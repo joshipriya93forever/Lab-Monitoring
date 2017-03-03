@@ -1,0 +1,44 @@
+<div class="page-sidebar navbar-collapse collapse">
+    <!-- BEGIN SIDEBAR MENU -->
+
+    <ul class="page-sidebar-menu" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200" ng-class="{'page-sidebar-menu-closed': settings.layout.pageSidebarClosed}">
+        <!-- DOC: To remove the search box from the sidebar you just need to completely remove the below "sidebar-search-wrapper" LI element -->
+
+        <li class="start nav-item">
+            <a ui-sref="main.dashboard">
+                <i class="fa fa-dashboard"></i>
+                <span class="title">Dashboard</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="#" class="nav-link nav-toggle">
+                <i class="icon-settings"></i>
+                <span class="title">Manage</span>
+                <span class="arrow"></span>
+            </a>
+            <ul class="sub-menu">
+                <li>
+                    <a ui-sref="main.consoleTable">
+                        <i class="fa fa-flask"></i> Console</span>
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref="main.toolTable">
+                        <i class="fa fa-wrench"></i> Tool</span>
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref="main.projectTable">
+                        <i class="fa fa-file-excel-o"></i> Project</span>
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref="main.usersTable">
+                        <i class="fa fa-users"></i> Users</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <!-- END SIDEBAR MENU -->
+</div>

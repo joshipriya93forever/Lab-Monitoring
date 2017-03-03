@@ -1,0 +1,63 @@
+<div>
+    <uib-alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)" dismiss-on-timeout="3000">{{alert.msg}}</uib-alert>
+</div>
+
+<div class="portlet box cblue">
+    <div class="portlet-title">
+        <div class="caption">
+            <span class="icon-note"></span>Add Tool for <span class="uppercase">{{bay.name}}</span> </div>
+    </div>
+
+    <div class="portlet-body form">
+        <div class="row">
+            <div class="col-lg-offset-2 col-lg-8 col-md-offset-2 col-md-8 col-sm-offset-2 col-sm-8">
+                <form name="toolform" class="css-form" ng-submit="addToolDetails(picFile)" novalidate>
+                    <div class="form-body">
+                        <div class="form-group form-md-line-input" ng-class="{'has-error': itemForm.bayno.$error.required (!itemForm.$pristine || itemForm.$submitted)}">
+                            <input type="text" class="form-control" id="bay_no" name="bayno" placeholder="Enter Bay Number" ng-model="bay_number" my-directive required ng-keyup="$event.keyCode == 13 && addToolDetails(picFile)">
+                            <label for="tool_name">Bay Number<span class="required"> * </span></label>
+                        </div>
+                        <p class="help-block" ng-show="toolform.bayno.$error.required && (!toolform.$pristine || toolform.$submitted)">This field is required</p>
+                        <div class="form-group form-md-line-input" ng-class="{'has-error': itemForm.tname.$error.required (!itemForm.$pristine || itemForm.$submitted)}">
+                            <input type="text" class="form-control" id="tool_name" name="tname" placeholder="Enter Tool name" ng-model="name" my-directive required ng-keyup="$event.keyCode == 13 && addToolDetails(picFile)">
+                            <label for="tool_name">Tool Name<span class="required"> * </span></label>
+                        </div>
+                        <p class="help-block" ng-show="toolform.tname.$error.required && (!toolform.$pristine || toolform.$submitted)">This field is required</p>
+                        <div class="form-group form-md-line-input has-info">
+                            <select name="repeatSelect" id="repeatSelect" ng-model="tool_owner" required>
+                                <option ng-repeat="user in Users" value="{{user.id}}">{{user.first_name}} {{user.last_name}}</option>
+                            </select>
+                            <label>Tool Owner</label>
+                        </div>
+
+                        <div class="form-group form-md-line-input">
+                            <input type="text" class="form-control" disabled="" id="tool_status"  placeholder="Stand By" ng-model="tool.status">
+                            <label for="tool_status">Tool Status</label>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="control-label col-md-3">Upload Tool Image </label>
+                                <img ng-show="myForm.file.$valid" ngf-thumbnail="picFile" class="large">
+                                <button ng-click="picFile = null" ng-show="picFile">Remove</button>
+                                <input type="file" ngf-select ng-model="picFile" name="file"
+                                       accept="image/png" ngf-max-size="2MB"
+                                       ngf-model-invalid="errorFile">
+                                <i ng-show="myForm.file.$error.required">*required</i><br>
+                                <i ng-show="myForm.file.$error.maxSize">File too large
+                                    {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+                            </div>
+
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit"  class="btn green-meadow" ng-keyup="$event.keyCode == 13" >Submit</button>
+                            <button type="button" ng-click="back()" class="btn default">Cancel</button>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

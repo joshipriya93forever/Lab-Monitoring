@@ -1,0 +1,59 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" ng-click="cancel()" aria-hidden="true"></button>
+    <h4 class="modal-title">Assign</h4>
+    <span>for {{item.name}}</span>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-6">
+            <div class="portlet light bordered">
+                <div class="form-group form-md-line-input has-info">
+                    <form>
+                        <div ng-dropdown-multiselect="" options="Projects" selected-model="Projectsdata" extra-settings="Projectssettings" translation-texts="ProjectscustomTexts"></div>
+
+                    </form>
+
+                </div>
+                <div class="form-actions noborder">
+                    <button type="button" ng-click="assignProject(Projectsdata,item)" class="btn blue">Assign</button>
+                </div>
+                <div class="portlet light bordered">
+                    <div class="scroller">
+                        <ul class="feeds">
+                            <li ng-repeat="pname in  item.name">{{pname}}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <ul class="feeds">
+                <li ng-repeat="projectname in  item.toolProjects.project.name">{{projectname}}
+                </li>
+            </ul>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6">
+            <div class="portlet light bordered">
+                <div class="form-group form-md-line-input has-info">
+                    <form>
+                        <div ng-dropdown-multiselect="" options="Users" selected-model="Usersdata" extra-settings="Userssettings" translation-texts="UserscustomTexts"></div>
+
+                    </form>
+
+                </div>
+                <div class="form-actions noborder">
+                    <button type="button" ng-click="assignUsers(Usersdata,item)" class="btn blue">Assign</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ok()">
+        <span aria-hidden="true" class="icon-arrow-r-white"></span>
+        <span class="description">Save Changes</span>
+    </button>
+    <button class="btn btn-default" ng-click="cancel()">
+        <span aria-hidden="true" class="icon-arrow-l-white"></span>
+        <span class="description">Cancel</span>
+    </button>
+</div>

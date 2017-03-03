@@ -1,0 +1,33 @@
+<div class="portlet light ">
+    <div class="portlet-title">
+        <div class="caption caption-md">
+            <i class="icon-bar-chart theme-font hide"></i>
+            <span class="caption-subject font-blue-madison bold uppercase">Tool Status</span>
+            <span class="caption-helper">select the status</span>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        <div class="row">
+            <div class="col-lg-offset-2 col-lg-6">
+                <div>
+                    {{item.id}}
+                    <label class="btn btn-default btn-block" ng-model="item.status" ng-class="{'idle' : tool.status === 'ID'}" ng-click="statusChange(item)" uib-btn-radio="'ID'">IDLE</label>
+                    <label class="btn btn-default btn-block" ng-model="item.status" ng-class="{'instal' : tool.status === 'IN'}" ng-click="statusChange(item)" uib-btn-radio="'IN'">Installation</label>
+                    <label class="btn btn-default btn-block" ng-model="item.status" ng-class="{'productive' : tool.status === 'PR'}" ng-click="statusChange(item)" uib-btn-radio="'PR'">Productive</label>
+                    <label class="btn btn-default btn-block" ng-model="item.status" ng-class="{'maintenance' : tool.status === 'MN'}" ng-click="statusChange(item)" uib-btn-radio="'MN'">Maintenance</label>
+                    <label class="btn btn-default btn-block" ng-click="statistics()">Statistics</label>
+                </div>
+               <!-- <div class="btn-group" data-toggle="buttons">
+                    <label class="btn btn-default active">
+                        <input type="radio" ng-model="item.status" ng-click="status(item)" name="item" ng-value="SB" class="toggle"> Option 1 </label>
+                    <label class="btn btn-default">
+                        <input type="radio" ng-model="item.status" ng-click="status(item)" name="item" ng-value="PR" class="toggle"> Option 2 </label>
+                    <label class="btn btn-default">
+                        <input type="radio" ng-model="item.status" ng-click="status(item)" name="item" ng-value="MA" class="toggle"> Option 3 </label>
+                </div>-->
+
+               <!-- <a ui-sref="main.tool.statistics" class="btn default btn-block btn-lg"> Statistics </a>-->
+            </div>
+        </div>
+    </div>
+</div>

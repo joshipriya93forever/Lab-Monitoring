@@ -1,0 +1,20 @@
+<div class="portlet light portlet-fit bordered">
+  <div class="portlet-title">
+    <div class="caption">
+      <i class=" fa fa-pie-chart font-green"></i>
+      <span class="caption-subject font-green bold uppercase">{{tool.name}} Analytics</span>
+    </div>
+    <div class="actions">
+      <div class="btn-group btn-group-devided" data-toggle="buttons">
+        <label class="btn dark btn-outline  btn-sm active">
+          <input type="radio" name="options" class="toggle" id="option1">8 hr</label>
+        <label class="btn dark btn-outline  btn-sm">
+          <input type="radio" name="options" class="toggle" id="option2">12 hr</label>
+    </div>
+  </div>
+  <div class="portlet-body">
+    <nvd3 options="options" data="stat"></nvd3>
+
+  </div>
+</div>
+

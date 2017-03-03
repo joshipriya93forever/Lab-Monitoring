@@ -1,0 +1,30 @@
+<div>
+    <uib-alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)" dismiss-on-timeout="3000">{{alert.msg}}</uib-alert>
+</div>
+<!-- BEGIN PAGE CONTENT-->
+<div class="row">
+    <div class="col-md-12">
+        <!-- BEGIN PROFILE SIDEBAR -->
+        <div class="profile-sidebar">
+            <!-- PORTLET MAIN -->
+            <div class="portlet light profile-sidebar-portlet" ng-class="{'idle' : tool.status === 'ID', 'productive' : tool.status === 'PR', 'instal' : tool.status === 'IN', 'maintenance' : tool.status === 'MN'}">
+                <!-- SIDEBAR USERPIC -->
+                <div class="profile-userpic">
+                    <img src="{{tool.image_url}}" class="img-responsive" alt=""> </div>
+                <!-- END SIDEBAR USERPIC -->
+                <!-- SIDEBAR USER TITLE -->
+                <div class="profile-usertitle">
+                    <div class="profile-usertitle-name">{{tool.name}} </div>
+                </div>
+
+            </div>
+            <!-- END PORTLET MAIN -->
+
+        </div>
+        <!-- END BEGIN PROFILE SIDEBAR -->
+        <!-- BEGIN PROFILE CONTENT -->
+        <div ui-view class="profile-content fade-in-up"> </div>
+        <!-- END PROFILE CONTENT -->
+    </div>
+</div>
+<!-- END PAGE CONTENT-->
