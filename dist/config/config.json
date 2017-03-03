@@ -1,5 +1,5 @@
 {
-  "baseURL" : "http://152.135.122.61.12:8871/" ,
+  "baseURL" : "http://152.135.122.61:8871/" ,
   "urlS" : {
     "login" : "api-token-auth/",
      "bays" : "api/bay/",
