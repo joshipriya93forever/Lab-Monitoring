@@ -56,7 +56,7 @@
                             </td>
                             <td value="tool name">{{ tool.name }}</td>
                             <td>{{ tool.bay_number }}</td>
-                            <td ng-class="{'idle' : tool.status === 'ID', 'productive' : tool.status === 'PR', 'instal' : tool.status === 'IN', 'maintenance' : tool.status === 'MN'}">{{ tool.status_value }}</td>
+                            <td ng-class="{'idle' : tool.status === 'ID', 'productive' : tool.status === 'PR', 'instal' : tool.status === 'IN', 'maintenance' : tool.status === 'MA'}">{{ tool.status_value }}</td>
                             <td>{{ tool.tool_owner.first_name}}</td>
                             <td><span class="btn"  ng-click="tooluser(tool,'lg')"><i class="glyphicon glyphicon-user"></i> Users</span></td>
                             <td><span class="btn"  ng-click="toolproject(tool,'lg')"><i class="glyphicon glyphicon-file"></i> Projects</span></td>

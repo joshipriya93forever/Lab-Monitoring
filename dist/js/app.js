@@ -595,7 +595,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
     $scope.getBaysData();              
 
     $scope.getCumulativeData = function() {
-        var url = urlS.bays
+        var url = urlS.tools + 'lab_utilization/'
         DataService.get(url).then(function (data) {
             $rootScope.cumulative = data;
         }, function (err) {
@@ -626,7 +626,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
                 else if ($scope.tstatus === 'PR') {
                     $('#bay1').css({fill: "#c2de80"});
                 }
-                else if ($scope.tstatus === 'MN') {
+                else if ($scope.tstatus === 'MA') {
                     $('#bay1').css({fill: "#9ac3f5"});
                 }
             }, function (err) {
@@ -648,7 +648,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
                 else if ($scope.tstatus === 'PR') {
                     $('#bay3').css({fill: "#c2de80"});
                 }
-                else if ($scope.tstatus === 'MN') {
+                else if ($scope.tstatus === 'MA') {
                     $('#bay3').css({fill: "#9ac3f5"});
                 }
             }, function (err) {
@@ -669,7 +669,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
                 else if ($scope.tstatus === 'PR') {
                     $('#bay4').css({fill: "#c2de80"});
                 }
-                else if ($scope.tstatus === 'MN') {
+                else if ($scope.tstatus === 'MA') {
                     $('#bay4').css({fill: "#9ac3f5"});
                 }
             }, function (err) {
@@ -692,7 +692,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
                 else if ($scope.tstatus === 'PR') {
                     $('#bay7').css({fill: "#c2de80"});
                 }
-                else if ($scope.tstatus === 'MN') {
+                else if ($scope.tstatus === 'MA') {
                     $('#bay7').css({fill: "#9ac3f5"});
                 }
             }, function (err) {
@@ -713,7 +713,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
                 else if ($scope.tstatus === 'PR') {
                     $('#bay8').css({fill: "#c2de80"});
                 }
-                else if ($scope.tstatus === 'MN') {
+                else if ($scope.tstatus === 'MA') {
                     $('#bay8').css({fill: "#9ac3f5"});
                 }
             }, function (err) {
@@ -735,7 +735,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
                 else if ($scope.tstatus === 'PR') {
                     $('#bay10').css({fill: "#c2de80"});
                 }
-                else if ($scope.tstatus === 'MN') {
+                else if ($scope.tstatus === 'MA') {
                     $('#bay10').css({fill: "#9ac3f5"});
                 }
             }, function (err) {
@@ -756,7 +756,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
                 else if ($scope.tstatus === 'PR') {
                     $('#bay11').css({fill: "#c2de80"});
                 }
-                else if ($scope.tstatus === 'MN') {
+                else if ($scope.tstatus === 'MA') {
                     $('#bay11').css({fill: "#9ac3f5"});
                 }
             }, function (err) {
@@ -777,7 +777,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
                 else if ($scope.tstatus === 'PR') {
                     $('#bay12').css({fill: "#c2de80"});
                 }
-                else if ($scope.tstatus === 'MN') {
+                else if ($scope.tstatus === 'MA') {
                     $('#bay12').css({fill: "#9ac3f5"});
                 }
             }, function (err) {
@@ -798,7 +798,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
                 else if ($scope.tstatus === 'PR') {
                     $('#bay13').css({fill: "#c2de80"});
                 }
-                else if ($scope.tstatus === 'MN') {
+                else if ($scope.tstatus === 'MA') {
                     $('#bay13').css({fill: "#9ac3f5"});
                 }
             }, function (err) {
@@ -819,7 +819,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
                 else if ($scope.tstatus === 'PR') {
                     $('#bay14').css({fill: "#c2de80"});
                 }
-                else if ($scope.tstatus === 'MN') {
+                else if ($scope.tstatus === 'MA') {
                     $('#bay14').css({fill: "#9ac3f5"});
                 }
             }, function (err) {
@@ -841,7 +841,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
                 else if ($scope.tstatus === 'PR') {
                     $('#bay16').css({fill: "#c2de80"});
                 }
-                else if ($scope.tstatus === 'MN') {
+                else if ($scope.tstatus === 'MA') {
                     $('#bay16').css({fill: "#9ac3f5"});
                 }
             }, function (err) {
@@ -863,7 +863,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
                 else if ($scope.tstatus === 'PR') {
                     $('#bay18').css({fill: "#c2de80"});
                 }
-                else if ($scope.tstatus === 'MN') {
+                else if ($scope.tstatus === 'MA') {
                     $('#bay18').css({fill: "#9ac3f5"});
                 }
             }, function (err) {
@@ -885,7 +885,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
                 else if ($scope.tstatus === 'PR') {
                     $('#bay20').css({fill: "#c2de80"});
                 }
-                else if ($scope.tstatus === 'MN') {
+                else if ($scope.tstatus === 'MA') {
                     $('#bay20').css({fill: "#9ac3f5"});
                 }
             }, function (err) {
@@ -906,7 +906,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
                 else if ($scope.tstatus === 'PR') {
                     $('#bay21').css({fill: "#c2de80"});
                 }
-                else if ($scope.tstatus === 'MN') {
+                else if ($scope.tstatus === 'MA') {
                     $('#bay21').css({fill: "#9ac3f5"});
                 }
             }, function (err) {
@@ -927,7 +927,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
                 else if ($scope.tstatus === 'PR') {
                     $('#bay22').css({fill: "#c2de80"});
                 }
-                else if ($scope.tstatus === 'MN') {
+                else if ($scope.tstatus === 'MA') {
                     $('#bay22').css({fill: "#9ac3f5"});
                 }
             }, function (err) {
@@ -949,7 +949,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
                 else if ($scope.tstatus === 'PR') {
                     $('#bay24').css({fill: "#c2de80"});
                 }
-                else if ($scope.tstatus === 'MN') {
+                else if ($scope.tstatus === 'MA') {
                     $('#bay24').css({fill: "#9ac3f5"});
                 }
             }, function (err) {
@@ -970,7 +970,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
                 else if ($scope.tstatus === 'PR') {
                     $('#bay25').css({fill: "#c2de80"});
                 }
-                else if ($scope.tstatus === 'MN') {
+                else if ($scope.tstatus === 'MA') {
                     $('#bay25').css({fill: "#9ac3f5"});
                 }
             }, function (err) {
@@ -991,7 +991,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
                 else if ($scope.tstatus === 'PR') {
                     $('#bay26').css({fill: "#c2de80"});
                 }
-                else if ($scope.tstatus === 'MN') {
+                else if ($scope.tstatus === 'MA') {
                     $('#bay26').css({fill: "#9ac3f5"});
                 }
             }, function (err) {
@@ -1012,7 +1012,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
                 else if ($scope.tstatus === 'PR') {
                     $('#bay27').css({fill: "#c2de80"});
                 }
-                else if ($scope.tstatus === 'MN') {
+                else if ($scope.tstatus === 'MA') {
                     $('#bay27').css({fill: "#9ac3f5"});
                 }
             }, function (err) {
@@ -1033,7 +1033,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
                 else if ($scope.tstatus === 'PR') {
                     $('#bay28').css({fill: "#c2de80"});
                 }
-                else if ($scope.tstatus === 'MN') {
+                else if ($scope.tstatus === 'MA') {
                     $('#bay28').css({fill: "#9ac3f5"});
                 }
             }, function (err) {
@@ -1054,7 +1054,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
                 else if ($scope.tstatus === 'PR') {
                     $('#bay29').css({fill: "#c2de80"});
                 }
-                else if ($scope.tstatus === 'MN') {
+                else if ($scope.tstatus === 'MA') {
                     $('#bay29').css({fill: "#9ac3f5"});
                 }
             }, function (err) {
@@ -1076,7 +1076,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
                 else if ($scope.tstatus === 'PR') {
                     $('#bay31').css({fill: "#c2de80"});
                 }
-                else if ($scope.tstatus === 'MN') {
+                else if ($scope.tstatus === 'MA') {
                     $('#bay31').css({fill: "#9ac3f5"});
                 }
             }, function (err) {
@@ -1099,7 +1099,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
                 else if ($scope.tstatus === 'PR') {
                     $('#bay34').css({fill: "#c2de80"});
                 }
-                else if ($scope.tstatus === 'MN') {
+                else if ($scope.tstatus === 'MA') {
                     $('#bay34').css({fill: "#9ac3f5"});
                 }
             }, function (err) {
@@ -1120,7 +1120,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
                 else if ($scope.tstatus === 'PR') {
                     $('#bay35').css({fill: "#c2de80"});
                 }
-                else if ($scope.tstatus === 'MN') {
+                else if ($scope.tstatus === 'MA') {
                     $('#bay35').css({fill: "#9ac3f5"});
                 }
             }, function (err) {
@@ -1141,7 +1141,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
                 else if ($scope.tstatus === 'PR') {
                     $('#bay36').css({fill: "#c2de80"});
                 }
-                else if ($scope.tstatus === 'MN') {
+                else if ($scope.tstatus === 'MA') {
                     $('#bay36').css({fill: "#9ac3f5"});
                 }
             }, function (err) {
@@ -1162,7 +1162,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
                 else if ($scope.tstatus === 'PR') {
                     $('#bay37').css({fill: "#c2de80"});
                 }
-                else if ($scope.tstatus === 'MN') {
+                else if ($scope.tstatus === 'MA') {
                     $('#bay37').css({fill: "#9ac3f5"});
                 }
             }, function (err) {
@@ -1183,7 +1183,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
                 else if ($scope.tstatus === 'PR') {
                     $('#bay38').css({fill: "#c2de80"});
                 }
-                else if ($scope.tstatus === 'MN') {
+                else if ($scope.tstatus === 'MA') {
                     $('#bay38').css({fill: "#9ac3f5"});
                 }
             }, function (err) {
@@ -1204,7 +1204,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
                 else if ($scope.tstatus === 'PR') {
                     $('#bay39').css({fill: "#c2de80"});
                 }
-                else if ($scope.tstatus === 'MN') {
+                else if ($scope.tstatus === 'MA') {
                     $('#bay39').css({fill: "#9ac3f5"});
                 }
             }, function (err) {
@@ -1225,7 +1225,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
                 else if ($scope.tstatus === 'PR') {
                     $('#bay40').css({fill: "#c2de80"});
                 }
-                else if ($scope.tstatus === 'MN') {
+                else if ($scope.tstatus === 'MA') {
                     $('#bay40').css({fill: "#9ac3f5"});
                 }
             }, function (err) {
@@ -1246,7 +1246,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
                 else if ($scope.tstatus === 'PR') {
                     $('#bay41').css({fill: "#c2de80"});
                 }
-                else if ($scope.tstatus === 'MN') {
+                else if ($scope.tstatus === 'MA') {
                     $('#bay41').css({fill: "#9ac3f5"});
                 }
             }, function (err) {
@@ -1267,7 +1267,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
                 else if ($scope.tstatus === 'PR') {
                     $('#bay42').css({fill: "#c2de80"});
                 }
-                else if ($scope.tstatus === 'MN') {
+                else if ($scope.tstatus === 'MA') {
                     $('#bay42').css({fill: "#9ac3f5"});
                 }
             }, function (err) {
