@@ -1276,7 +1276,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
         });
         
        
-    
+        
        
     };
     $scope.bayStatus();
@@ -1802,7 +1802,7 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
         var id =  $rootScope.id;
         var url = urlS.tools + id + '/utilization/'
         DataService.get(url).then(function (data) {
-            $scope.utilization = {"Productive_Time":10,"Maintenance_Time":40,"Idle_Time":60,"Installation_Time":20}
+            $scope.utilization = data;
             angular.forEach($scope.utilization, function(value, key) {
                 this.push({key : key , y : value});
             }, log);
