@@ -1836,7 +1836,7 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
             labelThreshold: 0.01,
             labelSunbeamLayout: true,
             showLegend : false,
-            color: ['#c2de80','#ffff80','#9ac3f5','#ff7f7f'],
+            color: ['#ff7f7f','#ffff80','#9ac3f5','#c2de80'],
             legend: {
                 margin: {
                     top: 5,
