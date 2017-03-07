@@ -1800,17 +1800,25 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
     $scope.statistics = function () {
         var log = [];
         var id =  $rootScope.id;
-        var url = urlS.tools + id + '/utilization/'
-        DataService.get(url).then(function (data) {
+        var url_utilization = urlS.tools + id + '/utilization/'
+        DataService.get(url_utilization).then(function (data) {
             $scope.utilization = data;
             angular.forEach($scope.utilization, function(value, key) {
                 this.push({key : key , y : value});
             }, log);
             $scope.stat = log;
-            $state.go('main.tool.statistics');
-        }, function (err) {
-
         });
+        var url_userUtilization = urlS.tools + id + '/user_utilization/'
+        DataService.get(url_userUtilization).then(function (data) {
+            $scope.userUtilization = data;
+            console.log(data);
+        });
+        var url_projectUtilization = urlS.tools + id + '/project_utilization/'
+        DataService.get(url_projectUtilization).then(function (data) {
+            $scope.projectUtilization = data;
+            console.log(data);
+        });
+        $state.go('main.tool.statistics');
     }
 
 
