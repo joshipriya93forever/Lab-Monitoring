@@ -1807,13 +1807,11 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
                 this.push({key : key , y : value});
             }, log);
             $scope.stat = log;
-          console.log(log);
             $state.go('main.tool.statistics');
         }, function (err) {
 
         });
     }
-
 
 
    
@@ -1836,7 +1834,7 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
             labelThreshold: 0.01,
             labelSunbeamLayout: true,
             showLegend : false,
-            color: ['#ff7f7f','#ffff80','#9ac3f5','#c2de80'],
+            color: ['#ff7f7f','#c2de80','#ffff80','#9ac3f5'],
             legend: {
                 margin: {
                     top: 5,
