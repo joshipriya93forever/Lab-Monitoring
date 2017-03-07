@@ -1835,7 +1835,8 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
             duration: 500,
             labelThreshold: 0.01,
             labelSunbeamLayout: true,
-            color: ['#c2de80','#9ac3f5','#ff7f7f','#ffff80'],
+            showLegend : false,
+            color: ['#c2de80','#ffff80','#9ac3f5','#ff7f7f'],
             legend: {
                 margin: {
                     top: 5,
@@ -1852,7 +1853,7 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
 
    
     $rootScope.settings.layout.pageBodySolid = true;
-    $rootScope.settings.layout.pageSidebarClosed = false;
+    $rootScope.settings.layout.pageSidebarClosed = true;
 });
 
 
