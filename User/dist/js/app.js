@@ -911,8 +911,8 @@ angular.module('LabMonitoring').controller('LoginController', function($rootScop
 
       $scope.login = function() {
           $.post("http://152.135.122.61:8871/api-token-auth/", {
-              email: "bay@gmail.com",
-              password: "1234"
+              email: "bay@amat.com",
+              password: "bay123"
           }).then(function (data) {
               var token = data.token;
               $localStorage.token = token;
