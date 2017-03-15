@@ -13,7 +13,8 @@ var LabMonitoring = angular.module("LabMonitoring", [
     "angularUtils.directives.dirPagination",
     "checklist-model",
     "ngMessages",
-    'nvd3'
+    'nvd3',
+    'daterangepicker'
 ]); 
 
 
@@ -1276,7 +1277,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
         });
         
        
-        
+       
        
     };
     $scope.bayStatus();
@@ -1287,6 +1288,44 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
     $scope.closeAlert = function(index){
         $scope.alerts.splice(index, 1);
     };
+
+
+
+
+    var current = moment().format("YYYY-MM-DD");
+
+    $scope.weekly = function(){
+        var id =  $rootScope.id;
+        var weekly = moment().subtract("days", 7).format("YYYY-MM-DD");
+        var start = weekly;
+        var end = current;
+        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
+        DataService.get(url_report).then(function (data) {
+            window.location = data;
+        });
+    }
+    $scope.monthly = function(){
+        var id =  $rootScope.id;
+        var monthly = moment().subtract("days", 30).format("YYYY-MM-DD");
+        var start = monthly;
+        var end = current;
+        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
+        DataService.get(url_report).then(function (data) {
+            window.location = data;
+        });
+    }
+    $scope.quatrely = function(){
+        var id =  $rootScope.id;
+        var quaterly = moment().subtract("days", 90).format("YYYY-MM-DD");
+        var start = quaterly;
+        var end = current;
+        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
+        DataService.get(url_report).then(function (data) {
+            window.location = data;
+        });
+    }
+
+
 
 
 
@@ -1335,11 +1374,6 @@ angular.module('LabMonitoring').controller('LoginController', function($rootScop
         $scope.alerts.splice(index, 1);
         $scope.show = false;
     };
-
-
-
-
-
 
 
 
@@ -1853,6 +1887,7 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
             }
         }
     };
+
 
 
 
