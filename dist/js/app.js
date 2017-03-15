@@ -1300,8 +1300,9 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
         var start = weekly;
         var end = current;
         var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
-        DataService.get(url_report).then(function (data) {
-            window.location = data;
+        var export_url = 'http://14.141.47.12:8871/api/export_tool_xls/?start_date=' + start +'&end_date='+ end
+        DataService.get(url_report).then(function () {
+            window.location = export_url;
         });
     }
     $scope.monthly = function(){
@@ -1310,8 +1311,9 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
         var start = monthly;
         var end = current;
         var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
-        DataService.get(url_report).then(function (data) {
-            window.location = data;
+        var export_url = 'http://14.141.47.12:8871/api/export_tool_xls/?start_date=' + start +'&end_date='+ end
+        DataService.get(url_report).then(function () {
+            window.location = export_url;
         });
     }
     $scope.quatrely = function(){
@@ -1319,9 +1321,10 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
         var quaterly = moment().subtract("days", 90).format("YYYY-MM-DD");
         var start = quaterly;
         var end = current;
-        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
-        DataService.get(url_report).then(function (data) {
-            window.location = data;
+        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end;
+        var export_url = 'http://14.141.47.12:8871/api/export_tool_xls/?start_date=' + start +'&end_date='+ end
+        DataService.get(url_report).then(function () {
+            window.location = export_url;
         });
     }
 
