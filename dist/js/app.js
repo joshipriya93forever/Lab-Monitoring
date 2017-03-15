@@ -1277,7 +1277,6 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
         });
         
        
-        14
        
     };
     $scope.bayStatus();
