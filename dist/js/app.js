@@ -1277,7 +1277,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
         });
         
        
-       
+        14
        
     };
     $scope.bayStatus();
@@ -1293,14 +1293,14 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
 
 
     var current = moment().format("YYYY-MM-DD");
-
+      $scope.current_date = current;
     $scope.weekly = function(){
         var id =  $rootScope.id;
         var weekly = moment().subtract("days", 7).format("YYYY-MM-DD");
         var start = weekly;
         var end = current;
         var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
-        var export_url = 'http://14.141.47.12:8871/api/export_tool_xls/?start_date=' + start +'&end_date='+ end
+        var export_url = 'http://152.135.122.61:8871/api/export_tool_xls/?start_date=' + start +'&end_date='+ end
         DataService.get(url_report).then(function () {
             window.location = export_url;
         });
@@ -1311,7 +1311,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
         var start = monthly;
         var end = current;
         var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
-        var export_url = 'http://14.141.47.12:8871/api/export_tool_xls/?start_date=' + start +'&end_date='+ end
+        var export_url = 'http://152.135.122.61:8871/api/export_tool_xls/?start_date=' + start +'&end_date='+ end
         DataService.get(url_report).then(function () {
             window.location = export_url;
         });
@@ -1322,7 +1322,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
         var start = quaterly;
         var end = current;
         var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end;
-        var export_url = 'http://14.141.47.12:8871/api/export_tool_xls/?start_date=' + start +'&end_date='+ end
+        var export_url = 'http://152.135.122.61:8871/api/export_tool_xls/?start_date=' + start +'&end_date='+ end
         DataService.get(url_report).then(function () {
             window.location = export_url;
         });
