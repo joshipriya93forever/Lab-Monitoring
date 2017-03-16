@@ -39,6 +39,33 @@
                 </li>
             </ul>
         </li>
+        <li class="nav-item" ng-controller="DashboardController">
+            <a href="#" class="nav-link nav-toggle">
+                <i class="icon-docs"></i>
+                <span class="title">Report</span>
+                <span class="arrow"></span>
+            </a>
+            <ul class="sub-menu">
+                <li>
+                    <a ng-click="weekly()">
+                        <i class="icon-calendar"></i> Weekly</a>
+                </li>
+                <li>
+                    <a ng-click="monthly()">
+                        <i class="icon-calendar"></i> Monthly</a>
+                </li>
+                <li>
+                    <a ng-click="quatrely()">
+                        <i class="icon-calendar"></i> Quaterly</a>
+                </li>
+                <!--<li class="divider"> </li>
+                <li>
+                    <a>
+                        <input date-range-picker class="form-control date-picker" type="text" ng-model="date" min="'2014-02-23'" max="'2015-02-25'"/>
+                    </a>
+                </li>-->
+            </ul>
+        </li>
     </ul>
     <!-- END SIDEBAR MENU -->
 </div>

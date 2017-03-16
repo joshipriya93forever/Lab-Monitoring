@@ -7,10 +7,9 @@
         <div class="portlet-title">
             <div class="caption">
                 <i class=" fa fa-area-chart font-green"></i>
-                <span class="caption-subject font-green bold uppercase">CUMULATIVE TOOL ANALYTICS -</span>
-                <span class="caption-helper">Real-Time Data {{current_date | date}}</span>
+                <span class="caption-subject font-green bold uppercase">CUMULATIVE TOOL ANALYTICS - Real-Time Data {{realtime | date}}</span>
             </div>
-            <div class="actions">
+           <!-- <div class="actions">
                 <div class="page-bar">
                     <div class="page-toolbar">
                         <div class="btn-group">
@@ -31,19 +30,19 @@
                                         <i class="icon-calendar"></i> Quaterly</a>
                                 </li>
                                 <li class="divider"> </li>
-                                <!-- <li>
-                                   <a ng-click="weekly()">
-                                     <input date-range-picker class="form-control date-picker" type="text" ng-model="datePicker.date" min="'2014-02-08'"/>
+                                 <li>
+                                   <a>
+                                       <input date-range-picker class="form-control date-picker" type="text" ng-model="date" min="'2014-02-23'" max="'2015-02-25'"/>
                                    </a>
-                                 </li>-->
+                                 </li>
                             </ul>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>-->
         </div>
         <div class="portlet-body">
-    <div class="row">
+                  <div class="row">
         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
             <div class="dashboard-stat productive" ng-click="getAcumulativeData()">
                 <div class="visual">

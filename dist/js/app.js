@@ -1277,6 +1277,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
         });
         
        
+        
        
     };
     $scope.bayStatus();
@@ -1292,10 +1293,11 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
 
 
     var current = moment().format("YYYY-MM-DD");
-      $scope.current_date = current;
+      $scope.realtime =  moment().format('h:mm:ss a, MMMM Do YYYY');
+
     $scope.weekly = function(){
         var id =  $rootScope.id;
-        var weekly = moment().subtract("days", 7).format("YYYY-MM-DD");
+        var weekly = moment().subtract("days", 6).format("YYYY-MM-DD");
         var start = weekly;
         var end = current;
         var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
@@ -1306,7 +1308,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
     }
     $scope.monthly = function(){
         var id =  $rootScope.id;
-        var monthly = moment().subtract("days", 30).format("YYYY-MM-DD");
+        var monthly = moment().subtract("days", 29).format("YYYY-MM-DD");
         var start = monthly;
         var end = current;
         var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
@@ -1317,7 +1319,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
     }
     $scope.quatrely = function(){
         var id =  $rootScope.id;
-        var quaterly = moment().subtract("days", 90).format("YYYY-MM-DD");
+        var quaterly = moment().subtract("days", 89).format("YYYY-MM-DD");
         var start = quaterly;
         var end = current;
         var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end;
@@ -1326,8 +1328,6 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
             window.location = export_url;
         });
     }
-
-
 
 
 
