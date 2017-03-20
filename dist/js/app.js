@@ -603,7 +603,9 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
 
         });
     };
-    $scope.getCumulativeData();
+    $scope.getCumulativeData();    
+
+
 
     $scope.setId = function (id) {
         $rootScope.id = id;
@@ -1277,7 +1279,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
         });
         
        
-        
+       
        
     };
     $scope.bayStatus();
@@ -1330,6 +1332,19 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
     }
 
 
+
+
+
+    $scope.clock = "loading clock...";
+    $scope.tickInterval = 1000
+
+    var tick = function() {
+        $scope.clock = Date.now()
+        $timeout(tick, $scope.tickInterval);
+    }
+
+   
+    $timeout(tick, $scope.tickInterval);
 
 
     $rootScope.settings.layout.pageBodySolid = true;           
