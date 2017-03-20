@@ -24,12 +24,12 @@
                 </li>
                 <li>
                     <a ui-sref="main.toolTable">
-                        <i class="fa fa-wrench"></i> Tool</span>
+                        <i class="fa fa-wrench"></i> Tools</span>
                     </a>
                 </li>
                 <li>
                     <a ui-sref="main.projectTable">
-                        <i class="fa fa-file-excel-o"></i> Project</span>
+                        <i class="fa fa-file-excel-o"></i> Projects</span>
                     </a>
                 </li>
                 <li>
@@ -47,23 +47,92 @@
             </a>
             <ul class="sub-menu">
                 <li>
-                    <a ng-click="weekly()">
-                        <i class="icon-calendar"></i> Weekly</a>
+                    <a href="#" class="nav-link nav-toggle">
+                        <i class="fa fa-wrench"></i>
+                        <span class="title">Tools</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub-menu">
+                        <li>
+                            <a ng-click="toolWeekly()">
+                                <i class="icon-calendar"></i> Weekly</a>
+                        </li>
+                        <li>
+                            <a ng-click="toolMonthly()">
+                                <i class="icon-calendar"></i> Monthly</a>
+                        </li>
+                        <li>
+                            <a ng-click="toolQuatrely()">
+                                <i class="icon-calendar"></i> Quaterly</a>
+                        </li>
+                        <li class="divider"> </li>
+                        <li>
+                            <a>
+                                <input date-range-picker class="form-control date-picker" type="text" ng-model="datePicker.date" />
+                            </a>
+                        </li>
+                    </ul>
                 </li>
                 <li>
-                    <a ng-click="monthly()">
-                        <i class="icon-calendar"></i> Monthly</a>
+                    <a href="#" class="nav-link nav-toggle">
+                        <i class="fa fa-file-excel-o"></i>
+                        <span class="title">Projects</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub-menu">
+                        <li>
+                            <a ng-click="projectWeekly()">
+                                <i class="icon-calendar"></i> Weekly</a>
+                        </li>
+                        <li>
+                            <a ng-click="projectMonthly()">
+                                <i class="icon-calendar"></i> Monthly</a>
+                        </li>
+                        <li>
+                            <a ng-click="projectQuatrely()">
+                                <i class="icon-calendar"></i> Quaterly</a>
+                        </li>
+                        <li class="divider"> </li>
+                        <li>
+                            <a>
+                                <input date-range-picker class="form-control date-picker" type="text" ng-model="datePicker.date" />
+                            </a>
+                        </li>
+                    </ul>
                 </li>
                 <li>
-                    <a ng-click="quatrely()">
-                        <i class="icon-calendar"></i> Quaterly</a>
+                    <a href="#" class="nav-link nav-toggle">
+                        <i class="fa fa-users"></i>
+                        <span class="title">Users</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub-menu">
+                        <li>
+                            <a ng-click="userWeekly()">
+                                <i class="icon-calendar"></i> Weekly</a>
+                        </li>
+                        <li>
+                            <a ng-click="userMonthly()">
+                                <i class="icon-calendar"></i> Monthly</a>
+                        </li>
+                        <li>
+                            <a ng-click="userQuatrely()">
+                                <i class="icon-calendar"></i> Quaterly</a>
+                        </li>
+                        <li class="divider"> </li>
+                        <li>
+                            <a>
+                                <input date-range-picker class="form-control date-picker" type="text" ng-model="datePicker.date" />
+                            </a>
+                        </li>
+                    </ul>
                 </li>
-                <li class="divider"> </li>
+                <!--<li class="divider"> </li>
                 <li>
                     <a>
                         <input date-range-picker class="form-control date-picker" type="text" ng-model="datePicker.date" />
                     </a>
-                </li>
+                </li>-->
             </ul>
         </li>
     </ul>

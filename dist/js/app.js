@@ -1297,7 +1297,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
     var current = moment().format("YYYY-MM-DD");
       $scope.realtime =  moment().format('h:mm:ss a, MMMM Do YYYY');
 
-    $scope.weekly = function(){
+    $scope.toolWeekly = function(){
         var id =  $rootScope.id;
         var weekly = moment().subtract("days", 6).format("YYYY-MM-DD");
         var start = weekly;
@@ -1308,7 +1308,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
             window.location = export_url;
         });
     }
-    $scope.monthly = function(){
+    $scope.toolMonthly = function(){
         var id =  $rootScope.id;
         var monthly = moment().subtract("days", 29).format("YYYY-MM-DD");
         var start = monthly;
@@ -1319,7 +1319,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
             window.location = export_url;
         });
     }
-    $scope.quatrely = function(){
+    $scope.toolQuatrely = function(){
         var id =  $rootScope.id;
         var quaterly = moment().subtract("days", 89).format("YYYY-MM-DD");
         var start = quaterly;
@@ -1331,7 +1331,72 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
         });
     }
 
-
+    $scope.projectWeekly = function(){
+        var id =  $rootScope.id;
+        var weekly = moment().subtract("days", 6).format("YYYY-MM-DD");
+        var start = weekly;
+        var end = current;
+        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
+        var export_url = 'http://152.135.122.61:8871/api/export_project_xls/?start_date=' + start +'&end_date='+ end
+        DataService.get(url_report).then(function () {
+            window.location = export_url;
+        });
+    }
+    $scope.projectMonthly = function(){
+        var id =  $rootScope.id;
+        var monthly = moment().subtract("days", 29).format("YYYY-MM-DD");
+        var start = monthly;
+        var end = current;
+        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
+        var export_url = 'http://152.135.122.61:8871/api/export_project_xls/?start_date=' + start +'&end_date='+ end
+        DataService.get(url_report).then(function () {
+            window.location = export_url;
+        });
+    }
+    $scope.projectQuatrely = function(){
+        var id =  $rootScope.id;
+        var quaterly = moment().subtract("days", 89).format("YYYY-MM-DD");
+        var start = quaterly;
+        var end = current;
+        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end;
+        var export_url = 'http://152.135.122.61:8871/api/export_project_xls/?start_date=' + start +'&end_date='+ end
+        DataService.get(url_report).then(function () {
+            window.location = export_url;
+        });
+    }
+    $scope.userWeekly = function(){
+        var id =  $rootScope.id;
+        var weekly = moment().subtract("days", 6).format("YYYY-MM-DD");
+        var start = weekly;
+        var end = current;
+        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
+        var export_url = 'http://152.135.122.61:8871/api/export_user_xls/?start_date=' + start +'&end_date='+ end
+        DataService.get(url_report).then(function () {
+            window.location = export_url;
+        });
+    }
+    $scope.userMonthly = function(){
+        var id =  $rootScope.id;
+        var monthly = moment().subtract("days", 29).format("YYYY-MM-DD");
+        var start = monthly;
+        var end = current;
+        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
+        var export_url = 'http://152.135.122.61:8871/api/export_user_xls/?start_date=' + start +'&end_date='+ end
+        DataService.get(url_report).then(function () {
+            window.location = export_url;
+        });
+    }
+    $scope.userQuatrely = function(){
+        var id =  $rootScope.id;
+        var quaterly = moment().subtract("days", 89).format("YYYY-MM-DD");
+        var start = quaterly;
+        var end = current;
+        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end;
+        var export_url = 'http://152.135.122.61:8871/api/export_user_xls/?start_date=' + start +'&end_date='+ end
+        DataService.get(url_report).then(function () {
+            window.location = export_url;
+        });
+    }
 
 
 
