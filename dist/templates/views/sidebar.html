@@ -39,9 +39,9 @@
                 </li>
             </ul>
         </li>
-        <li class="nav-item" ng-controller="DashboardController">
+        <li class="nav-item" ng-controller="ReportGenerationController">
             <a href="#" class="nav-link nav-toggle">
-                <i class="icon-docs"></i>
+                <i class="icon-cloud-download"></i>
                 <span class="title">Report</span>
                 <span class="arrow"></span>
             </a>
@@ -67,8 +67,9 @@
                         </li>
                         <li class="divider"> </li>
                         <li>
-                            <a>
-                                <input date-range-picker class="form-control date-picker" type="text" ng-model="datePicker.date" />
+                            <a><i class="icon-calendar"></i>Select Date
+                                <input type="text" name="datefilter" id="tool" value=""  minDate="dayOne" maxDate="current"/>
+
                             </a>
                         </li>
                     </ul>
@@ -94,8 +95,9 @@
                         </li>
                         <li class="divider"> </li>
                         <li>
-                            <a>
-                                <input date-range-picker class="form-control date-picker" type="text" ng-model="datePicker.date" />
+                            <a><i class="icon-calendar"></i>Select Date
+                                <input type="text" name="datefilter" value="" id="project"/>
+
                             </a>
                         </li>
                     </ul>
@@ -121,18 +123,13 @@
                         </li>
                         <li class="divider"> </li>
                         <li>
-                            <a>
-                                <input date-range-picker class="form-control date-picker" type="text" ng-model="datePicker.date" />
+                            <a><i class="icon-calendar"></i>Select Date
+                                <input type="text" name="datefilter" value="" id="user" />
+
                             </a>
                         </li>
                     </ul>
                 </li>
-                <!--<li class="divider"> </li>
-                <li>
-                    <a>
-                        <input date-range-picker class="form-control date-picker" type="text" ng-model="datePicker.date" />
-                    </a>
-                </li>-->
             </ul>
         </li>
     </ul>

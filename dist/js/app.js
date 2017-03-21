@@ -304,8 +304,6 @@ angular.module('LabMonitoring').controller('AddProjectController', function($roo
 
 
 
-    $rootScope.settings.layout.pageBodySolid = true;
-    $rootScope.settings.layout.pageSidebarClosed = false;
 });
 
 
@@ -380,8 +378,7 @@ $scope.getUsersData();
     };
 
 
-    $rootScope.settings.layout.pageBodySolid = true;           
-    $rootScope.settings.layout.pageSidebarClosed = false;        
+
 });
 
 
@@ -437,8 +434,7 @@ angular.module('LabMonitoring').controller('AddUsersController', function($rootS
     };
 
 
-    $rootScope.settings.layout.pageBodySolid = true;           
-    $rootScope.settings.layout.pageSidebarClosed = false;        
+
 });
 
 
@@ -574,8 +570,7 @@ angular.module('LabMonitoring').controller('ConsoleTableController',  function($
     };
 
 
-    $rootScope.settings.layout.pageBodySolid = true;       
-    $rootScope.settings.layout.pageSidebarClosed = true;      
+
 
 });
 
@@ -614,6 +609,39 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
 
 
 
+
+
+   
+    $scope.closeAlert = function(index){
+        $scope.alerts.splice(index, 1);
+    };
+
+
+
+    $scope.clock = "loading clock...";
+    $scope.tickInterval = 1000
+
+    var tick = function() {
+        $scope.clock = Date.now()
+        $timeout(tick, $scope.tickInterval);
+    }
+
+   
+    $timeout(tick, $scope.tickInterval);
+
+
+
+});
+
+
+angular.module('LabMonitoring').controller('LabController', function($rootScope,$state, $scope, $http, $timeout,DataService,$interval) {
+
+    var urlS = $rootScope.urlS;
+    $scope.alerts = [];
+
+
+
+
     $scope.bayStatus = function() {
         $("#bay1").ready(function () {
             var url = urlS.tools + 31 + '/'
@@ -636,7 +664,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
 
             });
         });
-       
+        
         $("#bay3").ready(function () {
             var url = urlS.tools + 65 + '/'
             DataService.get(url).then(function (data) {
@@ -679,7 +707,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
 
             });
         });
-       
+        
         
         $("#bay7").ready(function () {
             var url = urlS.tools + 50 + '/'
@@ -873,7 +901,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
 
             });
         });
-       
+        
         $("#bay20").ready(function () {
             var url = urlS.tools + 55 + '/'
             DataService.get(url).then(function (data) {
@@ -1086,7 +1114,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
 
             });
         });
-      
+        
         
         $("#bay34").ready(function () {
             var url = urlS.tools + 29 + '/'
@@ -1278,142 +1306,14 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
             });
         });
         
-       
-       
-       
+        
+        
+        
     };
     $scope.bayStatus();
 
     refreshMap = $interval($scope.bayStatus, 60000);
 
-   
-    $scope.closeAlert = function(index){
-        $scope.alerts.splice(index, 1);
-    };
-
-
-
-
-    var current = moment().format("YYYY-MM-DD");
-      $scope.realtime =  moment().format('h:mm:ss a, MMMM Do YYYY');
-
-    $scope.toolWeekly = function(){
-        var id =  $rootScope.id;
-        var weekly = moment().subtract("days", 6).format("YYYY-MM-DD");
-        var start = weekly;
-        var end = current;
-        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
-        var export_url = 'http://152.135.122.61:8871/api/export_tool_xls/?start_date=' + start +'&end_date='+ end
-        DataService.get(url_report).then(function () {
-            window.location = export_url;
-        });
-    }
-    $scope.toolMonthly = function(){
-        var id =  $rootScope.id;
-        var monthly = moment().subtract("days", 29).format("YYYY-MM-DD");
-        var start = monthly;
-        var end = current;
-        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
-        var export_url = 'http://152.135.122.61:8871/api/export_tool_xls/?start_date=' + start +'&end_date='+ end
-        DataService.get(url_report).then(function () {
-            window.location = export_url;
-        });
-    }
-    $scope.toolQuatrely = function(){
-        var id =  $rootScope.id;
-        var quaterly = moment().subtract("days", 89).format("YYYY-MM-DD");
-        var start = quaterly;
-        var end = current;
-        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end;
-        var export_url = 'http://152.135.122.61:8871/api/export_tool_xls/?start_date=' + start +'&end_date='+ end
-        DataService.get(url_report).then(function () {
-            window.location = export_url;
-        });
-    }
-
-    $scope.projectWeekly = function(){
-        var id =  $rootScope.id;
-        var weekly = moment().subtract("days", 6).format("YYYY-MM-DD");
-        var start = weekly;
-        var end = current;
-        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
-        var export_url = 'http://152.135.122.61:8871/api/export_project_xls/?start_date=' + start +'&end_date='+ end
-        DataService.get(url_report).then(function () {
-            window.location = export_url;
-        });
-    }
-    $scope.projectMonthly = function(){
-        var id =  $rootScope.id;
-        var monthly = moment().subtract("days", 29).format("YYYY-MM-DD");
-        var start = monthly;
-        var end = current;
-        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
-        var export_url = 'http://152.135.122.61:8871/api/export_project_xls/?start_date=' + start +'&end_date='+ end
-        DataService.get(url_report).then(function () {
-            window.location = export_url;
-        });
-    }
-    $scope.projectQuatrely = function(){
-        var id =  $rootScope.id;
-        var quaterly = moment().subtract("days", 89).format("YYYY-MM-DD");
-        var start = quaterly;
-        var end = current;
-        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end;
-        var export_url = 'http://152.135.122.61:8871/api/export_project_xls/?start_date=' + start +'&end_date='+ end
-        DataService.get(url_report).then(function () {
-            window.location = export_url;
-        });
-    }
-    $scope.userWeekly = function(){
-        var id =  $rootScope.id;
-        var weekly = moment().subtract("days", 6).format("YYYY-MM-DD");
-        var start = weekly;
-        var end = current;
-        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
-        var export_url = 'http://152.135.122.61:8871/api/export_user_xls/?start_date=' + start +'&end_date='+ end
-        DataService.get(url_report).then(function () {
-            window.location = export_url;
-        });
-    }
-    $scope.userMonthly = function(){
-        var id =  $rootScope.id;
-        var monthly = moment().subtract("days", 29).format("YYYY-MM-DD");
-        var start = monthly;
-        var end = current;
-        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
-        var export_url = 'http://152.135.122.61:8871/api/export_user_xls/?start_date=' + start +'&end_date='+ end
-        DataService.get(url_report).then(function () {
-            window.location = export_url;
-        });
-    }
-    $scope.userQuatrely = function(){
-        var id =  $rootScope.id;
-        var quaterly = moment().subtract("days", 89).format("YYYY-MM-DD");
-        var start = quaterly;
-        var end = current;
-        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end;
-        var export_url = 'http://152.135.122.61:8871/api/export_user_xls/?start_date=' + start +'&end_date='+ end
-        DataService.get(url_report).then(function () {
-            window.location = export_url;
-        });
-    }
-
-
-
-    $scope.clock = "loading clock...";
-    $scope.tickInterval = 1000
-
-    var tick = function() {
-        $scope.clock = Date.now()
-        $timeout(tick, $scope.tickInterval);
-    }
-
-   
-    $timeout(tick, $scope.tickInterval);
-
-
-    $rootScope.settings.layout.pageBodySolid = true;           
-    $rootScope.settings.layout.pageSidebarClosed = true;        
 });
 
 angular.module('LabMonitoring').controller('LoginController', function($rootScope, $scope, settings,$location, $state,$http,$localStorage,DataService) {
@@ -1797,11 +1697,162 @@ angular.module('LabMonitoring').controller('ProjectTableController',  function($
 
 
 
-
-    $rootScope.settings.layout.pageBodySolid = true;               
-    $rootScope.settings.layout.pageSidebarClosed = true;           
 });
 
+
+
+angular.module('LabMonitoring').controller('ReportGenerationController', function($rootScope,$state, $scope, $http, $timeout,DataService,$interval) {
+
+    var urlS = $rootScope.urlS;
+    $scope.alerts = [];
+
+    $('input[name="datefilter"]').daterangepicker({
+        autoUpdateInput: false,
+        locale: {
+            cancelLabel: 'Clear'
+        }
+    });
+
+    $('#tool').on('apply.daterangepicker', function(ev, picker) {
+        $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+        var start = picker.startDate.format('YYYY-MM-DD');
+        var end = picker.endDate.format('YYYY-MM-DD');
+        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
+        var export_url = 'http://152.135.122.61:8871/api/export_tool_xls/?start_date=' + start +'&end_date='+ end
+        DataService.get(url_report).then(function () {
+            window.location = export_url;
+        });
+    });
+    $('#project').on('apply.daterangepicker', function(ev, picker) {
+        $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+        var start = picker.startDate.format('YYYY-MM-DD');
+        var end = picker.endDate.format('YYYY-MM-DD');
+        var url_report = 'api/export_project_xls/?start_date=' + start +'&end_date='+ end
+        var export_url = 'http://152.135.122.61:8871/api/export_project_xls/?start_date=' + start +'&end_date='+ end
+        DataService.get(url_report).then(function () {
+            window.location = export_url;
+        });
+    });
+    $('#user').on('apply.daterangepicker', function(ev, picker) {
+        $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+        var start = picker.startDate.format('YYYY-MM-DD');
+        var end = picker.endDate.format('YYYY-MM-DD');
+        var url_report = 'api/export_user_xls/?start_date=' + start +'&end_date='+ end
+        var export_url = 'http://152.135.122.61:8871/api/export_user_xls/?start_date=' + start +'&end_date='+ end
+        DataService.get(url_report).then(function () {
+            window.location = export_url;
+        });
+    });
+
+    $('input[name="datefilter"]').on('cancel.daterangepicker', function(ev, picker) {
+        $(this).val('');
+    });
+
+    var dayOne = 2017-02-08;
+    var current = moment().format("YYYY-MM-DD");
+    $scope.realtime =  moment().format('h:mm:ss a, MMMM Do YYYY');
+
+    $scope.toolWeekly = function(){
+        var id =  $rootScope.id;
+        var weekly = moment().subtract("days", 6).format("YYYY-MM-DD");
+        var start = weekly;
+        var end = current;
+        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
+        var export_url = 'http://152.135.122.61:8871/api/export_tool_xls/?start_date=' + start +'&end_date='+ end
+        DataService.get(url_report).then(function () {
+            window.location = export_url;
+        });
+    }
+    $scope.toolMonthly = function(){
+        var id =  $rootScope.id;
+        var monthly = moment().subtract("days", 29).format("YYYY-MM-DD");
+        var start = monthly;
+        var end = current;
+        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
+        var export_url = 'http://152.135.122.61:8871/api/export_tool_xls/?start_date=' + start +'&end_date='+ end
+        DataService.get(url_report).then(function () {
+            window.location = export_url;
+        });
+    }
+    $scope.toolQuatrely = function(){
+        var id =  $rootScope.id;
+        var quaterly = moment().subtract("days", 89).format("YYYY-MM-DD");
+        var start = quaterly;
+        var end = current;
+        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end;
+        var export_url = 'http://152.135.122.61:8871/api/export_tool_xls/?start_date=' + start +'&end_date='+ end
+        DataService.get(url_report).then(function () {
+            window.location = export_url;
+        });
+    }
+
+    $scope.projectWeekly = function(){
+        var id =  $rootScope.id;
+        var weekly = moment().subtract("days", 6).format("YYYY-MM-DD");
+        var start = weekly;
+        var end = current;
+        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
+        var export_url = 'http://152.135.122.61:8871/api/export_project_xls/?start_date=' + start +'&end_date='+ end
+        DataService.get(url_report).then(function () {
+            window.location = export_url;
+        });
+    }
+    $scope.projectMonthly = function(){
+        var id =  $rootScope.id;
+        var monthly = moment().subtract("days", 29).format("YYYY-MM-DD");
+        var start = monthly;
+        var end = current;
+        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
+        var export_url = 'http://152.135.122.61:8871/api/export_project_xls/?start_date=' + start +'&end_date='+ end
+        DataService.get(url_report).then(function () {
+            window.location = export_url;
+        });
+    }
+    $scope.projectQuatrely = function(){
+        var id =  $rootScope.id;
+        var quaterly = moment().subtract("days", 89).format("YYYY-MM-DD");
+        var start = quaterly;
+        var end = current;
+        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end;
+        var export_url = 'http://152.135.122.61:8871/api/export_project_xls/?start_date=' + start +'&end_date='+ end
+        DataService.get(url_report).then(function () {
+            window.location = export_url;
+        });
+    }
+    $scope.userWeekly = function(){
+        var id =  $rootScope.id;
+        var weekly = moment().subtract("days", 6).format("YYYY-MM-DD");
+        var start = weekly;
+        var end = current;
+        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
+        var export_url = 'http://152.135.122.61:8871/api/export_user_xls/?start_date=' + start +'&end_date='+ end
+        DataService.get(url_report).then(function () {
+            window.location = export_url;
+        });
+    }
+    $scope.userMonthly = function(){
+        var id =  $rootScope.id;
+        var monthly = moment().subtract("days", 29).format("YYYY-MM-DD");
+        var start = monthly;
+        var end = current;
+        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
+        var export_url = 'http://152.135.122.61:8871/api/export_user_xls/?start_date=' + start +'&end_date='+ end
+        DataService.get(url_report).then(function () {
+            window.location = export_url;
+        });
+    }
+    $scope.userQuatrely = function(){
+        var id =  $rootScope.id;
+        var quaterly = moment().subtract("days", 89).format("YYYY-MM-DD");
+        var start = quaterly;
+        var end = current;
+        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end;
+        var export_url = 'http://152.135.122.61:8871/api/export_user_xls/?start_date=' + start +'&end_date='+ end
+        DataService.get(url_report).then(function () {
+            window.location = export_url;
+        });
+    }
+});
 
 
 
@@ -1854,9 +1905,6 @@ angular.module('LabMonitoring').controller('ToolController',  function($rootScop
 
 
 
-   
-    $rootScope.settings.layout.pageBodySolid = true;
-    $rootScope.settings.layout.pageSidebarClosed = false;
 });
 
 
@@ -1972,11 +2020,6 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
 
 
 
-
-
-   
-    $rootScope.settings.layout.pageBodySolid = true;
-    $rootScope.settings.layout.pageSidebarClosed = true;
 });
 
 
@@ -2145,11 +2188,6 @@ angular.module('LabMonitoring').controller('ToolTableController', function($root
         $scope.alerts.splice(index, 1);
     };
 
-
-
-   
-    $rootScope.settings.layout.pageBodySolid = true;
-    $rootScope.settings.layout.pageSidebarClosed = true;
 });
 
 
@@ -2272,11 +2310,6 @@ angular.module('LabMonitoring').controller('UsersTableController', function($roo
         $scope.alerts.splice(index, 1);
     };
 
-
-
-   
-    $rootScope.settings.layout.pageBodySolid = true;
-    $rootScope.settings.layout.pageSidebarClosed = true;
 });
 
 

@@ -9,38 +9,13 @@
                 <i class=" fa fa-area-chart font-green"></i>
                 <span class="caption-subject font-green bold uppercase">CUMULATIVE TOOL ANALYTICS - Real-Time Data {{clock  | date:'medium'}}</span>
             </div>
-           <!-- <div class="actions">
-                <div class="page-bar">
-                    <div class="page-toolbar">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-fit-height grey-salt dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="true" aria-expanded="false"> Reports
-                                <i class="fa fa-angle-down"></i>
-                            </button>
-                            <ul class="dropdown-menu pull-right" role="menu">
-                                <li>
-                                    <a ng-click="weekly()">
-                                        <i class="icon-calendar"></i> Weekly</a>
-                                </li>
-                                <li>
-                                    <a ng-click="monthly()">
-                                        <i class="icon-calendar"></i> Monthly</a>
-                                </li>
-                                <li>
-                                    <a ng-click="quatrely()">
-                                        <i class="icon-calendar"></i> Quaterly</a>
-                                </li>
-                                <li class="divider"> </li>
-                                 <li>
-                                   <a>
-                                       <input date-range-picker class="form-control date-picker" type="text" ng-model="date" min="'2014-02-23'" max="'2015-02-25'"/>
-                                   </a>
-                                 </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>-->
+            <div class="actions help">
+                <a href="javascript:;" class="btn btn-icon-only yellow">
+                    <i class="glyphicon glyphicon-question-sign"></i>
+                </a>
+            </div>
         </div>
+
         <div class="portlet-body">
                   <div class="row">
         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -87,11 +62,12 @@
                 </div>
             </div>
         </div>
-    </div>
+             </div>
         </div>
     </div>
+</div>
 
-    <div class="portlet light portlet-fit bordered">
+    <div class="portlet light portlet-fit bordered" ng-controller="LabController">
         <div class="portlet-title">
             <div class="caption">
                 <i class=" fa fa-map-o font-green"></i>

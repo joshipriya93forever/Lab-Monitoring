@@ -5,12 +5,15 @@
             <span class="caption-subject font-blue-madison bold uppercase">Tool Status</span>
             <span class="caption-helper">select the status</span>
         </div>
+        <div class="actions help">
+            <label class="btn blue-steel btn-outline btn-circle btn-sm active" title="Help">
+                <i class="icon-question"></i></label>
+        </div>
     </div>
     <div class="portlet-body form">
         <div class="row">
             <div class="col-lg-offset-2 col-lg-6">
                 <div>
-                    {{item.id}}
                     <label class="btn btn-default btn-block" ng-model="item.status" ng-class="{'idle' : tool.status === 'ID'}" ng-click="statusChange(item)" uib-btn-radio="'ID'">IDLE</label>
                     <label class="btn btn-default btn-block" ng-model="item.status" ng-class="{'instal' : tool.status === 'IN'}" ng-click="statusChange(item)" uib-btn-radio="'IN'">Installation</label>
                     <label class="btn btn-default btn-block" ng-model="item.status" ng-class="{'productive' : tool.status === 'PR'}" ng-click="statusChange(item)" uib-btn-radio="'PR'">Productive</label>
@@ -28,6 +31,20 @@
 
                <!-- <a ui-sref="main.tool.statistics" class="btn default btn-block btn-lg"> Statistics </a>-->
             </div>
+        </div>
+    </div>
+</div>
+<div class="portlet light ">
+    <div class="portlet-title">
+        <div class="caption caption-md">
+            <i class="icon-bar-chart theme-font hide"></i>
+            <span class="caption-subject font-blue-madison bold uppercase">{{tool.name}}</span>
+            <span class="caption-helper"></span>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        <div class="row">
+
         </div>
     </div>
 </div>
