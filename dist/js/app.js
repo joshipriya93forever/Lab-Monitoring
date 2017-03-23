@@ -2053,7 +2053,7 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
 
 
 
-    $scope.options = {
+    $scope.optionsline = {
         chart: {
             type: 'lineChart',
             height: 450,
