@@ -574,7 +574,7 @@ angular.module('LabMonitoring').controller('ConsoleTableController',  function($
 
 });
 
-angular.module('LabMonitoring').controller('DashboardController', function($rootScope,$state, $scope, $http, $timeout,DataService,$interval) {
+angular.module('LabMonitoring').controller('DashboardController', function($rootScope,$state, $scope, $http, $timeout,DataService,$interval,$uibModal) {
 
     var urlS = $rootScope.urlS;
     $scope.alerts = [];
@@ -630,6 +630,14 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
     $timeout(tick, $scope.tickInterval);
 
 
+    $scope.help =  function () {
+        var out = $uibModal.open(
+            {
+                animation: $scope.animationsEnabled,
+                templateUrl: "templates/modals/helpDashboard.html",
+                controller: "Modal_handlerController",
+            })
+    }
 
 });
 
@@ -1555,6 +1563,20 @@ angular.module('LabMonitoring').controller('ModalController', function ($rootSco
 });
 
 
+angular.module('LabMonitoring').controller('Modal_handlerController', function ($rootScope,$scope, $state, $uibModalInstance) {
+
+
+
+    $scope.cancel = function () {                    
+        $uibModalInstance.dismiss();
+    };
+
+
+
+});
+
+
+
 angular.module('LabMonitoring').controller('ProjectTableController',  function($rootScope, $scope, $http, $state,$uibModal, $log,DataService) {
 
     var urlS = $rootScope.urlS;
@@ -2018,7 +2040,96 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
         }
     };
 
+    $scope.help =  function () {
+            var out = $uibModal.open(
+                {
+                    animation: $scope.animationsEnabled,
+                    templateUrl: "templates/modals/helpStatus.html",
+                    controller: "Modal_handlerController",
+                })
+    }
 
+
+
+
+
+    $scope.options = {
+        chart: {
+            type: 'lineChart',
+            height: 450,
+            margin : {
+                top: 20,
+                right: 20,
+                bottom: 40,
+                left: 55
+            },
+            x: function(d){ return d.x; },
+            y: function(d){ return d.y; },
+            useInteractiveGuideline: true,
+            dispatch: {
+                stateChange: function(e){ console.log("stateChange"); },
+                changeState: function(e){ console.log("changeState"); },
+                tooltipShow: function(e){ console.log("tooltipShow"); },
+                tooltipHide: function(e){ console.log("tooltipHide"); }
+            },
+            xAxis: {
+                axisLabel: 'Date'
+            },
+            yAxis: {
+                axisLabel: 'Hrs',
+                tickFormat: function(d){
+                    return d3.format('.02f')(d);
+                },
+                axisLabelDistance: -10
+            },
+            callback: function(chart){
+                console.log("!!! lineChart callback !!!");
+            }
+        }
+    };
+
+    $scope.data = sinAndCos();
+
+    
+    function sinAndCos() {
+        var sin = [],sin2 = [],
+            cos = [];
+
+       
+        for (var i = 0; i < 100; i++) {
+            sin.push({x: i, y: Math.sin(i/10)});
+            sin2.push({x: i, y: i % 10 == 5 ? null : Math.sin(i/10) *0.25 + 0.5});
+            cos.push({x: i, y: .5 * Math.cos(i/10+ 2) + Math.random() / 10});
+        }
+
+       
+        return [
+            {
+                values: sin,     
+                key: 'Productive',
+                color: '#c2de80', 
+                classed: 'dashed'
+            },
+            {
+                values: cos,
+                key: 'Idle',
+                color: '#ff7f7f',
+                classed: 'dashed'
+            },
+            {
+                values: sin,
+                key: 'Maintenance',
+                color: '#9ac3f5',
+                classed: 'dashed'
+            },
+            {
+                values: cos,
+                key: 'Installation',
+                color: '#ffff80',
+                classed: 'dashed'
+            }
+        ];
+    };
 
 });
 

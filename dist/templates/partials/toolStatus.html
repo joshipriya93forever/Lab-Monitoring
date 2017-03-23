@@ -5,9 +5,10 @@
             <span class="caption-subject font-blue-madison bold uppercase">Tool Status</span>
             <span class="caption-helper">select the status</span>
         </div>
-        <div class="actions help">
-            <label class="btn blue-steel btn-outline btn-circle btn-sm active" title="Help">
-                <i class="icon-question"></i></label>
+        <div class="actions">
+            <a ng-click="help()" class="btn btn-icon-only yellow" title="Help">
+                <i class="glyphicon glyphicon-question-sign"></i>
+            </a>
         </div>
     </div>
     <div class="portlet-body form">
@@ -20,16 +21,7 @@
                     <label class="btn btn-default btn-block" ng-model="item.status" ng-class="{'maintenance' : tool.status === 'MA'}" ng-click="statusChange(item)" uib-btn-radio="'MA'">Maintenance</label>
                     <label class="btn btn-default btn-block" ng-click="statistics()">Statistics</label>
                 </div>
-               <!-- <div class="btn-group" data-toggle="buttons">
-                    <label class="btn btn-default active">
-                        <input type="radio" ng-model="item.status" ng-click="status(item)" name="item" ng-value="SB" class="toggle"> Option 1 </label>
-                    <label class="btn btn-default">
-                        <input type="radio" ng-model="item.status" ng-click="status(item)" name="item" ng-value="PR" class="toggle"> Option 2 </label>
-                    <label class="btn btn-default">
-                        <input type="radio" ng-model="item.status" ng-click="status(item)" name="item" ng-value="MA" class="toggle"> Option 3 </label>
-                </div>-->
 
-               <!-- <a ui-sref="main.tool.statistics" class="btn default btn-block btn-lg"> Statistics </a>-->
             </div>
         </div>
     </div>
@@ -44,7 +36,7 @@
     </div>
     <div class="portlet-body form">
         <div class="row">
-
+            <nvd3 options="options" data="data" class="with-3d-shadow with-transitions"></nvd3>
         </div>
     </div>
 </div>
