@@ -14,7 +14,8 @@ var LabMonitoring = angular.module("LabMonitoring", [
     "checklist-model",
     "ngMessages",
     'nvd3',
-    'daterangepicker'
+    'daterangepicker',
+    'chart.js'
 ]); 
 
 
@@ -1315,7 +1316,7 @@ angular.module('LabMonitoring').controller('LabController', function($rootScope,
         });
         
         
-        
+         
         
     };
     $scope.bayStatus();
@@ -1932,7 +1933,7 @@ angular.module('LabMonitoring').controller('ToolController',  function($rootScop
 
 
 
-angular.module('LabMonitoring').controller('ToolStatusController',  function($rootScope, $scope, settings, $state,DataService,$uibModal, $log) {
+angular.module('LabMonitoring').controller('ToolStatusController',  function($rootScope, $scope, settings, $state,DataService,$uibModal, $log,$interval) {
 
     var urlS = $rootScope.urlS;
     var aurl = $rootScope.url;
@@ -2052,84 +2053,79 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
 
 
 
+    Date.prototype.formatMMDDYYYY = function() {
+        return (this.getMonth() + 1) +
+            "/" +  this.getDate() +
+            "/" +  this.getFullYear();
+    }
 
-    $scope.optionsline = {
-        chart: {
-            type: 'lineChart',
-            height: 450,
-            margin : {
-                top: 20,
-                right: 20,
-                bottom: 40,
-                left: 55
-            },
-            x: function(d){ return d.x; },
-            y: function(d){ return d.y; },
-            useInteractiveGuideline: true,
-            dispatch: {
-                stateChange: function(e){ console.log("stateChange"); },
-                changeState: function(e){ console.log("changeState"); },
-                tooltipShow: function(e){ console.log("tooltipShow"); },
-                tooltipHide: function(e){ console.log("tooltipHide"); }
-            },
-            xAxis: {
-                axisLabel: 'Date'
-            },
-            yAxis: {
-                axisLabel: 'Hrs',
-                tickFormat: function(d){
-                    return d3.format('.02f')(d);
+    $scope.trendChart = function() {
+
+        $scope.loading = false;
+        var label = [], Productive = [],  Maintenance = [], Idle = [], Installation = [], data1=[];
+        $scope.trend = [];
+        var i = 0;
+        var id =  $rootScope.id;
+        var update =  function (){
+            label = [], Productive = [],  Maintenance = [], Idle = [], Installation = [], data1=[];
+            var url_trend = urlS.tools + id + '/trend/'
+            DataService.get(url_trend).then(function (data) {
+                $scope.trend = data.trend;
+                $scope.trends = $scope.trend;
+                var n = $scope.trend.length;
+                for(i = n-1 ; i >= 0; i--){
+                    label.push(new Date($scope.trend[i].date).formatMMDDYYYY());
+                    Productive.push($scope.trend[i].PR);
+                    Maintenance.push($scope.trend[i].MA);
+                    Idle.push($scope.trend[i].ID);
+                    Installation.push($scope.trend[i].IN);
+                }
+            }, function myError(response) {
+                $scope.trend = response.statusText;
+            }).finally(function () {
+                $scope.loading = true;
+            });
+           
+        };
+
+        refreshCanvas = $interval(update, 10000);
+
+
+        $scope.$watch('trends', function(){
+            data1.push(Productive,Maintenance,Idle,Installation);
+            $scope.labels = label;
+            $scope.series = ['Productive', 'Maintenance', 'Idle', 'Installation'];
+            $scope.data = data1;
+            $scope.colors = ['#c2de80','#9ac3f5','#ff7f7f','#ffff80' ];
+
+            $scope.datasetOverride = [{ yAxisID: 'y-axis-1' }];
+            $scope.optionsTrend = {
+                scales: {
+                    yAxes: [
+                        {
+                            id: 'y-axis-1',
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            beginAtZero:true
+                        }
+                    ]
                 },
-                axisLabelDistance: -10
-            },
-            callback: function(chart){
-                console.log("!!! lineChart callback !!!");
-            }
-        }
-    };
+                pan: {
+                   
+                    enabled: true,
+                    mode: 'xy'
+                },
+                zoom: {
+                    enabled: true,
+                    mode: 'xy'
+                }
+            };
 
-    $scope.data = sinAndCos();
+        });
 
-    
-    function sinAndCos() {
-        var sin = [],sin2 = [],
-            cos = [];
 
-       
-        for (var i = 0; i < 100; i++) {
-            sin.push({x: i, y: Math.sin(i/10)});
-            sin2.push({x: i, y: i % 10 == 5 ? null : Math.sin(i/10) *0.25 + 0.5});
-            cos.push({x: i, y: .5 * Math.cos(i/10+ 2) + Math.random() / 10});
-        }
-
-       
-        return [
-            {
-                values: sin,     
-                key: 'Productive',
-                color: '#c2de80', 
-                classed: 'dashed'
-            },
-            {
-                values: cos,
-                key: 'Idle',
-                color: '#ff7f7f',
-                classed: 'dashed'
-            },
-            {
-                values: sin,
-                key: 'Maintenance',
-                color: '#9ac3f5',
-                classed: 'dashed'
-            },
-            {
-                values: cos,
-                key: 'Installation',
-                color: '#ffff80',
-                classed: 'dashed'
-            }
-        ];
-    };
+    }();
 
 });
 

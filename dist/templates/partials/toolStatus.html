@@ -46,7 +46,10 @@
     </div>
     <div class="portlet-body form">
         <div class="row">
-            <nvd3 options="optionsline" data="data" class="with-3d-shadow with-transitions"></nvd3>
+            <canvas id="line" class=" chart-line" chart-data="data"
+                    chart-labels="labels" chart-series="series" chart-options="optionsTrend"  chart-colors="colors"
+                    chart-click="onClick">
+            </canvas>
         </div>
     </div>
 </div>
