@@ -5,10 +5,8 @@
             <span class="caption-subject font-blue-madison bold uppercase">Tool Status</span>
             <span class="caption-helper">select the status</span>
         </div>
-        <div class="actions">
-            <a ng-click="help()" class="btn btn-icon-only yellow" title="Help">
-                <i class="glyphicon glyphicon-question-sign"></i>
-            </a>
+        <div id="help" class="actions">
+            <img src="images/help.png" ng-click="help('lg')"/>
         </div>
     </div>
     <div class="portlet-body form">
@@ -40,15 +38,20 @@
     <div class="portlet-title">
         <div class="caption caption-md">
             <i class="icon-bar-chart theme-font hide"></i>
-            <span class="caption-subject font-blue-madison bold uppercase">{{tool.name}}</span>
-            <span class="caption-helper"></span>
+            <span class="caption-subject font-blue-madison bold uppercase">Trend</span>
         </div>
+            <div class="actions" ng-controller="ReportGenerationController">
+                <a><i class="icon-calendar"></i>Select Date
+                    <input type="text" name="datefilter" id="tool" value=""  minDate="dayOne" maxDate="current"/>
+
+                </a>
+            </div>
     </div>
     <div class="portlet-body form">
         <div class="row">
-            <canvas id="line" class=" chart-line" chart-data="data"
-                    chart-labels="labels" chart-series="series" chart-options="optionsTrend"  chart-colors="colors"
-                    chart-click="onClick">
+            <canvas id="line" class="chart-line" chart-data="data"
+                    chart-labels="labels" chart-series="series" chart-options="optionsTrend"  chart-colors="colors"  legend="true"
+                    chart-dataset-override="datasetOverride"  chart-click="onClick">
             </canvas>
         </div>
     </div>

@@ -631,12 +631,13 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
     $timeout(tick, $scope.tickInterval);
 
 
-    $scope.help =  function () {
+    $scope.help =  function (opt_attributes) {
         var out = $uibModal.open(
             {
                 animation: $scope.animationsEnabled,
                 templateUrl: "templates/modals/helpDashboard.html",
                 controller: "Modal_handlerController",
+                size : opt_attributes
             })
     }
 
@@ -1998,12 +1999,10 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
         var url_userUtilization = urlS.tools + id + '/user_utilization/'
         DataService.get(url_userUtilization).then(function (data) {
             $scope.userUtilization = data;
-            console.log(data);
         });
         var url_projectUtilization = urlS.tools + id + '/project_utilization/'
         DataService.get(url_projectUtilization).then(function (data) {
             $scope.projectUtilization = data;
-            console.log(data);
         });
         $state.go('main.tool.statistics');
     }
@@ -2041,17 +2040,38 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
         }
     };
 
-    $scope.help =  function () {
+    $scope.help =  function (opt_attributes) {
             var out = $uibModal.open(
                 {
                     animation: $scope.animationsEnabled,
                     templateUrl: "templates/modals/helpStatus.html",
                     controller: "Modal_handlerController",
+                    size : opt_attributes
                 })
     }
 
+    $('input[name="datefilter"]').daterangepicker({
+        autoUpdateInput: false,
+        locale: {
+            cancelLabel: 'Clear'
+        }
+    });
 
 
+    $('#trend').on('apply.daterangepicker', function(ev, picker) {
+        $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+        console.log(val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD')));
+        var start = picker.startDate.format('YYYY-MM-DD');
+        var end = picker.endDate.format('YYYY-MM-DD');
+        var url_trend = urlS.tools + id + '/trend/?start_date=' + start +'&end_date='+ end
+        DataService.get(url_trend).then(function (data) {
+            console.log(data);
+        });
+    });
+
+    $('input[name="datefilter"]').on('cancel.daterangepicker', function(ev, picker) {
+        $(this).val('');
+    });
 
     Date.prototype.formatMMDDYYYY = function() {
         return (this.getMonth() + 1) +
@@ -2068,7 +2088,7 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
         var id =  $rootScope.id;
         var update =  function (){
             label = [], Productive = [],  Maintenance = [], Idle = [], Installation = [], data1=[];
-            var url_trend = urlS.tools + id + '/trend/'
+            var url_trend = urlS.tools + id + '/trend/'  
             DataService.get(url_trend).then(function (data) {
                 $scope.trend = data.trend;
                 $scope.trends = $scope.trend;
@@ -2097,8 +2117,16 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
             $scope.series = ['Productive', 'Maintenance', 'Idle', 'Installation'];
             $scope.data = data1;
             $scope.colors = ['#c2de80','#9ac3f5','#ff7f7f','#ffff80' ];
-
-            $scope.datasetOverride = [{ yAxisID: 'y-axis-1' }];
+            $scope.datasetOverride = [
+                {
+                    label: "Line chart",
+                    borderWidth: 3,
+                    hoverBackgroundColor: "rgba(255,99,132,0.4)",
+                    hoverBorderColor: "rgba(255,99,132,1)",
+                    fill: false,
+                    type: 'line'
+                }
+            ];
             $scope.optionsTrend = {
                 scales: {
                     yAxes: [
@@ -2121,11 +2149,17 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
                     mode: 'xy'
                 }
             };
-
         });
-
-
     }();
+
+
+
+    var dayOne = 2017-02-08;
+    var current = moment().format("YYYY-MM-DD");
+    $scope.realtime =  moment().format('h:mm:ss a, MMMM Do YYYY');
+
+
+
 
 });
 
