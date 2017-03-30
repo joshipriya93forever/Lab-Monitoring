@@ -176,7 +176,7 @@ LabMonitoring.config([ '$stateProvider',
         })
 
        
-        .state("tool.status", {
+        .state("main.tool.status", {
             url: "/status",
             templateUrl: "templates/partials/toolStatus.html",
             data: {pageTitle: 'Tool Status'}
@@ -2050,28 +2050,8 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
                 })
     }
 
-    $('input[name="datefilter"]').daterangepicker({
-        autoUpdateInput: false,
-        locale: {
-            cancelLabel: 'Clear'
-        }
-    });
 
 
-    $('#trend').on('apply.daterangepicker', function(ev, picker) {
-        $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
-        console.log(val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD')));
-        var start = picker.startDate.format('YYYY-MM-DD');
-        var end = picker.endDate.format('YYYY-MM-DD');
-        var url_trend = urlS.tools + id + '/trend/?start_date=' + start +'&end_date='+ end
-        DataService.get(url_trend).then(function (data) {
-            console.log(data);
-        });
-    });
-
-    $('input[name="datefilter"]').on('cancel.daterangepicker', function(ev, picker) {
-        $(this).val('');
-    });
 
     Date.prototype.formatMMDDYYYY = function() {
         return (this.getMonth() + 1) +
@@ -2151,14 +2131,11 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
         }();
 
 
-       
 
 
 
 
-    var dayOne = 2017-02-08;
-    var current = moment().format("YYYY-MM-DD");
-    $scope.realtime =  moment().format('h:mm:ss a, MMMM Do YYYY');
+
 
 
 
