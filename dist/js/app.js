@@ -176,7 +176,7 @@ LabMonitoring.config([ '$stateProvider',
         })
 
        
-        .state("main.tool.status", {
+        .state("tool.status", {
             url: "/status",
             templateUrl: "templates/partials/toolStatus.html",
             data: {pageTitle: 'Tool Status'}
@@ -2079,14 +2079,15 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
             "/" +  this.getFullYear();
     }
 
-    $scope.trendChart = function() {
 
-        $scope.loading = false;
+
+
         var label = [], Productive = [],  Maintenance = [], Idle = [], Installation = [], data1=[];
-        $scope.trend = [];
-        var i = 0;
-        var id =  $rootScope.id;
         var update =  function (){
+            $scope.loading = false;
+            $scope.trend = [];
+            var i = 0;
+            var id =  $rootScope.id;
             label = [], Productive = [],  Maintenance = [], Idle = [], Installation = [], data1=[];
             var url_trend = urlS.tools + id + '/trend/'  
             DataService.get(url_trend).then(function (data) {
@@ -2100,57 +2101,58 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
                     Idle.push($scope.trend[i].ID);
                     Installation.push($scope.trend[i].IN);
                 }
+                data1.push(Productive,Maintenance,Idle,Installation);
+                $scope.labels = label;
+                $scope.series = ['Productive', 'Maintenance', 'Idle', 'Installation'];
+                $scope.data = data1;
+                $scope.colors = ['#c2de80','#9ac3f5','#ff7f7f','#ffff80' ];
+                $scope.datasetOverride = [
+                    {
+                        yAxisID: 'y-axis-1'
+                    },
+                    {
+                        label: "Line chart",
+                        borderWidth: 3,
+                        backgroundColor: "transparent",
+                        hoverBackgroundColor: "rgba(255,99,132,0.4)",
+                        hoverBorderColor: "rgba(255,99,132,1)",
+                        type: 'line'
+                    }
+                ];
+                $scope.optionsTrend = {
+                    scales: {
+                        yAxes: [
+                            {
+                                id: 'y-axis-1',
+                                type: 'linear',
+                                display: true,
+                                position: 'left',
+                                beginAtZero:true,
+                                labelString: 'probability'
+                            }
+                        ]
+                    },
+                    pan: {
+                       
+                        enabled: true,
+                        mode: 'xy'
+                    },
+                    zoom: {
+                        enabled: true,
+                        mode: 'xy'
+                    }
+                };
             }, function myError(response) {
                 $scope.trend = response.statusText;
             }).finally(function () {
                 $scope.loading = true;
             });
            
-        };
-
-        refreshCanvas = $interval(update, 10000);
+        }();
 
 
-        $scope.$watch('trends', function(){
-            data1.push(Productive,Maintenance,Idle,Installation);
-            $scope.labels = label;
-            $scope.series = ['Productive', 'Maintenance', 'Idle', 'Installation'];
-            $scope.data = data1;
-            $scope.colors = ['#c2de80','#9ac3f5','#ff7f7f','#ffff80' ];
-            $scope.datasetOverride = [
-                {
-                    label: "Line chart",
-                    borderWidth: 3,
-                    hoverBackgroundColor: "rgba(255,99,132,0.4)",
-                    hoverBorderColor: "rgba(255,99,132,1)",
-                    fill: false,
-                    type: 'line'
-                }
-            ];
-            $scope.optionsTrend = {
-                scales: {
-                    yAxes: [
-                        {
-                            id: 'y-axis-1',
-                            type: 'linear',
-                            display: true,
-                            position: 'left',
-                            beginAtZero:true
-                        }
-                    ]
-                },
-                pan: {
-                   
-                    enabled: true,
-                    mode: 'xy'
-                },
-                zoom: {
-                    enabled: true,
-                    mode: 'xy'
-                }
-            };
-        });
-    }();
+       
+
 
 
 

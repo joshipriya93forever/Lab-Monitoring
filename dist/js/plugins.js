@@ -43533,7 +43533,7 @@ module.exports = function(Chart) {
       var alpha = color[3] || 1;
       color = color.slice(0, 3);
       return {
-        backgroundColor: rgba(color, 0.2),
+        backgroundColor: rgba(color, 0),
         pointBackgroundColor: rgba(color, alpha),
         pointHoverBackgroundColor: rgba(color, 0.8),
         borderColor: rgba(color, alpha),
