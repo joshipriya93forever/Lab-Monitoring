@@ -8,9 +8,10 @@
             <div class="caption">
                 <i class=" fa fa-area-chart font-green"></i>
                 <span class="caption-subject font-green bold uppercase">CUMULATIVE TOOL ANALYTICS - Real-Time Data {{clock  | date:'medium'}}</span>
-            </div>
-            <div id="help" class="actions">
                 <a type="button" id="export" class="btn blue-ebonyclay" href="http://152.135.122.61:8871/api/export_tool_xls" target="_self" download="status.pdf">Export Excel</a>
+            </div>
+            <div id="help" class="actions dash">
+
                 <img src="images/help.png" ng-click="help('lg')"/>  <canvas id="line" class="chart-line" chart-data="data"
                                                                             chart-labels="labels" chart-series="series" chart-options="optionsTrend"  chart-colors="colors"  legend="true"
                                                                             chart-dataset-override="datasetOverride"  chart-click="onClick">

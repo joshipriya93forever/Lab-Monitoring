@@ -1807,7 +1807,6 @@ angular.module('LabMonitoring').controller('ReportGenerationController', functio
             window.location = export_url;
         });
     }
-
     $scope.projectWeekly = function(){
         var id =  $rootScope.id;
         var weekly = moment().subtract("days", 6).format("YYYY-MM-DD");
@@ -1932,7 +1931,7 @@ angular.module('LabMonitoring').controller('ToolController',  function($rootScop
 
 
 
-angular.module('LabMonitoring').controller('ToolStatusController',  function($rootScope, $scope, settings, $state,DataService,$uibModal, $log,$interval) {
+angular.module('LabMonitoring').controller('ToolStatusController',  function($rootScope, $scope, settings, $state,DataService,$uibModal, $log,$interval,$http) {
 
     var urlS = $rootScope.urlS;
     var aurl = $rootScope.url;
@@ -2134,7 +2133,32 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
 
 
 
+    $('input[name="datefilter"]').daterangepicker({
+        autoUpdateInput: false,
+        locale: {
+            cancelLabel: 'Clear'
+        }
+    });
 
+    $('#trend').on('apply.daterangepicker', function(ev, picker) {
+        $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+        var start = picker.startDate.format('YYYY-MM-DD');
+        var end = picker.endDate.format('YYYY-MM-DD');
+        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
+        var export_url = 'http://152.135.122.61:8871/api/export_tool_xls/?start_date=' + start +'&end_date='+ end
+        DataService.get(url_report).then(function () {
+            window.location = export_url;
+        });
+    });
+
+
+    $('input[name="datefilter"]').on('cancel.daterangepicker', function(ev, picker) {
+        $(this).val('');
+    });
+
+    var dayOne = 2017-02-08;
+    var current = moment().format("YYYY-MM-DD");
+    $scope.realtime =  moment().format('h:mm:ss a, MMMM Do YYYY');
 
 
 
