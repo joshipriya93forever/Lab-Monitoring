@@ -1,6 +1,4 @@
 
-
-
 var LabMonitoring = angular.module("LabMonitoring", [
     "ui.router",
     "ui.bootstrap",
