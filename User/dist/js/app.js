@@ -1,19 +1,14 @@
 
-
-
 var LabMonitoring = angular.module("LabMonitoring", [
     "ui.router",
     "ui.bootstrap",
     "oc.lazyLoad",
     "ngSanitize",
     "ngStorage",
-    "angularjs-dropdown-multiselect",
-    "datatables",
-    "ngFileUpload",
-    "angularUtils.directives.dirPagination",
-    "checklist-model",
+    'chart.js',
     "ngMessages",
-    'nvd3'
+    'nvd3',
+    'daterangepicker'
 ]); 
 
 
@@ -58,6 +53,12 @@ LabMonitoring.controller('HeaderController', ['$scope', function($scope) {
 }]);
 
 
+LabMonitoring.controller('SidebarController', ['$state', '$scope', function($state, $scope) {
+    $scope.$on('$includeContentLoaded', function() {
+        Layout.initSidebar($state);
+    });
+}]);
+
 
 
 LabMonitoring.controller('FooterController', ['$scope', function($scope) {
@@ -91,21 +92,23 @@ LabMonitoring.directive('myDirective', function() {
 
 
 
-
     
 LabMonitoring.run(["$rootScope", "settings", "$state","$http","$localStorage", function($rootScope, settings, $state,$http,$localStorage) {
     $rootScope.$state = $state;
     $rootScope.$settings = settings;
    
-    $http.get('config/config.json').success(function (response)
-    {
-        $rootScope.baseURL = response.baseURL;
-        $rootScope.urlS = response.urlS;
-        $rootScope.url = response.url;
-        $rootScope.config = response;
-    }).error(function () {
+    $http({
+        method: 'GET',
+        url: 'config/config.json'
+    }).then(function (success){
+        $rootScope.baseURL = success.data.baseURL;
+        $rootScope.urlS = success.data.urlS;
+        $rootScope.url = success.data.url;
+        $rootScope.config = success.data;
+    },function (error){
         console.log('config file missing');
     });
+   
 }]);
 
 LabMonitoring.config(['$httpProvider',function($httpProvider)
@@ -130,6 +133,12 @@ LabMonitoring.config([ '$stateProvider',
 
     $stateProvider
 
+        .state('login', {
+            url: "/login.html",
+            templateUrl: "templates/views/login.html",
+            data: {pageTitle: 'Admin Login'},
+            controller: "LoginController"
+        })
 
        
         .state('dashboard', {
@@ -139,13 +148,13 @@ LabMonitoring.config([ '$stateProvider',
             controller: "DashboardController"
             })
 
-        .state('tool', {
-            url: "/tool.html",
+       
+        .state("tool", {
+            url: "/tool",
             templateUrl: "templates/views/tool.html",
-            data: {pageTitle: 'Admin Dashboard'},
-            controller: "ToolStatusController"
+            data: {pageTitle: 'Tool'},
+            controller: "ToolStatisticsController"
         })
-
 
 
         .state("tool.statistics", {
@@ -154,7 +163,12 @@ LabMonitoring.config([ '$stateProvider',
             data: {pageTitle: 'Tool Statistics'}
         })
 
-
+        .state('labTrend', {
+            url: "/labTrend",
+            templateUrl: "templates/views/labTrend.html",
+            data: {pageTitle: 'Lab Trend'},
+            controller: "LabTrendController"
+        })
 
 }]);
 LabMonitoring.run(function($rootScope, $location) {
@@ -163,9 +177,9 @@ LabMonitoring.run(function($rootScope, $location) {
             $location.path("/login.html");
         }
     })
-})
+});
 
-angular.module('LabMonitoring').controller('DashboardController', function($rootScope,$state, $scope, $http, $timeout,DataService,$interval) {
+angular.module('LabMonitoring').controller('DashboardController', function($rootScope,$state, $scope, $http, $timeout,DataService,$interval,$uibModal) {
 
     var urlS = $rootScope.urlS;
     $scope.alerts = [];
@@ -189,12 +203,73 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
 
         });
     };
-    $scope.getCumulativeData();
+    $scope.getCumulativeData();    
+
+    $scope.getMonthlyCumulativeData = function() {
+        var url = urlS.tools + 'monthlylab_utilization/'
+        DataService.get(url).then(function (data) {
+            $rootScope.monthlycumulative = data;
+        }, function (err) {
+
+        });
+    };
+    $scope.getMonthlyCumulativeData();
 
     $scope.setId = function (id) {
         $rootScope.id = id;
         $state.go('tool.statistics');
     }
+
+
+   
+    $scope.closeAlert = function(index){
+        $scope.alerts.splice(index, 1);
+    };
+
+
+
+    $scope.clock = "loading clock...";
+    $scope.tickInterval = 1000
+
+    var tick = function() {
+        $scope.clock = Date.now()
+        $timeout(tick, $scope.tickInterval);
+    }
+
+   
+    $timeout(tick, $scope.tickInterval);
+
+
+    $scope.help =  function (opt_attributes) {
+        var out = $uibModal.open(
+            {
+                animation: $scope.animationsEnabled,
+                templateUrl: "templates/modals/helpDashboard.html",
+                controller: "Modal_handlerController",
+                size : opt_attributes
+            })
+    }
+
+
+
+    $scope.labModal  =  function (opt_attributes) {
+        var out = $uibModal.open(
+            {
+                animation: $scope.animationsEnabled,
+                templateUrl: "templates/modals/labTrend.html",
+                controller: "Modal_handlerController",
+                size: opt_attributes
+            })
+    }
+
+});
+
+
+angular.module('LabMonitoring').controller('LabController', function($rootScope,$state, $scope, $http, $timeout,DataService,$interval) {
+
+    var urlS = $rootScope.urlS;
+    $scope.alerts = [];
+
 
 
 
@@ -220,7 +295,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
 
             });
         });
-       
+        
         $("#bay3").ready(function () {
             var url = urlS.tools + 65 + '/'
             DataService.get(url).then(function (data) {
@@ -263,7 +338,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
 
             });
         });
-       
+        
         
         $("#bay7").ready(function () {
             var url = urlS.tools + 50 + '/'
@@ -457,7 +532,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
 
             });
         });
-       
+        
         $("#bay20").ready(function () {
             var url = urlS.tools + 55 + '/'
             DataService.get(url).then(function (data) {
@@ -670,7 +745,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
 
             });
         });
-      
+        
         
         $("#bay34").ready(function () {
             var url = urlS.tools + 29 + '/'
@@ -862,44 +937,14 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
             });
         });
         
-       
-        $("#bay45").ready(function () {
-            var url = urlS.tools + 134 + '/'
-            DataService.get(url).then(function (data) {
-                $scope.tool = data;
-                $scope.tstatus = $scope.tool.status;
-                if ($scope.tstatus === 'IN') {
-                    $('#bay45').css({fill: "#ffff80"});
-                }
-                else if ($scope.tstatus === 'ID') {
-                    $('#bay45').css({fill: "#ff7f7f"});
-                }
-                else if ($scope.tstatus === 'PR') {
-                    $('#bay45').css({fill: "#c2de80"});
-                }
-                else if ($scope.tstatus === 'MA') {
-                    $('#bay45').css({fill: "#9ac3f5"});
-                }
-            }, function (err) {
-
-            });
-        });
-       
+        
+         
+        
     };
     $scope.bayStatus();
 
     refreshMap = $interval($scope.bayStatus, 60000);
 
-   
-    $scope.closeAlert = function(index){
-        $scope.alerts.splice(index, 1);
-    };
-
-
-
-
-    $rootScope.settings.layout.pageBodySolid = true;           
-    $rootScope.settings.layout.pageSidebarClosed = true;        
 });
 
 angular.module('LabMonitoring').controller('LoginController', function($rootScope, $scope, settings,$location, $state,$http,$localStorage,DataService) {
@@ -908,20 +953,22 @@ angular.module('LabMonitoring').controller('LoginController', function($rootScop
     $scope.alerts = [];
 
 
+    $scope.submit = function (login) {
+           if(login === undefined || login.email === undefined || login.email === " " || login.password === " " || login.password === undefined) {
+               console.log('enter valid username && password');
+           }
+           else {
+               var url = urlS.login
+               DataService.post(url, login).then(function (data) {
+                   var token = data.token;
+                   $localStorage.token = token;
+                   $state.go('dashboard');
+               }, function (err) {
+                   $scope.alerts.push({type: 'danger', msg: 'Please enter valid Email and Password.'});
+               });
+           }
+    }
 
-      $scope.login = function() {
-          $.post("http://152.135.122.61:8871/api-token-auth/", {
-              email: "bay@amat.com",
-              password: "bay123"
-          }).then(function (data) {
-              var token = data.token;
-              $localStorage.token = token;
-              $state.go('dashboard');
-          }, function (err) {
-              $scope.alerts.push({type: 'danger', msg: 'Please enter valid Email and Password.'});
-          });
-      };
-    $scope.login();
     if($localStorage.token === undefined) {
         $location.path('/login');
     };
@@ -943,13 +990,432 @@ angular.module('LabMonitoring').controller('LoginController', function($rootScop
 
 
 
+});
+
+
+angular.module('LabMonitoring').controller('ModalController', function ($rootScope,$scope, $state, $uibModalInstance, item, $http,DataService,Upload) {
+        if (item) {
+            $scope.item = item;
+        }
+        $scope.changedItem = {
+            item: $scope.item
+        };
 
 
 
+    var urlS = $rootScope.urlS;
+    var aurl = $rootScope.url;
+    $scope.alerts = [];
+
+
+       
+    $scope.assignToolProject = function (Projectsmodel,item) {
+        $rootScope.toolProject(Projectsmodel,item);
+    };
+
+    
+    $scope.assignUsers = function (Usersmodel,item) {
+        $rootScope.toolassignUser(Usersmodel,item);
+    };
+
+
+    
+    $scope.assign = function (Usersmodel,item) {
+          $rootScope.assignProjectUser(Usersmodel,item);
+
+    };
+
+    $scope.cancel = function () {                    
+        $uibModalInstance.dismiss();
+    };
+
+    $scope.edit = function (tool,picFile) {                    
+        if(item.name === "" || item.name === undefined){
+            console.log('field is required');
+        }
+        else {
+            var url = urlS.tools+item.id + '/';
+            item.upload = Upload.upload({
+                method: 'PATCH',
+                url: $rootScope.baseURL + url,
+                data: {
+                    name: item.name, image: picFile, tool_owner: item.tool_owner, bay_number: item.bay_number
+                }
+            }).then(function (resp) {
+                $state.go('toolTable');
+            }, function (resp) {
+                $scope.alerts.push({type: 'danger', msg: 'Sorry!!! Something went wrong. Please try again.'});
+            });
+            $uibModalInstance.close($scope.changedItem.item);
+        }
+    };
+
+
+    $scope.ok = function () {                    
+        if(item.name === "" || item.name === undefined){
+          console.log('field is required');
+        }
+        else {
+            $uibModalInstance.close($scope.changedItem.item);
+        }
+    };
+    $scope.change = function () {                    
+        console.log(item);
+        if(item.rfid === "" || item.rfid === undefined){
+            console.log('field is required');
+        }
+        else {
+            $uibModalInstance.close($scope.changedItem.item);
+        }
+    };
+
+    $scope.sure = function (){
+            $uibModalInstance.close($scope.changedItem.item);
+    };
+
+   
+    $scope.closeAlert = function(index){
+        $scope.alerts.splice(index, 1);
+    };
+
+
+
+     $scope.getUsersData = function(){                     
+         var url = urlS.users;
+         DataService.get(url).then(function (data) {
+             $scope.Users = data;
+             $scope.Usersdata = $scope.Users;
+         }, function (err) {
+             $scope.alerts.push({type: 'danger', msg: 'Sorry!!! Something went wrong. Please try again.'});
+         });
+     }
+    $scope.getUsersData();
+
+    
+    $scope.getProjectData = function(){
+        var url = urlS.projects;
+        DataService.get(url).then(function (data) {
+            $scope.Projects = data;
+            $scope.Projectsdata = $scope.Projects;
+        }, function (err) {
+            $scope.alerts.push({type: 'danger', msg: 'Sorry!!! Something went wrong. Please try again.'});
+        });
+    }
+    $scope.getProjectData();
+
+    $rootScope.assigntoolProject = function(Usersmodel,item){
+        var dataToPost = {};
+        var  project_ids= [];
+        angular.forEach(Usersmodel, function(value, key) {
+            this.push(value.id);
+        }, project_ids);
+        dataToPost.project_ids = project_ids;
+        var url = urlS.tools+item.id + aurl.aproject;
+        DataService.post(url, dataToPost).then(function (data) {
+            $scope.item.toolProjects = data;
+            $scope.users= $scope.item.toolProjects;
+
+        }, function (err) {
+            $scope.alerts.push({type: 'danger', msg: 'Sorry!!! Something went wrong. Please try again.'});
+        });
+    }
+    $rootScope.toolassignUser = function(Usersmodel,item){
+        var dataToPost = {};
+        var  user_ids= [];
+        angular.forEach(Usersmodel, function(value, key) {
+            this.push(value.id);
+        }, user_ids);
+        dataToPost.user_ids = user_ids;
+        var url = urlS.tools +item.id + aurl.tuser;
+        DataService.post(url, dataToPost).then(function (data) {
+            DataService.get(url).then(function (data) {
+                $scope.item.toolUsers = data;
+                $scope.user =  $scope.item.toolUsers;
+            })
+        }, function (err) {
+            $scope.alerts.push({type: 'danger', msg: 'Sorry!!! Something went wrong. Please try again.'});
+        });
+    }
+
+    $rootScope.assignProjectUser = function(Usersmodel,item){
+        var  user_ids= [];
+        var dataToPost = {};
+        angular.forEach(Usersmodel, function(value, key) {
+            this.push(value.id);
+        }, user_ids);
+        dataToPost.user_ids = user_ids;
+        var url = urlS.projects +item.id + aurl.puser;
+        DataService.post(url, dataToPost).then(function (data) {
+            $scope.item.pusers = data;
+            $scope.user =  $scope.item.pusers;
+        }, function (err) {
+            $scope.alerts.push({type: 'danger', msg: 'Sorry!!! Something went wrong. Please try again.'});
+        });
+    }
+
+    
+    $scope.Projectsmodel = item.toolProjects;
+    $scope.Projectsdata = [];
+    $scope.Projectssettings = {
+        displayProp: 'name',
+        smartButtonMaxItems: 3,
+        scrollableHeight: '300px',
+        scrollable: true,
+        enableSearch: true,
+        styleActive: true
+    };
+    $scope.ProjectscustomTexts = {buttonDefaultText: 'Select Projects'};
+
+
+
+    
+    $scope.Usersmodel = item.Users;
+    $scope.Usersdata = [];
+    $scope.Userssettings = {
+        template :  '<b>{{option.first_name}} {{option.last_name}}</b>',
+        displayProp: 'first_name',
+        smartButtonMaxItems: 3,
+        scrollableHeight: '300px',
+        scrollable: true,
+        enableSearch: true,
+        styleActive: true
+    };
+    $rootScope.UserscustomTexts = {buttonDefaultText: 'Select Users'};
 
 
 });
 
+
+angular.module('LabMonitoring').controller('Modal_handlerController', function ($rootScope,$scope, $state, $uibModalInstance,DataService) {
+
+
+
+    $scope.cancel = function () {                    
+        $uibModalInstance.dismiss();
+    };
+
+    $scope.labTrend = function(){
+        $scope.loading = false;
+        $scope.trend = [];
+        var i = 0;
+        var id = $rootScope.id;
+        pr = {}, mn = {}, id = {}, ins = {};
+        Productive = [], Maintenance = [], Idle = [], Installation = [];
+        var url_trend = 'api/api_trends_overall/';
+        DataService.get(url_trend).then(function (data) {
+            $scope.trend = data.trend;
+            var n = $scope.trend.length;
+            for (i = n - 1; i >= 0; i--) {
+                pr.x = (new Date($scope.trend[i].date).formatMMDDYYYY());
+                pr.y = $scope.trend[i].PR;
+                Productive.push(pr);
+                pr = {};
+                mn.x = (new Date($scope.trend[i].date).formatMMDDYYYY());
+                mn.y = $scope.trend[i].MA;
+                Maintenance.push(mn);
+                mn = {};
+                id.x = (new Date($scope.trend[i].date).formatMMDDYYYY());
+                id.y = $scope.trend[i].ID;
+                Idle.push(id);
+                id = {};
+                ins.x = (new Date($scope.trend[i].date).formatMMDDYYYY());
+                ins.y = $scope.trend[i].IN;
+                Installation.push(ins);
+                ins = {};
+            }
+            var chart = nv.models.multiBarChart();
+            d3.select('#chart svg').datum([
+                {
+                    key: "Production",
+                    color: "#c2de80",
+                    values: Productive
+                },
+                {
+                    key: "Maintenance",
+                    color: "#9ac3f5",
+                    values: Maintenance
+                },
+                {
+                    key: "Idle",
+                    color: "#ff7f7f",
+                    values: Idle
+                },
+                {
+                    key: "Installation",
+                    color: "#ffff80",
+                    values: Installation
+                }
+            ]).transition().duration(500).call(chart);
+        }, function myError(response) {
+            $scope.trend = response.statusText;
+        }).finally(function () {
+            $scope.loading = true;
+        });
+       
+    }();
+
+
+    Date.prototype.formatMMDDYYYY = function() {
+        return (this.getMonth() + 1) +
+            "/" +  this.getDate() +
+            "/" +  this.getFullYear();
+    }
+
+});
+
+
+
+angular.module('LabMonitoring').controller('ReportGenerationController', function($rootScope,$state, $scope, $http, $timeout,DataService,$interval) {
+
+    var urlS = $rootScope.urlS;
+    $scope.alerts = [];
+
+    $('input[name="datefilter"]').daterangepicker({
+        autoUpdateInput: false,
+        locale: {
+            cancelLabel: 'Clear'
+        }
+    });
+
+    $('#tool').on('apply.daterangepicker', function(ev, picker) {
+        $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+        var start = picker.startDate.format('YYYY-MM-DD');
+        var end = picker.endDate.format('YYYY-MM-DD');
+        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
+        var export_url = 'http://152.135.122.61:8871/api/export_tool_xls/?start_date=' + start +'&end_date='+ end
+        DataService.get(url_report).then(function () {
+            window.location = export_url;
+        });
+    });
+    $('#project').on('apply.daterangepicker', function(ev, picker) {
+        $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+        var start = picker.startDate.format('YYYY-MM-DD');
+        var end = picker.endDate.format('YYYY-MM-DD');
+        var url_report = 'api/export_project_xls/?start_date=' + start +'&end_date='+ end
+        var export_url = 'http://152.135.122.61:8871/api/export_project_xls/?start_date=' + start +'&end_date='+ end
+        DataService.get(url_report).then(function () {
+            window.location = export_url;
+        });
+    });
+    $('#user').on('apply.daterangepicker', function(ev, picker) {
+        $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+        var start = picker.startDate.format('YYYY-MM-DD');
+        var end = picker.endDate.format('YYYY-MM-DD');
+        var url_report = 'api/export_user_xls/?start_date=' + start +'&end_date='+ end
+        var export_url = 'http://152.135.122.61:8871/api/export_user_xls/?start_date=' + start +'&end_date='+ end
+        DataService.get(url_report).then(function () {
+            window.location = export_url;
+        });
+    });
+
+    $('input[name="datefilter"]').on('cancel.daterangepicker', function(ev, picker) {
+        $(this).val('');
+    });
+
+    var dayOne = 2017-02-08;
+    var current = moment().format("YYYY-MM-DD");
+    $scope.realtime =  moment().format('h:mm:ss a, MMMM Do YYYY');
+
+    $scope.toolWeekly = function(){
+        var id =  $rootScope.id;
+        var weekly = moment().subtract("days", 6).format("YYYY-MM-DD");
+        var start = weekly;
+        var end = current;
+        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
+        var export_url = 'http://152.135.122.61:8871/api/export_tool_xls/?start_date=' + start +'&end_date='+ end
+        DataService.get(url_report).then(function () {
+            window.location = export_url;
+        });
+    }
+    $scope.toolMonthly = function(){
+        var id =  $rootScope.id;
+        var monthly = moment().subtract("days", 29).format("YYYY-MM-DD");
+        var start = monthly;
+        var end = current;
+        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
+        var export_url = 'http://152.135.122.61:8871/api/export_tool_xls/?start_date=' + start +'&end_date='+ end
+        DataService.get(url_report).then(function () {
+            window.location = export_url;
+        });
+    }
+    $scope.toolQuatrely = function(){
+        var id =  $rootScope.id;
+        var quaterly = moment().subtract("days", 89).format("YYYY-MM-DD");
+        var start = quaterly;
+        var end = current;
+        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end;
+        var export_url = 'http://152.135.122.61:8871/api/export_tool_xls/?start_date=' + start +'&end_date='+ end
+        DataService.get(url_report).then(function () {
+            window.location = export_url;
+        });
+    }
+    $scope.projectWeekly = function(){
+        var id =  $rootScope.id;
+        var weekly = moment().subtract("days", 6).format("YYYY-MM-DD");
+        var start = weekly;
+        var end = current;
+        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
+        var export_url = 'http://152.135.122.61:8871/api/export_project_xls/?start_date=' + start +'&end_date='+ end
+        DataService.get(url_report).then(function () {
+            window.location = export_url;
+        });
+    }
+    $scope.projectMonthly = function(){
+        var id =  $rootScope.id;
+        var monthly = moment().subtract("days", 29).format("YYYY-MM-DD");
+        var start = monthly;
+        var end = current;
+        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
+        var export_url = 'http://152.135.122.61:8871/api/export_project_xls/?start_date=' + start +'&end_date='+ end
+        DataService.get(url_report).then(function () {
+            window.location = export_url;
+        });
+    }
+    $scope.projectQuatrely = function(){
+        var id =  $rootScope.id;
+        var quaterly = moment().subtract("days", 89).format("YYYY-MM-DD");
+        var start = quaterly;
+        var end = current;
+        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end;
+        var export_url = 'http://152.135.122.61:8871/api/export_project_xls/?start_date=' + start +'&end_date='+ end
+        DataService.get(url_report).then(function () {
+            window.location = export_url;
+        });
+    }
+    $scope.userWeekly = function(){
+        var id =  $rootScope.id;
+        var weekly = moment().subtract("days", 6).format("YYYY-MM-DD");
+        var start = weekly;
+        var end = current;
+        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
+        var export_url = 'http://152.135.122.61:8871/api/export_user_xls/?start_date=' + start +'&end_date='+ end
+        DataService.get(url_report).then(function () {
+            window.location = export_url;
+        });
+    }
+    $scope.userMonthly = function(){
+        var id =  $rootScope.id;
+        var monthly = moment().subtract("days", 29).format("YYYY-MM-DD");
+        var start = monthly;
+        var end = current;
+        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
+        var export_url = 'http://152.135.122.61:8871/api/export_user_xls/?start_date=' + start +'&end_date='+ end
+        DataService.get(url_report).then(function () {
+            window.location = export_url;
+        });
+    }
+    $scope.userQuatrely = function(){
+        var id =  $rootScope.id;
+        var quaterly = moment().subtract("days", 89).format("YYYY-MM-DD");
+        var start = quaterly;
+        var end = current;
+        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end;
+        var export_url = 'http://152.135.122.61:8871/api/export_user_xls/?start_date=' + start +'&end_date='+ end
+        DataService.get(url_report).then(function () {
+            window.location = export_url;
+        });
+    }
+});
 
 
 
@@ -975,7 +1441,7 @@ angular.module('LabMonitoring').controller('ToolController',  function($rootScop
     
     $scope.toolstat = function(id){
         $rootScope.id = id;
-        $state.go('main.tool.status');
+        $state.go('tool.status');
     }
 
 
@@ -1002,19 +1468,46 @@ angular.module('LabMonitoring').controller('ToolController',  function($rootScop
 
 
 
-   
-    $rootScope.settings.layout.pageBodySolid = true;
-    $rootScope.settings.layout.pageSidebarClosed = false;
 });
 
 
 
 
-angular.module('LabMonitoring').controller('ToolStatusController',  function($rootScope, $scope, settings, $state,DataService,$uibModal, $log) {
+angular.module('LabMonitoring').controller('ToolStatisticsController',  function($rootScope, $scope, settings, $state,DataService,$uibModal, $log,$interval,$http) {
 
     var urlS = $rootScope.urlS;
     var aurl = $rootScope.url;
     $scope.alerts = [];
+
+    
+    $scope.statusChange = function(item) {
+        var _item = {},
+            _item = angular.copy(item);
+        var modalInstance = $uibModal.open(
+            {
+                animation: $scope.animationsEnabled,
+                templateUrl: "templates/modals/confirmation.html",
+                controller: "ModalController",
+                resolve: {
+                    item: function () {
+                        return _item;
+                    }
+                }
+            })
+        modalInstance.result.then(function (item) {
+            var id = $rootScope.id;
+            var url = urlS.tools + id + '/'
+            DataService.patch(url, item).then(function (data) {
+                $scope.item = data;
+                $scope.item.status.push = $scope.item.status;
+                $state.go('dashboard');
+                $scope.alerts.push({type: 'success', msg: 'Changes Saved Successfully.'});
+            }, function (err) {
+                $scope.alerts.push({type: 'danger', msg: 'Sorry!!! Something went wrong. Please try again.'});
+            });
+        });
+    }
+
 
     
     $scope.status = function(){
@@ -1034,21 +1527,24 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
     $scope.statistics = function () {
         var log = [];
         var id =  $rootScope.id;
-        var url = urlS.tools + id + '/utilization/'
-        DataService.get(url).then(function (data) {
+        var url_utilization = urlS.tools + id + '/utilization/'
+        DataService.get(url_utilization).then(function (data) {
             $scope.utilization = data;
             angular.forEach($scope.utilization, function(value, key) {
                 this.push({key : key , y : value});
             }, log);
             $scope.stat = log;
-          console.log(log);
-            $state.go('tool.statistics');
-        }, function (err) {
-
         });
-    }
+        var url_userUtilization = urlS.tools + id + '/user_utilization/'
+        DataService.get(url_userUtilization).then(function (data) {
+            $scope.userUtilization = data;
+        });
+        var url_projectUtilization = urlS.tools + id + '/project_utilization/'
+        DataService.get(url_projectUtilization).then(function (data) {
+            $scope.projectUtilization = data;
+        });
+    }();
 
-    $scope.statistics();
 
    
     $scope.closeAlert = function(index){
@@ -1070,7 +1566,7 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
             labelThreshold: 0.01,
             labelSunbeamLayout: true,
             showLegend : false,
-            color: ['#c2de80','#ffff80','#9ac3f5','#ff7f7f'],
+            color: ['#ff7f7f','#c2de80','#ffff80','#9ac3f5'],
             legend: {
                 margin: {
                     top: 5,
@@ -1082,12 +1578,131 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
         }
     };
 
+    $scope.help =  function (opt_attributes) {
+            var out = $uibModal.open(
+                {
+                    animation: $scope.animationsEnabled,
+                    templateUrl: "templates/modals/helpStatus.html",
+                    controller: "Modal_handlerController",
+                    size : opt_attributes
+                })
+    }
 
 
 
-   
-    $rootScope.settings.layout.pageBodySolid = true;
-    $rootScope.settings.layout.pageSidebarClosed = false;
+
+    Date.prototype.formatMMDDYYYY = function() {
+        return (this.getMonth() + 1) +
+            "/" +  this.getDate() +
+            "/" +  this.getFullYear();
+    }
+
+
+
+
+        var label = [], Productive = [],  Maintenance = [], Idle = [], Installation = [], data1=[];
+        var update =  function (){
+            $scope.loading = false;
+            $scope.trend = [];
+            var i = 0;
+            var id =  $rootScope.id;
+            label = [], Productive = [],  Maintenance = [], Idle = [], Installation = [], data1=[];
+            var url_trend = urlS.tools + id + '/trend/'  
+            DataService.get(url_trend).then(function (data) {
+                $scope.trend = data.trend;
+                $scope.trends = $scope.trend;
+                var n = $scope.trend.length;
+                for(i = n-1 ; i >= 0; i--){
+                    label.push(new Date($scope.trend[i].date).formatMMDDYYYY());
+                    Productive.push($scope.trend[i].PR);
+                    Maintenance.push($scope.trend[i].MA);
+                    Idle.push($scope.trend[i].ID);
+                    Installation.push($scope.trend[i].IN);
+                }
+                data1.push(Productive,Maintenance,Idle,Installation);
+                $scope.labels = label;
+                $scope.series = ['Productive', 'Maintenance', 'Idle', 'Installation'];
+                $scope.data = data1;
+                $scope.colors = ['#c2de80','#9ac3f5','#ff7f7f','#ffff80' ];
+                $scope.datasetOverride = [
+                    {
+                        yAxisID: 'y-axis-1'
+                    },
+                    {
+                        label: "Line chart",
+                        borderWidth: 3,
+                        backgroundColor: "transparent",
+                        hoverBackgroundColor: "rgba(255,99,132,0.4)",
+                        hoverBorderColor: "rgba(255,99,132,1)",
+                        type: 'line'
+                    }
+                ];
+                $scope.optionsTrend = {
+                    scales: {
+                        yAxes: [
+                            {
+                                id: 'y-axis-1',
+                                type: 'linear',
+                                display: true,
+                                position: 'left',
+                                beginAtZero:true,
+                                labelString: 'probability'
+                            }
+                        ]
+                    },
+                    pan: {
+                       
+                        enabled: true,
+                        mode: 'xy'
+                    },
+                    zoom: {
+                        enabled: true,
+                        mode: 'xy'
+                    }
+                };
+            }, function myError(response) {
+                $scope.trend = response.statusText;
+            }).finally(function () {
+                $scope.loading = true;
+            });
+           
+        }();
+
+
+
+
+
+
+
+    $('input[name="datefilter"]').daterangepicker({
+        autoUpdateInput: false,
+        locale: {
+            cancelLabel: 'Clear'
+        }
+    });
+
+    $('#trend').on('apply.daterangepicker', function(ev, picker) {
+        $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+        var start = picker.startDate.format('YYYY-MM-DD');
+        var end = picker.endDate.format('YYYY-MM-DD');
+        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
+        var export_url = 'http://152.135.122.61:8871/api/export_tool_xls/?start_date=' + start +'&end_date='+ end
+        DataService.get(url_report).then(function () {
+            window.location = export_url;
+        });
+    });
+
+
+    $('input[name="datefilter"]').on('cancel.daterangepicker', function(ev, picker) {
+        $(this).val('');
+    });
+
+    var dayOne = 2017-02-08;
+    var current = moment().format("YYYY-MM-DD");
+    $scope.realtime =  moment().format('h:mm:ss a, MMMM Do YYYY');
+
+
+
 });
 
 
@@ -1210,23 +1825,25 @@ LabMonitoring.service('DataService',[
         var r = function(type, url, data) {
             var deferred = $q.defer();
             var apiBaseURL = url.indexOf('.json')>-1 ? url : $rootScope.baseURL+url;
-            $http.defaults.headers.common['Authorization'] = 'JWT '+ $localStorage.token;
-            $http[type](apiBaseURL,data).success(function(data) {
-                if(data!= null && data.collection != null && data.collection.error) {
-                    var err = data.collection.error;
+            $http({
+                method: [type],
+                url: (apiBaseURL),
+                data: data,
+                headers: {
+                    'Authorization': 'JWT '+ $localStorage.token
+                },
+            }).then(function (success){
+                if(success.data!= null && success.data.collection != null && success.data.collection.error) {
+                    var err = success.data.collection.error;
                     deferred.reject(err);
                     $log.error('API Error:', err);
                 } else {
-                    deferred.resolve(data);
+                    deferred.resolve(success.data);
                 }
-            }).error(function(data, status, headers, config) {
-                var request = config.method + ' ' + config.url,
-                    err = 'API request ' + request + ' failed with response code ' + status;
-
-                deferred.reject(err);
-
-                $log.error('API Error:', err);
+            },function (error){
+                $log.error('API Error:', error);
             });
+           
             return deferred.promise;
         };
 
