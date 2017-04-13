@@ -9,11 +9,11 @@ var LabMonitoring = angular.module("LabMonitoring", [
     "datatables",
     "ngFileUpload",
     "angularUtils.directives.dirPagination",
+    'chart.js',
     "checklist-model",
     "ngMessages",
     'nvd3',
-    'daterangepicker',
-    'chart.js'
+    'daterangepicker'
 ]); 
 
 
@@ -102,15 +102,18 @@ LabMonitoring.run(["$rootScope", "settings", "$state","$http","$localStorage", f
     $rootScope.$state = $state;
     $rootScope.$settings = settings;
    
-    $http.get('config/config.json').success(function (response)
-    {
-        $rootScope.baseURL = response.baseURL;
-        $rootScope.urlS = response.urlS;
-        $rootScope.url = response.url;
-        $rootScope.config = response;
-    }).error(function () {
+    $http({
+        method: 'GET',
+        url: 'config/config.json'
+    }).then(function (success){
+        $rootScope.baseURL = success.data.baseURL;
+        $rootScope.urlS = success.data.urlS;
+        $rootScope.url = success.data.url;
+        $rootScope.config = success.data;
+    },function (error){
         console.log('config file missing');
     });
+   
 }]);
 
 LabMonitoring.config(['$httpProvider',function($httpProvider)
@@ -260,7 +263,12 @@ LabMonitoring.config([ '$stateProvider',
             data: {pageTitle: 'Add Users'},
             controller: "AddUsersController"
         })
-
+        .state('main.labTrend', {
+            url: "/labTrend",
+            templateUrl: "templates/views/labTrend.html",
+            data: {pageTitle: 'Lab Trend'},
+            controller: "LabTrendController"
+        })
 
 }]);
 LabMonitoring.run(function($rootScope, $location) {
@@ -269,7 +277,7 @@ LabMonitoring.run(function($rootScope, $location) {
             $location.path("/login.html");
         }
     })
-})
+});;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 angular.module('LabMonitoring').controller('AddProjectController', function($rootScope, $scope, $http, $state,DataService) {
@@ -1323,6 +1331,89 @@ angular.module('LabMonitoring').controller('LabController', function($rootScope,
     refreshMap = $interval($scope.bayStatus, 60000);
 
 });
+
+
+angular.module('LabMonitoring').controller('LabTrendController', function($rootScope, $scope, $http, $state,$uibModal, $log,DataService,Upload,$timeout) {
+
+    var urlS = $rootScope.urlS;
+    var aurl = $rootScope.url;
+    $scope.alerts = [];
+
+
+    Date.prototype.formatMMDDYYYY = function() {
+        return (this.getMonth() + 1) +
+            "/" +  this.getDate() +
+            "/" +  this.getFullYear();
+    }
+
+    $scope.labTrend = function(){
+        $scope.loading = false;
+        $scope.trend = [];
+        var i = 0;
+        var id =  $rootScope.id;
+      pr = {}, mn = {}, id = {}, ins = {};
+       Productive = [],  Maintenance = [], Idle = [], Installation = [];
+        var url_trend = 'api/api_trends_overall/';
+        DataService.get(url_trend).then(function (data) {
+            $scope.trend = data.trend;
+            var n = $scope.trend.length;
+            for(i = n-1 ; i >= 0; i--){
+                pr.x = (new Date($scope.trend[i].date).formatMMDDYYYY());
+                pr.y = $scope.trend[i].PR;
+                Productive.push(pr);
+                pr = {};
+                mn.x = (new Date($scope.trend[i].date).formatMMDDYYYY());
+                mn.y = $scope.trend[i].MA;
+                Maintenance.push(mn);
+                mn = {};
+                id.x = (new Date($scope.trend[i].date).formatMMDDYYYY());
+                id.y = $scope.trend[i].ID;
+                Idle.push(id);
+                id = {};
+                ins.x = (new Date($scope.trend[i].date).formatMMDDYYYY());
+                ins.y = $scope.trend[i].IN;
+                Installation.push(ins);
+                ins = {};
+            }
+            var chart = nv.models.multiBarChart();
+            d3.select('#chart svg').datum([
+                {
+                    key: "Production",
+                    color: "#c2de80",
+                    values: Productive
+                },
+                {
+                    key: "Maintenance",
+                    color: "#9ac3f5",
+                    values:Maintenance
+                },
+                {
+                    key: "Idle",
+                    color: "#ff7f7f",
+                    values:Idle
+                },
+                {
+                    key: "Installation",
+                    color: "#ffff80",
+                    values:Installation
+                }
+            ]).transition().duration(500).call(chart);
+        }, function myError(response) {
+            $scope.trend = response.statusText;
+        }).finally(function () {
+            $scope.loading = true;
+        });
+       
+
+    }();
+
+
+
+
+});
+
+
+
 
 angular.module('LabMonitoring').controller('LoginController', function($rootScope, $scope, settings,$location, $state,$http,$localStorage,DataService) {
 
@@ -2575,23 +2666,25 @@ LabMonitoring.service('DataService',[
         var r = function(type, url, data) {
             var deferred = $q.defer();
             var apiBaseURL = url.indexOf('.json')>-1 ? url : $rootScope.baseURL+url;
-            $http.defaults.headers.common['Authorization'] = 'JWT '+ $localStorage.token;
-            $http[type](apiBaseURL,data).success(function(data) {
-                if(data!= null && data.collection != null && data.collection.error) {
-                    var err = data.collection.error;
+            $http({
+                method: [type],
+                url: (apiBaseURL),
+                data: data,
+                headers: {
+                    'Authorization': 'JWT '+ $localStorage.token
+                },
+            }).then(function (success){
+                if(success.data!= null && success.data.collection != null && success.data.collection.error) {
+                    var err = success.data.collection.error;
                     deferred.reject(err);
                     $log.error('API Error:', err);
                 } else {
-                    deferred.resolve(data);
+                    deferred.resolve(success.data);
                 }
-            }).error(function(data, status, headers, config) {
-                var request = config.method + ' ' + config.url,
-                    err = 'API request ' + request + ' failed with response code ' + status;
-
-                deferred.reject(err);
-
-                $log.error('API Error:', err);
+            },function (error){
+                $log.error('API Error:', error);
             });
+           
             return deferred.promise;
         };
 
