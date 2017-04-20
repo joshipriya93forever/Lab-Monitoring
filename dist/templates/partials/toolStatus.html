@@ -34,8 +34,8 @@
         </div>
     </div>
 </div>
-<div class="portlet light ">
-    <div class="portlet-title" ng-controller="ReportGenerationController">
+<div class="portlet light " ng-controller="ReportGenerationController">
+    <div class="portlet-title">
         <div class="caption caption-md">
             <i class="icon-bar-chart theme-font hide"></i>
             <span class="caption-subject font-blue-madison bold uppercase">Trend</span>
@@ -43,8 +43,7 @@
     </div>
     <div class="portlet-body form">
         <div class="row">
-            <div class="col-lg-offset-3 col-md-offset-3 col-lg-2 col-md-2 bold">Select Date</div>
-            <div class="input-group col-lg-4 col-md-4" id="toolTrend" style="margin-bottom: 20px;">
+            <div class="input-group col-lg-4 col-md-4" id="tooltrend" style="margin-bottom: 20px;">
                 <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                 <input date-range-picker name="daterange5" class="date-picker" type="text"
                        ng-model="date" options="opts" style="padding: 3px;" required/>
