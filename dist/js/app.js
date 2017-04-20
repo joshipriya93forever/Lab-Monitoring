@@ -1903,7 +1903,7 @@ angular.module('LabMonitoring').controller('ReportGenerationController', functio
         var start =  $scope.start.format('YYYY-MM-DD');
         var end =    $scope.end.format('YYYY-MM-DD');
         var url_report = 'api/export_tools/'+ id +'/?start_date=' + start +'&end_date='+ end
-        var export_url = 'http://152.135.122.61:8871/api/export_tools/'+ id +'/?start_date=' + start +'&end_date='+ end
+        var export_url = 'http://152.135.122.61:8871/api/export_tools/'+ id +'?start_date=' + start +'&end_date='+ end
         DataService.get(url_report).then(function () {
             window.location = export_url;
         });
@@ -1980,7 +1980,7 @@ angular.module('LabMonitoring').controller('ReportGenerationController', functio
         var i = 0;
         var id =  $rootScope.id;
         label = [], Productive = [],  Maintenance = [], Idle = [], Installation = [], data1=[];
-        var url_trend = urlS.tools + id +'/trend?start_date='+ start +'/&end_date='+ end  
+        var url_trend = urlS.tools + id +'/trend?start_date='+ start +'&end_date='+ end  
         DataService.get(url_trend).then(function (data) {
             $scope.trend = data.trend;
             $scope.trends = $scope.trend;
