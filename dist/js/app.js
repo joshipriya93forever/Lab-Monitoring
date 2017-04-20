@@ -1948,7 +1948,7 @@ angular.module('LabMonitoring').controller('ReportGenerationController', functio
         var i = 0;
         var id =  $rootScope.id;
         label = [], Productive = [],  Maintenance = [], Idle = [], Installation = [], data1=[];
-        var url_trend = urlS.tools + id +'/trend?start_date='+ start +'&end_date='+ end  
+        var url_trend = urlS.tools + id +'/trend/?start_date='+ start +'&end_date='+ end  
         DataService.get(url_trend).then(function (data) {
             $scope.trend = data.trend;
             $scope.trends = $scope.trend;
@@ -1980,7 +1980,7 @@ angular.module('LabMonitoring').controller('ReportGenerationController', functio
         var i = 0;
         var id =  $rootScope.id;
         label = [], Productive = [],  Maintenance = [], Idle = [], Installation = [], data1=[];
-        var url_trend = urlS.tools + id +'/trend?start_date='+ start +'&end_date='+ end  
+        var url_trend = urlS.tools + id +'/trend/?start_date='+ start +'&end_date='+ end  
         DataService.get(url_trend).then(function (data) {
             $scope.trend = data.trend;
             $scope.trends = $scope.trend;
