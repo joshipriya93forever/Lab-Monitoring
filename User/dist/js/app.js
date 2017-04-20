@@ -1270,151 +1270,152 @@ angular.module('LabMonitoring').controller('ReportGenerationController', functio
     var urlS = $rootScope.urlS;
     $scope.alerts = [];
 
-    $('input[name="datefilter"]').daterangepicker({
-        autoUpdateInput: false,
+    $scope.date = {
+        startDate: moment().subtract(1, "days"),
+        endDate: moment()
+    };
+
+    $scope.setStartDate = function () {
+        $scope.date.startDate = moment().subtract(4, "days");
+    };
+
+    var start = moment().subtract(29, 'days');
+    var end = moment();
+
+    $scope.opts = {
         locale: {
-            cancelLabel: 'Clear'
+            applyClass: 'btn-green',
+            applyLabel: "Apply",
+            fromLabel: "From",
+            format: "YYYY-MM-DD",
+            toLabel: "To",
+            cancelLabel: 'Cancel',
+            customRangeLabel: 'Custom range'
+        },
+        ranges: {
+            'Weekly': [moment().subtract(7, 'days'), moment().subtract(1, 'days')],
+            'Last 30 Days': [moment().subtract(30, 'days'), moment().subtract(1, 'days')],
+            'Current Month': [moment().startOf('month'), moment().subtract(1, 'days')],
+            'Quaterly': [moment().subtract(2, 'month').startOf('month'), moment().subtract(1, 'days')]
         }
+    };
+
+
+
+
+    $('#tooltrend').on('apply.daterangepicker', function(ev, picker) {
+        $scope.start = picker.startDate.format('YYYY-MM-DD');
+        $scope.end = picker.endDate.format('YYYY-MM-DD');
+        var start = $scope.start;
+        var end = $scope.end;
+        $scope.loading = false;
+        $scope.trend = [];
+        var i = 0;
+        var id =  $rootScope.id;
+        label = [], Productive = [],  Maintenance = [], Idle = [], Installation = [], data1=[];
+        var url_trend = urlS.tools + id +'/trend?start_date='+ start +'&end_date='+ end  
+        DataService.get(url_trend).then(function (data) {
+            $scope.trend = data.trend;
+            $scope.trends = $scope.trend;
+            var n = $scope.trend.length;
+            for(i = n-1 ; i >= 0; i--){
+                label.push(new Date($scope.trend[i].date).formatMMDDYYYY());
+                Productive.push($scope.trend[i].PR);
+                Maintenance.push($scope.trend[i].MA);
+                Idle.push($scope.trend[i].ID);
+                Installation.push($scope.trend[i].IN);
+            }
+        }, function myError(response) {
+            $scope.trend = response.statusText;
+        }).finally(function () {
+            $scope.loading = true;
+        });
     });
 
-    $('#tool').on('apply.daterangepicker', function(ev, picker) {
-        $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
-        var start = picker.startDate.format('YYYY-MM-DD');
-        var end = picker.endDate.format('YYYY-MM-DD');
-        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
-        var export_url = 'http://152.135.122.61:8871/api/export_tool_xls/?start_date=' + start +'&end_date='+ end
-        DataService.get(url_report).then(function () {
-            window.location = export_url;
+    $scope.start = moment().startOf('month').format('YYYY-MM-DD');
+    $scope.end = moment().format('YYYY-MM-DD');
+
+
+    var label = [], Productive = [],  Maintenance = [], Idle = [], Installation = [], data1=[];
+    $scope.toolTrend =  function (){
+        var start =  $scope.start;
+        var end =    $scope.end;
+        $scope.loading = false;
+        $scope.trend = [];
+        var i = 0;
+        var id =  $rootScope.id;
+        label = [], Productive = [],  Maintenance = [], Idle = [], Installation = [], data1=[];
+        var url_trend = urlS.tools + id +'/trend?start_date='+ start +'&end_date='+ end  
+        DataService.get(url_trend).then(function (data) {
+            $scope.trend = data.trend;
+            $scope.trends = $scope.trend;
+            var n = $scope.trend.length;
+            for(i = n-1 ; i >= 0; i--){
+                label.push(new Date($scope.trend[i].date).formatMMDDYYYY());
+                Productive.push($scope.trend[i].PR);
+                Maintenance.push($scope.trend[i].MA);
+                Idle.push($scope.trend[i].ID);
+                Installation.push($scope.trend[i].IN);
+            }
+        }, function myError(response) {
+            $scope.trend = response.statusText;
+        }).finally(function () {
+            $scope.loading = true;
         });
-    });
-    $('#project').on('apply.daterangepicker', function(ev, picker) {
-        $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
-        var start = picker.startDate.format('YYYY-MM-DD');
-        var end = picker.endDate.format('YYYY-MM-DD');
-        var url_report = 'api/export_project_xls/?start_date=' + start +'&end_date='+ end
-        var export_url = 'http://152.135.122.61:8871/api/export_project_xls/?start_date=' + start +'&end_date='+ end
-        DataService.get(url_report).then(function () {
-            window.location = export_url;
-        });
-    });
-    $('#user').on('apply.daterangepicker', function(ev, picker) {
-        $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
-        var start = picker.startDate.format('YYYY-MM-DD');
-        var end = picker.endDate.format('YYYY-MM-DD');
-        var url_report = 'api/export_user_xls/?start_date=' + start +'&end_date='+ end
-        var export_url = 'http://152.135.122.61:8871/api/export_user_xls/?start_date=' + start +'&end_date='+ end
-        DataService.get(url_report).then(function () {
-            window.location = export_url;
-        });
+       
+    }();
+
+    $scope.$watch('trend', function(){
+        data1.push(Productive,Maintenance,Idle,Installation);
+        $scope.labels = label;
+        $scope.series = ['Productive', 'Maintenance', 'Idle', 'Installation'];
+        $scope.data = data1;
+        $scope.colors = ['#c2de80','#9ac3f5','#ff7f7f','#ffff80' ];
+        $scope.datasetOverride = [
+            {
+                yAxisID: 'y-axis-1'
+            },
+            {
+                label: "Line chart",
+                borderWidth: 3,
+                backgroundColor: "transparent",
+                hoverBackgroundColor: "rgba(255,99,132,0.4)",
+                hoverBorderColor: "rgba(255,99,132,1)",
+                type: 'line'
+            }
+        ];
+        $scope.optionsTrend = {
+            scales: {
+                yAxes: [
+                    {
+                        id: 'y-axis-1',
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        beginAtZero:true,
+                        labelString: 'probability'
+                    }
+                ]
+            },
+            pan: {
+               
+                enabled: true,
+                mode: 'xy'
+            },
+            zoom: {
+                enabled: true,
+                mode: 'xy'
+            }
+        };
     });
 
-    $('input[name="datefilter"]').on('cancel.daterangepicker', function(ev, picker) {
-        $(this).val('');
-    });
+    Date.prototype.formatMMDDYYYY = function() {
+        return (this.getMonth() + 1) +
+            "/" +  this.getDate() +
+            "/" +  this.getFullYear();
+    }
 
-    var dayOne = 2017-02-08;
-    var current = moment().format("YYYY-MM-DD");
-    $scope.realtime =  moment().format('h:mm:ss a, MMMM Do YYYY');
 
-    $scope.toolWeekly = function(){
-        var id =  $rootScope.id;
-        var weekly = moment().subtract("days", 6).format("YYYY-MM-DD");
-        var start = weekly;
-        var end = current;
-        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
-        var export_url = 'http://152.135.122.61:8871/api/export_tool_xls/?start_date=' + start +'&end_date='+ end
-        DataService.get(url_report).then(function () {
-            window.location = export_url;
-        });
-    }
-    $scope.toolMonthly = function(){
-        var id =  $rootScope.id;
-        var monthly = moment().subtract("days", 29).format("YYYY-MM-DD");
-        var start = monthly;
-        var end = current;
-        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
-        var export_url = 'http://152.135.122.61:8871/api/export_tool_xls/?start_date=' + start +'&end_date='+ end
-        DataService.get(url_report).then(function () {
-            window.location = export_url;
-        });
-    }
-    $scope.toolQuatrely = function(){
-        var id =  $rootScope.id;
-        var quaterly = moment().subtract("days", 89).format("YYYY-MM-DD");
-        var start = quaterly;
-        var end = current;
-        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end;
-        var export_url = 'http://152.135.122.61:8871/api/export_tool_xls/?start_date=' + start +'&end_date='+ end
-        DataService.get(url_report).then(function () {
-            window.location = export_url;
-        });
-    }
-    $scope.projectWeekly = function(){
-        var id =  $rootScope.id;
-        var weekly = moment().subtract("days", 6).format("YYYY-MM-DD");
-        var start = weekly;
-        var end = current;
-        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
-        var export_url = 'http://152.135.122.61:8871/api/export_project_xls/?start_date=' + start +'&end_date='+ end
-        DataService.get(url_report).then(function () {
-            window.location = export_url;
-        });
-    }
-    $scope.projectMonthly = function(){
-        var id =  $rootScope.id;
-        var monthly = moment().subtract("days", 29).format("YYYY-MM-DD");
-        var start = monthly;
-        var end = current;
-        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
-        var export_url = 'http://152.135.122.61:8871/api/export_project_xls/?start_date=' + start +'&end_date='+ end
-        DataService.get(url_report).then(function () {
-            window.location = export_url;
-        });
-    }
-    $scope.projectQuatrely = function(){
-        var id =  $rootScope.id;
-        var quaterly = moment().subtract("days", 89).format("YYYY-MM-DD");
-        var start = quaterly;
-        var end = current;
-        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end;
-        var export_url = 'http://152.135.122.61:8871/api/export_project_xls/?start_date=' + start +'&end_date='+ end
-        DataService.get(url_report).then(function () {
-            window.location = export_url;
-        });
-    }
-    $scope.userWeekly = function(){
-        var id =  $rootScope.id;
-        var weekly = moment().subtract("days", 6).format("YYYY-MM-DD");
-        var start = weekly;
-        var end = current;
-        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
-        var export_url = 'http://152.135.122.61:8871/api/export_user_xls/?start_date=' + start +'&end_date='+ end
-        DataService.get(url_report).then(function () {
-            window.location = export_url;
-        });
-    }
-    $scope.userMonthly = function(){
-        var id =  $rootScope.id;
-        var monthly = moment().subtract("days", 29).format("YYYY-MM-DD");
-        var start = monthly;
-        var end = current;
-        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
-        var export_url = 'http://152.135.122.61:8871/api/export_user_xls/?start_date=' + start +'&end_date='+ end
-        DataService.get(url_report).then(function () {
-            window.location = export_url;
-        });
-    }
-    $scope.userQuatrely = function(){
-        var id =  $rootScope.id;
-        var quaterly = moment().subtract("days", 89).format("YYYY-MM-DD");
-        var start = quaterly;
-        var end = current;
-        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end;
-        var export_url = 'http://152.135.122.61:8871/api/export_user_xls/?start_date=' + start +'&end_date='+ end
-        DataService.get(url_report).then(function () {
-            window.location = export_url;
-        });
-    }
 });
 
 
