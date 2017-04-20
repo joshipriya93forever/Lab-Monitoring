@@ -1,0 +1,187 @@
+<div class="portlet light portlet-fit bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class=" fa fa-pie-chart font-green"></i>
+            <span class="caption-subject font-green bold uppercase">{{tool.name}} Analytics</span>
+        </div>
+        <div class="actions">
+            <div class="btn-group btn-group-devided" data-toggle="buttons">
+                <label class="btn dark btn-outline  btn-sm active">
+                    <input type="radio" name="options" class="toggle" id="option1">8 hr</label>
+                <label class="btn dark btn-outline  btn-sm">
+                    <input type="radio" name="options" class="toggle" id="option2">24 hr</label>
+            </div>
+
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="row">
+            <ul class="feeds">
+                <li  style="background-color: #c2de80; width: 23%; height: 20px; float: right; margin: 2px">
+                    <div class="col1">
+                        <div class="cont">
+                            <div class="cont-col1">
+                                <div class="desc"> Productive Time </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col2">
+                        <div class="date"> {{utilization.Productive | number : 2}}%</div>
+                    </div>
+                </li>
+                <li style="background-color: #9ac3f5; width: 23%; height: 20px; float: right; margin: 2px" >
+                    <div class="col1">
+                        <div class="cont">
+                            <div class="cont-col1">
+                                <div class="desc"> Maintenance </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col2">
+                        <div class="date"> {{utilization.Maintenance| number : 2}}%</div>
+                    </div>
+                </li>
+                <li style="background-color: #ff7f7f; width: 23%; height: 20px; float: right; margin: 2px">
+                    <div class="col1">
+                        <div class="cont">
+                            <div class="cont-col1">
+                                <div class="desc"> Idle Time </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col2">
+                        <div class="date"> {{utilization.Idle| number : 2}}%</div>
+                    </div>
+                </li>
+                <li style="background-color: #ffff80; width: 23%; height: 20px; float: right; margin: 2px">
+                    <div class="col1">
+                        <div class="cont">
+                            <div class="cont-col1">
+                                <div class="desc"> Installation Time </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col2">
+                        <div class="date"> {{utilization.Installation| number : 2}}%</div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="row">
+            <nvd3 options="options" data="stat" labelType="stat.value"></nvd3>
+        </div>
+    </div>
+    <div class="portlet-footer">
+        <div class="row">
+            <div class="col-lg-offset-10 col-md-offset-10 col-lg-2 col-md-2">
+                <div class="btn-group btn-group btn-group-justified">
+                    <a ui-sref="dashboard" class="btn blue">
+                        <i class="icon-back"></i> Back </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-xs-6">
+        <div class="portlet light portlet-fit bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <span class="caption-subject font-green bold uppercase">{{tool.name}}</span>
+                </div>
+                <div class="actions">
+                    <div class="btn-group btn-group-devided" data-toggle="buttons">
+                        <label class="btn dark btn-outline  btn-sm active">
+                            <input type="radio" name="options" class="toggle" id="option1">8 hr</label>
+                        <label class="btn dark btn-outline  btn-sm">
+                            <input type="radio" name="options" class="toggle" id="option2">24 hr</label>
+                    </div>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <uib-tabset active="active">
+                    <uib-tab index="0" heading="Users">
+                        <ul class="feeds">
+                            <li>
+                                <div class="col1">
+                                    <div class="cont">
+                                        <div class="cont-col1">
+                                            <div class="desc" style="color: black"> User Name </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col2">
+                                    <div class="date" style="color: black">Working Hrs </div>
+                                </div>
+                            </li>
+                            <li ng-repeat="uul in userUtilization">
+                                <div class="col1">
+                                    <div class="cont">
+                                        <div class="cont-col1">
+                                            <div class="desc"> {{uul.first_name}} {{uul.last_name}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col2">
+                                    <div class="date"> {{uul.utilization | number : 2}} hrs</div>
+                                </div>
+                            </li>
+                        </ul>
+                    </uib-tab>
+                    <uib-tab index="1" heading="Projects">
+                        <ul class="feeds">
+                            <li>
+                                <div class="col1">
+                                    <div class="cont">
+                                        <div class="cont-col1">
+                                            <div class="desc" style="color: black"> Project Name </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col2">
+                                    <div class="date" style="color: black"> In Use hrs </div>
+                                </div>
+                            </li>
+                            <li ng-repeat="pul in projectUtilization">
+                                <div class="col1">
+                                    <div class="cont">
+                                        <div class="cont-col1">
+                                            <div class="desc"> {{pul.project_name}} </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col2">
+                                    <div class="date"> {{pul.utilization | number : 2}} hrs</div>
+                                </div>
+                            </li>
+                        </ul>
+                    </uib-tab>
+                </uib-tabset>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="portlet light" ng-controller="ReportGenerationController">
+    <div class="portlet-title">
+        <div class="caption caption-md">
+            <i class="icon-bar-chart theme-font hide"></i>
+            <span class="caption-subject font-blue-madison bold uppercase">Trend</span>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        <div class="row">
+            <div class="input-group col-lg-4 col-md-4" id="tooltrend" style="margin-bottom: 20px;">
+                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                <input date-range-picker name="daterange5" class="date-picker" type="text"
+                       ng-model="date" options="opts" style="padding: 3px;" required/>
+            </div>
+        </div>
+        <div class="row">
+            <canvas id="line" class="chart-line" chart-data="data"
+                    chart-labels="labels" chart-series="series" chart-options="optionsTrend"  chart-colors="colors"  legend="true"
+                    chart-dataset-override="datasetOverride"  chart-click="onClick">
+            </canvas>
+        </div>
+    </div>
+</div>
