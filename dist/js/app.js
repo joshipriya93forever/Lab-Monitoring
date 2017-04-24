@@ -2139,7 +2139,7 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
         modalInstance.result.then(function (item) {
             var id = $rootScope.id;
             var url = urlS.tools + id + '/'
-            DataService.patch(url, item).then(function (data) {
+            DataService.put(url, item).then(function (data) {
                 $scope.item = data;
                 $scope.item.status.push = $scope.item.status;
                 $state.go('main.dashboard');
@@ -2229,14 +2229,6 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
                     size : opt_attributes
                 })
     }
-
-
-
-
-
-
-
-
 
 });
 
@@ -2466,7 +2458,7 @@ angular.module('LabMonitoring').controller('UsersTableController', function($roo
                 })
             modalInstance.result.then(function(item) {     
                 var url = urlS.users+item.id + '/';
-                DataService.patch(url, item).then(function (data) {
+                DataService.put(url, item).then(function (data) {
                     $scope.getUsersData();
                     $scope.alerts.push({type: 'success', msg: 'Changes Saved Successfully.'});
                 }, function (err) {
