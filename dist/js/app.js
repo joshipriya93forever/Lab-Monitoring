@@ -1353,7 +1353,7 @@ angular.module('LabMonitoring').controller('LabTrendController', function($rootS
             "/" +  this.getFullYear();
     }
 
-    $scope.labTrend = function(){
+    $scope.labTrendBar = function(){
         $scope.loading = false;
         $scope.trend = [];
         var i = 0;
@@ -1412,8 +1412,87 @@ angular.module('LabMonitoring').controller('LabTrendController', function($rootS
         });
        
 
-    }();
+    };
 
+    $scope.labTrendBar();
+
+    var log = [];
+    $scope.labTrendPie = function(){
+        var url_utilization = urlS.tools + 62 + '/utilization/'
+        DataService.get(url_utilization).then(function (data) {
+            $scope.utilization = data;
+            angular.forEach($scope.utilization, function(value, key) {
+                this.push({key : key , y : value});
+            }, log);
+            $scope.stat = log;
+        });
+    }
+    $scope.labTrendPie();
+
+    $scope.options = {
+        chart: {
+            type: 'pieChart',
+            height: 500,
+            x: function(d){return d.key;},
+            y: function(d){return d.y;},
+            showLabels: true,
+            duration: 500,
+            labelThreshold: 0.01,
+            labelType : 'percent',
+            labelSunbeamLayout: true,
+            showLegend : true,
+            color: ['#ff7f7f','#c2de80','#ffff80','#9ac3f5'],
+            legend: {
+                margin: {
+                    top: 5,
+                    right: 30,
+                    bottom: 5,
+                    left: 0
+                }
+            }
+        }
+    };
+
+
+
+    $scope.date = {
+        startDate: moment().subtract(1, "days"),
+        endDate: moment()
+    };
+
+    $scope.setStartDate = function () {
+        $scope.date.startDate = moment().subtract(4, "days");
+    };
+
+    var start = moment().subtract(29, 'days');
+    var end = moment();
+
+    $scope.opts = {
+        locale: {
+            applyClass: 'btn-green',
+            applyLabel: "Apply",
+            fromLabel: "From",
+            format: "YYYY-MM-DD",
+            toLabel: "To",
+            cancelLabel: 'Cancel',
+            customRangeLabel: 'Custom range'
+        },
+        ranges: {
+            'Weekly': [moment().subtract(7, 'days'), moment().subtract(1, 'days')],
+            'Last 30 Days': [moment().subtract(30, 'days'), moment().subtract(1, 'days')],
+            'Current Month': [moment().startOf('month'), moment().subtract(1, 'days')],
+            'Quaterly': [moment().subtract(2, 'month').startOf('month'), moment().subtract(1, 'days')]
+        }
+    };
+
+
+
+    $('#labtrend').on('apply.daterangepicker', function(ev, picker) {
+        $scope.start = picker.startDate;
+        $scope.end = picker.endDate;
+        $scope.labTrendBar();
+        $scope.labTrendPie();
+    });
 
 
 
@@ -1941,30 +2020,7 @@ angular.module('LabMonitoring').controller('ReportGenerationController', functio
     $('#tooltrend').on('apply.daterangepicker', function(ev, picker) {
         $scope.start = picker.startDate.format('YYYY-MM-DD');
         $scope.end = picker.endDate.format('YYYY-MM-DD');
-        var start = $scope.start;
-        var end = $scope.end;
-        $scope.loading = false;
-        $scope.trend = [];
-        var i = 0;
-        var id =  $rootScope.id;
-        label = [], Productive = [],  Maintenance = [], Idle = [], Installation = [], data1=[];
-        var url_trend = urlS.tools + id +'/trend/?start_date='+ start +'&end_date='+ end  
-        DataService.get(url_trend).then(function (data) {
-            $scope.trend = data.trend;
-            $scope.trends = $scope.trend;
-            var n = $scope.trend.length;
-            for(i = n-1 ; i >= 0; i--){
-                label.push(new Date($scope.trend[i].date).formatMMDDYYYY());
-                Productive.push($scope.trend[i].PR);
-                Maintenance.push($scope.trend[i].MA);
-                Idle.push($scope.trend[i].ID);
-                Installation.push($scope.trend[i].IN);
-            }
-        }, function myError(response) {
-            $scope.trend = response.statusText;
-        }).finally(function () {
-            $scope.loading = true;
-        });
+        $scope.toolTrend();
     });
 
     $scope.start = moment().startOf('month').format('YYYY-MM-DD');
@@ -1980,6 +2036,7 @@ angular.module('LabMonitoring').controller('ReportGenerationController', functio
         var i = 0;
         var id =  $rootScope.id;
         label = [], Productive = [],  Maintenance = [], Idle = [], Installation = [], data1=[];
+        data1.push(Productive,Maintenance,Idle,Installation);
         var url_trend = urlS.tools + id +'/trend/?start_date='+ start +'&end_date='+ end  
         DataService.get(url_trend).then(function (data) {
             $scope.trend = data.trend;
@@ -1998,10 +2055,10 @@ angular.module('LabMonitoring').controller('ReportGenerationController', functio
             $scope.loading = true;
         });
        
-    }();
+    };
+    $scope.toolTrend();
 
     $scope.$watch('trend', function(){
-        data1.push(Productive,Maintenance,Idle,Installation);
         $scope.labels = label;
         $scope.series = ['Productive', 'Maintenance', 'Idle', 'Installation'];
         $scope.data = data1;
@@ -2011,7 +2068,6 @@ angular.module('LabMonitoring').controller('ReportGenerationController', functio
                 yAxisID: 'y-axis-1'
             },
             {
-                label: "Line chart",
                 borderWidth: 3,
                 backgroundColor: "transparent",
                 hoverBackgroundColor: "rgba(255,99,132,0.4)",
@@ -2206,6 +2262,7 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
             showLabels: true,
             duration: 500,
             labelThreshold: 0.01,
+            labelType : 'percent',
             labelSunbeamLayout: true,
             showLegend : false,
             color: ['#ff7f7f','#c2de80','#ffff80','#9ac3f5'],

@@ -68,7 +68,7 @@
                         <div class="fraction">
                             <span class="fup">Productive Time in hrs from start date </span>
                             <span class="bar">/</span>
-                            <span class="fdn">Total time of hours(Production/Installation/Config/Maintenance)</span>
+                            <span class="fdn">Total time in hours(Production/Installation/Config/Maintenance)</span>
                         </div>
                         * 100
                     </div>
@@ -79,7 +79,7 @@
                         <div class="fraction">
                             <span class="fup">Maintenance Time in hours from start date  </span>
                             <span class="bar">/</span>
-                            <span class="fdn">Total time of hours(Production/Installation/Config/Maintenance)</span>
+                            <span class="fdn">Total time in hours(Production/Installation/Config/Maintenance)</span>
                         </div>
                         * 100
                     </div>
@@ -90,7 +90,7 @@
                         <div class="fraction">
                             <span class="fup">Idle Time in hours from start date </span>
                             <span class="bar">/</span>
-                            <span class="fdn">Total time of hours(Production/Installation/Config/Maintenance)</span>
+                            <span class="fdn">Total time in hours(Production/Installation/Config/Maintenance)</span>
                         </div>
                         * 100
                     </div>
@@ -101,20 +101,23 @@
                         <div class="fraction">
                             <span class="fup">Installation/config in hours from start date  </span>
                             <span class="bar">/</span>
-                            <span class="fdn">Total time of hours(Production/Installation/Config/Maintenance)</span>
+                            <span class="fdn">Total time in hours(Production/Installation/Config/Maintenance)</span>
                         </div>
                         * 100
                     </div>
                 </div>
             </div>
+            <p><span class="bold">Note:-</span>
+                Idle Time for Day  =    24 hours – ( Total hours of Production + Total hours of Installation + Total hours of Maintenance)
+            </p>
             <h3 class="todo-task-modal-bg bold">Concept & Proto Lab</h3>
-                <p> The floor plan contains the real-time status of the all the bays/tools. The tools which are in Productive state is highlighted in green color .Similarly, Yellow color represents the Install/Config state, Blue color represents Maintenance state and Red color represents Idle state.</p>
+                <p> The floor plan contains the real-time status of all the bays/tools in the C&P lab. The which are in productive state is highlighted in green . Similarly for idle state in red ,install/config in yellow and maintenance in blue.</p>
 
-        <p class="productive" style="padding: 10px; border: 1px solid black"><span class="bold">Productive</span> When tool is running that time user or tool owner has to change the productive mode.</p>
-            <p class="idle" style="padding: 10px;border: 1px solid black"><span class="bold">Idle time</span> Unproductive time on the part of employees or machines as a result of factors beyond their control.<br> Idle time is the time associated with waiting, or when a piece of machinery is not being used but could be.<br> Idle time could also be associated with computing, and in that case refers to processing time.</p>
-            <p class="maintenance" style="padding: 10px;border: 1px solid black"><span class="bold">Maintenance</span> Preventive maintenance (PM, the care and servicing by personnel for the purpose of maintaining.<br>Preventive maintenance tends to follow planned guidelines from time-to-time to prevent equipment and Tools during the time will be change the tool status of maintenance.</p>
-            <p class="instal" style="padding: 10px;border: 1px solid black"><span class="bold">Installation/config</span> Any materials required for the particular tool then will be change the status of tool installation/config.</p>
-            <p style="padding: 10px;border: 1px solid black"><span class="bold">Vacant</span> In the lay out which tools are not assigned to the console that tool representing white color.</p>
+        <p class="productive" style="padding: 10px; border: 1px solid black"><span class="bold">Productive :- </span>  It defines the working or action state of the tool. When tool is being used ,user/tool-owner has to change the status to productive mode.</p>
+            <p class="idle" style="padding: 10px;border: 1px solid black"><span class="bold">Idle :- </span> It defines the time associated with waiting or when the piece of machinery is not being used for the given moment.</br> So when tool is not being used ,user/tool-owner has to change the status to idle mode.</p>
+            <p class="maintenance" style="padding: 10px;border: 1px solid black"><span class="bold">Maintenance :- </span> Maintenance tends to follow the planned guidelines from time-to-time to ensure efficient and best condition of the machinery. During this period the  administrator/user/tool-owner has to change the status to maintenance mode.</p>
+            <p class="instal" style="padding: 10px;border: 1px solid black"><span class="bold">Installation/config :- </span> At this state any additional equipments required  to be added or changed of the machinery/tool is done during this period. Hence administrator/user/tool-owner has to change status to installation during this timeline.</p>
+            <p style="padding: 10px;border: 1px solid black"><span class="bold">Vacant :- </span> In the dashboard layout, empty or white spaces don't represent any state. Those  tools/bays are not yet allotted to the console. </p>
 
         </div>
     </div>
