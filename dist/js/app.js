@@ -1354,13 +1354,15 @@ angular.module('LabMonitoring').controller('LabTrendController', function($rootS
     }
 
     $scope.labTrendBar = function(){
+        var start = $scope.start;
+        var end = $scope.end;
         $scope.loading = false;
         $scope.trend = [];
         var i = 0;
         var id =  $rootScope.id;
       pr = {}, mn = {}, id = {}, ins = {};
        Productive = [],  Maintenance = [], Idle = [], Installation = [];
-        var url_trend = 'api/api_trends_overall/';
+        var url_trend = 'api/api_trends_overall/?start_date=' + start +'&end_date='+ end
         DataService.get(url_trend).then(function (data) {
             $scope.trend = data.trend;
             var n = $scope.trend.length;
@@ -1488,8 +1490,8 @@ angular.module('LabMonitoring').controller('LabTrendController', function($rootS
 
 
     $('#labtrend').on('apply.daterangepicker', function(ev, picker) {
-        $scope.start = picker.startDate;
-        $scope.end = picker.endDate;
+        $scope.start = picker.startDate.format('YYYY-MM-DD');
+        $scope.end = picker.endDate.format('YYYY-MM-DD');
         $scope.labTrendBar();
         $scope.labTrendPie();
     });
