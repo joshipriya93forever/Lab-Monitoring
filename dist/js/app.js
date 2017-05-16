@@ -614,6 +614,15 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
     };
     $scope.getCumulativeData();    
 
+    $scope.getQuaterlyCumulativeData = function() {
+        var url = urlS.tools + 'lab_utilization_qtr/'
+        DataService.get(url).then(function (data) {
+            $rootScope.qtrcumulative = data;
+        }, function (err) {
+
+        });
+    };
+    $scope.getQuaterlyCumulativeData();
 
 
     $scope.setId = function (id) {
@@ -1418,9 +1427,12 @@ angular.module('LabMonitoring').controller('LabTrendController', function($rootS
 
     $scope.labTrendBar();
 
-    var log = [];
+
     $scope.labTrendPie = function(){
-        var url_utilization = urlS.tools + 62 + '/utilization/'
+        var start = $scope.start;
+        var end = $scope.end;
+        var log = [];
+        var url_utilization = 'api/api_trends_pie/?start_date=' + start +'&end_date='+ end
         DataService.get(url_utilization).then(function (data) {
             $scope.utilization = data;
             angular.forEach($scope.utilization, function(value, key) {

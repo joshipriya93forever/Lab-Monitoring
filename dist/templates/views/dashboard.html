@@ -65,6 +65,63 @@
              </div>
         </div>
     </div>
+    <div class="portlet light portlet-fit bordered">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class=" fa fa-area-chart font-green"></i>
+                <span class="caption-subject font-green bold uppercase">QUATERLY CUMULATIVE TOOL ANALYTICS</span>
+            </div>
+        </div>
+
+        <div class="portlet-body">
+            <div class="row">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat productive" ng-click="getAcumulativeData()">
+                        <div class="visual">
+                            <i class="fa fa-pie-chart"></i>
+                        </div>
+                        <div class="details">
+                            <div class="number"> {{qtrcumulative.Productive_Time | number : 2}}%</div>
+                            <div class="desc"> Productive </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat idle">
+                        <div class="visual">
+                            <i class="fa fa-pie-chart"></i>
+                        </div>
+                        <div class="details">
+                            <div class="number"> {{qtrcumulative.Idle_Time| number : 2}}%</div>
+                            <div class="desc"> Idle </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat instal">
+                        <div class="visual">
+                            <i class="fa fa-pie-chart"></i>
+                        </div>
+                        <div class="details">
+                            <div class="number"> {{qtrcumulative.Installation_Time| number : 2}}%</div>
+                            <div class="desc"> Installation/Config </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat maintenance">
+                        <div class="visual">
+                            <i class="fa fa-pie-chart"></i>
+                        </div>
+                        <div class="details">
+                            <div class="number">{{qtrcumulative.Maintenance_Time| number : 2}}%</div>
+                            <div class="desc"> Maintenance </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
     <div class="portlet light portlet-fit bordered" ng-controller="LabController">

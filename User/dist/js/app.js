@@ -947,6 +947,173 @@ angular.module('LabMonitoring').controller('LabController', function($rootScope,
 
 });
 
+
+angular.module('LabMonitoring').controller('LabTrendController', function($rootScope, $scope, $http, $state,$uibModal, $log,DataService,$timeout) {
+
+    var urlS = $rootScope.urlS;
+    var aurl = $rootScope.url;
+    $scope.alerts = [];
+
+
+    Date.prototype.formatMMDDYYYY = function() {
+        return (this.getMonth() + 1) +
+            "/" +  this.getDate() +
+            "/" +  this.getFullYear();
+    }
+
+    $scope.labTrendBar = function(){
+        var start = $scope.start;
+        var end = $scope.end;
+        $scope.loading = false;
+        $scope.trend = [];
+        var i = 0;
+        var id =  $rootScope.id;
+      pr = {}, mn = {}, id = {}, ins = {};
+       Productive = [],  Maintenance = [], Idle = [], Installation = [];
+        var url_trend = 'api/api_trends_overall/?start_date=' + start +'&end_date='+ end
+        DataService.get(url_trend).then(function (data) {
+            $scope.trend = data.trend;
+            var n = $scope.trend.length;
+            for(i = n-1 ; i >= 0; i--){
+                pr.x = (new Date($scope.trend[i].date).formatMMDDYYYY());
+                pr.y = $scope.trend[i].PR;
+                Productive.push(pr);
+                pr = {};
+                mn.x = (new Date($scope.trend[i].date).formatMMDDYYYY());
+                mn.y = $scope.trend[i].MA;
+                Maintenance.push(mn);
+                mn = {};
+                id.x = (new Date($scope.trend[i].date).formatMMDDYYYY());
+                id.y = $scope.trend[i].ID;
+                Idle.push(id);
+                id = {};
+                ins.x = (new Date($scope.trend[i].date).formatMMDDYYYY());
+                ins.y = $scope.trend[i].IN;
+                Installation.push(ins);
+                ins = {};
+            }
+            var chart = nv.models.multiBarChart();
+            d3.select('#chart svg').datum([
+                {
+                    key: "Production",
+                    color: "#c2de80",
+                    values: Productive
+                },
+                {
+                    key: "Maintenance",
+                    color: "#9ac3f5",
+                    values:Maintenance
+                },
+                {
+                    key: "Idle",
+                    color: "#ff7f7f",
+                    values:Idle
+                },
+                {
+                    key: "Installation",
+                    color: "#ffff80",
+                    values:Installation
+                }
+            ]).transition().duration(500).call(chart);
+        }, function myError(response) {
+            $scope.trend = response.statusText;
+        }).finally(function () {
+            $scope.loading = true;
+        });
+       
+
+    };
+
+    $scope.labTrendBar();
+
+
+    $scope.labTrendPie = function(){
+        var start = $scope.start;
+        var end = $scope.end;
+        var log = [];
+        var url_utilization = 'api/api_trends_pie/?start_date=' + start +'&end_date='+ end
+        DataService.get(url_utilization).then(function (data) {
+            $scope.utilization = data;
+            angular.forEach($scope.utilization, function(value, key) {
+                this.push({key : key , y : value});
+            }, log);
+            $scope.stat = log;
+        });
+    }
+    $scope.labTrendPie();
+
+    $scope.options = {
+        chart: {
+            type: 'pieChart',
+            height: 500,
+            x: function(d){return d.key;},
+            y: function(d){return d.y;},
+            showLabels: true,
+            duration: 500,
+            labelThreshold: 0.01,
+            labelType : 'percent',
+            labelSunbeamLayout: true,
+            showLegend : true,
+            color: ['#ff7f7f','#c2de80','#ffff80','#9ac3f5'],
+            legend: {
+                margin: {
+                    top: 5,
+                    right: 30,
+                    bottom: 5,
+                    left: 0
+                }
+            }
+        }
+    };
+
+
+
+    $scope.date = {
+        startDate: moment().subtract(1, "days"),
+        endDate: moment()
+    };
+
+    $scope.setStartDate = function () {
+        $scope.date.startDate = moment().subtract(4, "days");
+    };
+
+    var start = moment().subtract(29, 'days');
+    var end = moment();
+
+    $scope.opts = {
+        locale: {
+            applyClass: 'btn-green',
+            applyLabel: "Apply",
+            fromLabel: "From",
+            format: "YYYY-MM-DD",
+            toLabel: "To",
+            cancelLabel: 'Cancel',
+            customRangeLabel: 'Custom range'
+        },
+        ranges: {
+            'Weekly': [moment().subtract(7, 'days'), moment().subtract(1, 'days')],
+            'Last 30 Days': [moment().subtract(30, 'days'), moment().subtract(1, 'days')],
+            'Current Month': [moment().startOf('month'), moment().subtract(1, 'days')],
+            'Quaterly': [moment().subtract(2, 'month').startOf('month'), moment().subtract(1, 'days')]
+        }
+    };
+
+
+
+    $('#labtrend').on('apply.daterangepicker', function(ev, picker) {
+        $scope.start = picker.startDate.format('YYYY-MM-DD');
+        $scope.end = picker.endDate.format('YYYY-MM-DD');
+        $scope.labTrendBar();
+        $scope.labTrendPie();
+    });
+
+
+
+});
+
+
+
+
 angular.module('LabMonitoring').controller('LoginController', function($rootScope, $scope, settings,$location, $state,$http,$localStorage,DataService) {
 
     var urlS = $rootScope.urlS;
@@ -1186,80 +1353,14 @@ angular.module('LabMonitoring').controller('ModalController', function ($rootSco
 });
 
 
-angular.module('LabMonitoring').controller('Modal_handlerController', function ($rootScope,$scope, $state, $uibModalInstance,DataService) {
-
+angular.module('LabMonitoring').controller('Modal_handlerController', function ($rootScope, $scope, $http, $state, $uibModalInstance, $uibModal, $log,DataService,$timeout) {
 
 
     $scope.cancel = function () {                    
         $uibModalInstance.dismiss();
     };
 
-    $scope.labTrend = function(){
-        $scope.loading = false;
-        $scope.trend = [];
-        var i = 0;
-        var id = $rootScope.id;
-        pr = {}, mn = {}, id = {}, ins = {};
-        Productive = [], Maintenance = [], Idle = [], Installation = [];
-        var url_trend = 'api/api_trends_overall/';
-        DataService.get(url_trend).then(function (data) {
-            $scope.trend = data.trend;
-            var n = $scope.trend.length;
-            for (i = n - 1; i >= 0; i--) {
-                pr.x = (new Date($scope.trend[i].date).formatMMDDYYYY());
-                pr.y = $scope.trend[i].PR;
-                Productive.push(pr);
-                pr = {};
-                mn.x = (new Date($scope.trend[i].date).formatMMDDYYYY());
-                mn.y = $scope.trend[i].MA;
-                Maintenance.push(mn);
-                mn = {};
-                id.x = (new Date($scope.trend[i].date).formatMMDDYYYY());
-                id.y = $scope.trend[i].ID;
-                Idle.push(id);
-                id = {};
-                ins.x = (new Date($scope.trend[i].date).formatMMDDYYYY());
-                ins.y = $scope.trend[i].IN;
-                Installation.push(ins);
-                ins = {};
-            }
-            var chart = nv.models.multiBarChart();
-            d3.select('#chart svg').datum([
-                {
-                    key: "Production",
-                    color: "#c2de80",
-                    values: Productive
-                },
-                {
-                    key: "Maintenance",
-                    color: "#9ac3f5",
-                    values: Maintenance
-                },
-                {
-                    key: "Idle",
-                    color: "#ff7f7f",
-                    values: Idle
-                },
-                {
-                    key: "Installation",
-                    color: "#ffff80",
-                    values: Installation
-                }
-            ]).transition().duration(500).call(chart);
-        }, function myError(response) {
-            $scope.trend = response.statusText;
-        }).finally(function () {
-            $scope.loading = true;
-        });
-       
-    }();
 
-
-    Date.prototype.formatMMDDYYYY = function() {
-        return (this.getMonth() + 1) +
-            "/" +  this.getDate() +
-            "/" +  this.getFullYear();
-    }
 
 });
 
