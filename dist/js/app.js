@@ -1367,6 +1367,7 @@ angular.module('LabMonitoring').controller('LabTrendController', function($rootS
         var start = $scope.start;
         var end = $scope.end;
         $scope.loading = false;
+        var log = [];
         $scope.trend = [];
         var i = 0;
         var id =  $rootScope.id;
@@ -1375,6 +1376,13 @@ angular.module('LabMonitoring').controller('LabTrendController', function($rootS
         var url_trend = 'api/api_trends_overall/?start_date=' + start +'&end_date='+ end
         DataService.get(url_trend).then(function (data) {
             $scope.trend = data.trend;
+            $scope.chart = data.Chart;
+           
+            angular.forEach($scope.chart, function(value, key) {
+                this.push({key : key , y : value});
+            }, log);
+            $scope.stat = log;
+             
             var n = $scope.trend.length;
             for(i = n-1 ; i >= 0; i--){
                 pr.x = (new Date($scope.trend[i].date).formatMMDDYYYY());
@@ -1429,20 +1437,8 @@ angular.module('LabMonitoring').controller('LabTrendController', function($rootS
     $scope.labTrendBar();
 
 
-    $scope.labTrendPie = function(){
-        var start = $scope.start;
-        var end = $scope.end;
-        var log = [];
-        var url_utilization = 'api/api_trends_pie/?start_date=' + start +'&end_date='+ end
-        DataService.get(url_utilization).then(function (data) {
-            $scope.utilization = data;
-            angular.forEach($scope.utilization, function(value, key) {
-                this.push({key : key , y : value});
-            }, log);
-            $scope.stat = log;
-        });
-    }
-    $scope.labTrendPie();
+   
+  
 
     $scope.options = {
         chart: {
@@ -1506,7 +1502,6 @@ angular.module('LabMonitoring').controller('LabTrendController', function($rootS
         $scope.start = picker.startDate.format('YYYY-MM-DD');
         $scope.end = picker.endDate.format('YYYY-MM-DD');
         $scope.labTrendBar();
-        $scope.labTrendPie();
     });
 
 
