@@ -1452,7 +1452,7 @@ angular.module('LabMonitoring').controller('LabTrendController', function($rootS
             labelType : 'percent',
             labelSunbeamLayout: true,
             showLegend : true,
-            color: ['#ffff80','#9ac3f5','#c2de80','#ff7f7f'],
+            color: ['#ff7f7f','#c2de80','#ffff80','#9ac3f5'],
             legend: {
                 margin: {
                     top: 5,
