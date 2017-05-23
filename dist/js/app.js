@@ -1437,9 +1437,6 @@ angular.module('LabMonitoring').controller('LabTrendController', function($rootS
     $scope.labTrendBar();
 
 
-   
-  
-
     $scope.options = {
         chart: {
             type: 'pieChart',
