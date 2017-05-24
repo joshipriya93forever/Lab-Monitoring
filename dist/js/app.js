@@ -1945,14 +1945,14 @@ angular.module('LabMonitoring').controller('ReportGenerationController', functio
 
 
     $('#reportgenerate').on('apply.daterangepicker', function(ev, picker) {
-        $scope.start = picker.startDate;
-        $scope.end = picker.endDate;
+        $scope.start = picker.startDate.format('YYYY-MM-DD');
+        $scope.end = picker.endDate.format('YYYY-MM-DD');
     });
 
 
     $scope.getLabReport = function () {
-        var start =  $scope.start.format('YYYY-MM-DD');
-        var end =    $scope.end.format('YYYY-MM-DD');
+        var start =  $scope.start;
+        var end =    $scope.end;
         var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
         var export_url = 'http://152.135.122.61:8871/api/export_tool_xls/?start_date=' + start +'&end_date='+ end
         DataService.get(url_report).then(function () {
@@ -1961,18 +1961,18 @@ angular.module('LabMonitoring').controller('ReportGenerationController', functio
     }
 
     $scope.getProjectReport = function () {
-        var start =  $scope.start.format('YYYY-MM-DD');
-        var end =    $scope.end.format('YYYY-MM-DD');
-        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end;
+        var start =  $scope.start;
+        var end =    $scope.end;
+        var url_report = 'api/export_project_xls/?start_date=' + start +'&end_date='+ end;
         var export_url = 'http://152.135.122.61:8871/api/export_project_xls/?start_date=' + start +'&end_date='+ end
         DataService.get(url_report).then(function () {
             window.location = export_url;
         });
     }
     $scope.getUserReport = function () {
-        var start =  $scope.start.format('YYYY-MM-DD');
-        var end =    $scope.end.format('YYYY-MM-DD');
-        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end;
+        var start =  $scope.start;
+        var end =    $scope.end;
+        var url_report = 'api/export_user_xls/?start_date=' + start +'&end_date='+ end;
         var export_url = 'http://152.135.122.61:8871/api/export_user_xls/?start_date=' + start +'&end_date='+ end
         DataService.get(url_report).then(function () {
             window.location = export_url;
@@ -1980,14 +1980,14 @@ angular.module('LabMonitoring').controller('ReportGenerationController', functio
     }
 
     $('#toolreportgenerate').on('apply.daterangepicker', function(ev, picker) {
-        $scope.start = picker.startDate;
-        $scope.end = picker.endDate;
+        $scope.start = picker.startDate.format('YYYY-MM-DD');
+        $scope.end = picker.endDate.format('YYYY-MM-DD');
     });
 
     $scope.getToolReport = function (item) {
         var id = item.id;
-        var start =  $scope.start.format('YYYY-MM-DD');
-        var end =    $scope.end.format('YYYY-MM-DD');
+        var start =  $scope.start;
+        var end =    $scope.end;
         var url_report = 'api/export_tools/'+ id +'/?start_date=' + start +'&end_date='+ end
         var export_url = 'http://152.135.122.61:8871/api/export_tools/'+ id +'?start_date=' + start +'&end_date='+ end
         DataService.get(url_report).then(function () {
@@ -2014,17 +2014,6 @@ angular.module('LabMonitoring').controller('ReportGenerationController', functio
 
 
 
-
-
-
-
-
-
-
-
-
-
-   
 
 
 
