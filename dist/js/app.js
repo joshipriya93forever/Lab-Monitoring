@@ -172,7 +172,7 @@ LabMonitoring.config([ '$stateProvider',
         .state("main.tool", {
             url: "/tool",
             templateUrl: "templates/views/tool.html",
-            data: {pageTitle: 'Tool'},
+            data: {pageTitle: 'Tool'}
 
         })
 
@@ -2603,10 +2603,10 @@ angular.module('LabMonitoring').controller('UsersTableController', function($roo
                 }
             })
         modalInstance.result.then(function(item) {
-            var ids = {};
-            ids.tool_ids = selectedusers;
-            var url = urlS.users + 'delete/'
-            DataService.put(url, ids).then(function (data) {
+            console.log(item);
+            var id = item[0];
+            var url = aurl.user + id + '/user_delete/'
+            DataService.delete(url).then(function (data) {
                 $scope.getUsersData();
                 $scope.alerts.push({type: 'success', msg: 'Deleted Successfully.'});
                 $scope.selectedusers.length = 0;
