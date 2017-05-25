@@ -642,11 +642,11 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
 
 
 
-    $scope.clock = "loading clock...";
+    $rootScope.clock = "loading clock...";
     $scope.tickInterval = 1000
 
     var tick = function() {
-        $scope.clock = Date.now()
+        $rootScope.clock = Date.now()
         $timeout(tick, $scope.tickInterval);
     }
 
@@ -1363,6 +1363,18 @@ angular.module('LabMonitoring').controller('LabTrendController', function($rootS
             "/" +  this.getFullYear();
     }
 
+    $scope.date = {
+        startDate: '2017-02-18',
+        endDate: moment()
+    };
+
+    $scope.setStartDate = function () {
+        $scope.date.startDate = moment().subtract(4, "days");
+    };
+
+    $scope.start = '2017-02-18';
+    $scope.end = moment();
+
     $scope.labTrendBar = function(){
         var start = $scope.start;
         var end = $scope.end;
@@ -1463,17 +1475,7 @@ angular.module('LabMonitoring').controller('LabTrendController', function($rootS
 
 
 
-    $scope.date = {
-        startDate: moment().subtract(1, "days"),
-        endDate: moment()
-    };
 
-    $scope.setStartDate = function () {
-        $scope.date.startDate = moment().subtract(4, "days");
-    };
-
-    var start = moment().subtract(29, 'days');
-    var end = moment();
 
     $scope.opts = {
         locale: {
@@ -1913,7 +1915,7 @@ angular.module('LabMonitoring').controller('ReportGenerationController', functio
     $scope.alerts = [];
 
     $scope.date = {
-        startDate: moment().subtract(1, "days"),
+        startDate: '2017-02-18',
         endDate: moment()
     };
 
@@ -1921,8 +1923,8 @@ angular.module('LabMonitoring').controller('ReportGenerationController', functio
         $scope.date.startDate = moment().subtract(4, "days");
     };
 
-    var start = moment().subtract(29, 'days');
-    var end = moment();
+    $scope.start = '2017-02-18';
+    $scope.end = moment();
 
     $scope.opts = {
         locale: {
@@ -2084,7 +2086,7 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
     var aurl = $rootScope.url;
     $scope.alerts = [];
 
-
+    $scope.clock = $rootScope.clock;
 
     
     $scope.statusChange = function(item) {
@@ -2141,6 +2143,10 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
             }, log);
             $scope.stat = log;
         });
+        var url = urlS.tools + 'tool_utilization_qtr/'
+        DataService.get(url).then(function (data) {
+            $rootScope.toolqtrcumulative = data;
+        });
         var url_userUtilization = urlS.tools + id + '/user_utilization/'
         DataService.get(url_userUtilization).then(function (data) {
             $scope.userUtilization = data;
@@ -2149,6 +2155,7 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
         DataService.get(url_projectUtilization).then(function (data) {
             $scope.projectUtilization = data;
         });
+
     }
     $scope.statistics();
 
@@ -2205,19 +2212,17 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
             "/" +  this.getFullYear();
     }
     $scope.date = {
-        startDate: moment().subtract(1, "days").format('YYYY-MM-DD'),
-        endDate: moment().format('YYYY-MM-DD')
+        startDate: '2017-02-18',
+        endDate: moment()
     };
 
     $scope.setStartDate = function () {
         $scope.date.startDate = moment().subtract(4, "days");
     };
 
-    $scope.start = moment().subtract(29, 'days').format('YYYY-MM-DD');
+    $scope.start = '2017-02-18';
     $scope.end = moment().format('YYYY-MM-DD');
 
-
- 
 
 
     var label = [], Productive = [],  Maintenance = [], Idle = [], Installation = [], data1=[];
