@@ -1363,9 +1363,9 @@ angular.module('LabMonitoring').controller('LabTrendController', function($rootS
             "/" +  this.getFullYear();
     }
 
-    $scope.date = {
+   $scope.date = {
         startDate: '2017-02-18',
-        endDate: moment()
+        endDate: moment().format('YYYY-MM-DD')
     };
 
     $scope.setStartDate = function () {
@@ -1373,7 +1373,7 @@ angular.module('LabMonitoring').controller('LabTrendController', function($rootS
     };
 
     $scope.start = '2017-02-18';
-    $scope.end = moment();
+    $scope.end = moment().format('YYYY-MM-DD');
 
     $scope.labTrendBar = function(){
         var start = $scope.start;
@@ -1916,7 +1916,7 @@ angular.module('LabMonitoring').controller('ReportGenerationController', functio
 
     $scope.date = {
         startDate: '2017-02-18',
-        endDate: moment()
+        endDate: moment().format('YYYY-MM-DD')
     };
 
     $scope.setStartDate = function () {
@@ -1924,7 +1924,7 @@ angular.module('LabMonitoring').controller('ReportGenerationController', functio
     };
 
     $scope.start = '2017-02-18';
-    $scope.end = moment();
+    $scope.end = moment().format('YYYY-MM-DD');
 
     $scope.opts = {
         locale: {
@@ -2143,7 +2143,7 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
             }, log);
             $scope.stat = log;
         });
-        var url = urlS.tools + 'tool_utilization_qtr/'
+        var url = urlS.tools + id + '/tool_utilization_qtr/'
         DataService.get(url).then(function (data) {
             $rootScope.toolqtrcumulative = data;
         });
@@ -2213,7 +2213,7 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
     }
     $scope.date = {
         startDate: '2017-02-18',
-        endDate: moment()
+        endDate: moment().format('YYYY-MM-DD')
     };
 
     $scope.setStartDate = function () {
@@ -2225,80 +2225,75 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
 
 
 
-    var label = [], Productive = [],  Maintenance = [], Idle = [], Installation = [], data1=[];
-    $scope.toolTrend =  function (){
-        var start =  $scope.start;
-        var end =    $scope.end;
+ 
+
+
+    $scope.toolTrendBar = function(){
+        var start = $scope.start;
+        var end = $scope.end;
         $scope.loading = false;
+        var log = [];
         $scope.trend = [];
         var i = 0;
         var id =  $rootScope.id;
-        label = [], Productive = [],  Maintenance = [], Idle = [], Installation = [], data1=[];
-        data1.push(Productive,Maintenance,Idle,Installation);
+        pr = {}, mn = {}, idl = {}, ins = {};
+        Productive = [],  Maintenance = [], Idle = [], Installation = [];
         var url_trend = urlS.tools + id +'/trend/?start_date='+ start +'&end_date='+ end
-            DataService.get(url_trend).then(function (data) {
-                $scope.trend = data.trend;
-                $scope.trends = $scope.trend;
-                var n = $scope.trend.length;
-                for(i = n-1 ; i >= 0; i--){
-                    label.push(new Date($scope.trend[i].date).formatMMDDYYYY());
-                    Productive.push($scope.trend[i].PR);
-                    Maintenance.push($scope.trend[i].MA);
-                    Idle.push($scope.trend[i].ID);
-                    Installation.push($scope.trend[i].IN);
+        DataService.get(url_trend).then(function (data) {
+            $scope.trend = data.trend;
+           
+            var n = $scope.trend.length;
+            for(i = n-1 ; i >= 0; i--){
+                pr.x = (new Date($scope.trend[i].date).formatMMDDYYYY());
+                pr.y = $scope.trend[i].PR;
+                Productive.push(pr);
+                pr = {};
+                mn.x = (new Date($scope.trend[i].date).formatMMDDYYYY());
+                mn.y = $scope.trend[i].MA;
+                Maintenance.push(mn);
+                mn = {};
+                idl.x = (new Date($scope.trend[i].date).formatMMDDYYYY());
+                idl.y = $scope.trend[i].ID;
+                Idle.push(idl);
+                idl = {};
+                ins.x = (new Date($scope.trend[i].date).formatMMDDYYYY());
+                ins.y = $scope.trend[i].IN;
+                Installation.push(ins);
+                ins = {};
+            }
+            var chart = nv.models.multiBarChart();
+            d3.select('#chart svg').datum([
+                {
+                    key: "Production",
+                    color: "#c2de80",
+                    values: Productive
+                },
+                {
+                    key: "Maintenance",
+                    color: "#9ac3f5",
+                    values:Maintenance
+                },
+                {
+                    key: "Idle",
+                    color: "#ff7f7f",
+                    values:Idle
+                },
+                {
+                    key: "Installation",
+                    color: "#ffff80",
+                    values:Installation
                 }
-            }, function myError(response) {
-                $scope.trend = response.statusText;
-            }).finally(function () {
-                $scope.loading = true;
-            });
+            ]).transition().duration(500).call(chart);
+        }, function myError(response) {
+            $scope.trend = response.statusText;
+        }).finally(function () {
+            $scope.loading = true;
+        });
        
+
     };
-    $scope.toolTrend();
 
-    $scope.$watch('trend', function(){
-        $scope.labels = label;
-        $scope.series = ['Productive', 'Maintenance', 'Idle', 'Installation'];
-        $scope.data = data1;
-        $scope.colors = ['#c2de80','#9ac3f5','#ff7f7f','#ffff80' ];
-        $scope.datasetOverride = [
-            {
-                yAxisID: 'y-axis-1'
-            },
-            {
-                borderWidth: 3,
-                backgroundColor: "transparent",
-                hoverBackgroundColor: "rgba(255,99,132,0.4)",
-                hoverBorderColor: "rgba(255,99,132,1)",
-                type: 'line'
-            }
-        ];
-        $scope.optionsTrend = {
-            scales: {
-                yAxes: [
-                    {
-                        id: 'y-axis-1',
-                        type: 'linear',
-                        display: true,
-                        position: 'left',
-                        beginAtZero:true,
-                        labelString: 'probability'
-                    }
-                ]
-            },
-            pan: {
-               
-                enabled: true,
-                mode: 'xy'
-            },
-            zoom: {
-                enabled: true,
-                mode: 'xy'
-            }
-        };
-    });
-
-
+    $scope.toolTrendBar();
 
 
 
@@ -2328,7 +2323,7 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
     $('#tooltrend').on('apply.daterangepicker', function(ev, picker) {
         $scope.start = picker.startDate.format('YYYY-MM-DD');
         $scope.end = picker.endDate.format('YYYY-MM-DD');
-        $scope.toolTrend();
+        $scope.toolTrendBar();
     });
 
 
