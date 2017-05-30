@@ -1916,7 +1916,7 @@ angular.module('LabMonitoring').controller('ReportGenerationController', functio
 
     $scope.date = {
         startDate: '2017-02-18',
-        endDate: moment().format('YYYY-MM-DD')
+        endDate: moment()
     };
 
     $scope.setStartDate = function () {
