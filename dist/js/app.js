@@ -2133,19 +2133,21 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
 
 
     $scope.statistics = function () {
-        var log = [];
+        var cupie = [];
+        var qtrpie = [];
+        $scope.qtrData = [];
         var id =  $rootScope.id;
         var url_utilization = urlS.tools + id + '/utilization/'
         DataService.get(url_utilization).then(function (data) {
             $scope.utilization = data;
             angular.forEach($scope.utilization, function(value, key) {
                 this.push({key : key , y : value});
-            }, log);
-            $scope.stat = log;
+            }, cupie);
+            $scope.stat = cupie;
         });
         var url = urlS.tools + id + '/tool_utilization_qtr/'
         DataService.get(url).then(function (data) {
-            $rootScope.toolqtrcumulative = data;
+            $scope.toolqtrcumulative = data;
         });
         var url_userUtilization = urlS.tools + id + '/user_utilization/'
         DataService.get(url_userUtilization).then(function (data) {
@@ -2179,7 +2181,7 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
             labelThreshold: 0.01,
             labelType : 'percent',
             labelSunbeamLayout: true,
-            showLegend : true,
+            showLegend : false,
             color: ['#ff7f7f','#c2de80','#ffff80','#9ac3f5'],
             legend: {
                 margin: {
