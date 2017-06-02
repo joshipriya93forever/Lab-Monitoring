@@ -174,8 +174,14 @@
         <div class="portlet light portlet-fit bordered">
             <div class="portlet-title">
                 <div class="caption">
-                    <i class=" fa fa-pie-chart font-green"></i>
-                    <span class="caption-subject font-green bold uppercase">{{tool.name}} Analytics</span>
+                    <ul class="nav nav-tabs">
+                        <li class="active">
+                            <a ng-click="cumupie()" data-toggle="tab"> Cumulative </a>
+                        </li>
+                        <li>
+                            <a ng-click="qtrpie()" data-toggle="tab"> Quaterly </a>
+                        </li>
+                    </ul>
                 </div>
                 <div class="actions">
                     <div class="btn-group btn-group-devided" data-toggle="buttons">
@@ -188,19 +194,13 @@
                 </div>
             </div>
             <div class="portlet-body">
-               <!-- <uib-tabset active="active">
-                    <uib-tab index="0" heading="Users">
-                        <nvd3 options="options" data="stat" labelType="stat.value"></nvd3>
-                    </uib-tab>
-                    <uib-tab index="1" heading="Projects">
-                        <nvd3 options="options" data="stat" labelType="stat.value"></nvd3>
-                    </uib-tab>
-                </uib-tabset>
--->
-                <div class="row">
+                <div class="row" data-ng-if="!qtrPieChart">
                     <nvd3 options="options" data="stat" labelType="stat.value"></nvd3>
-
                 </div>
+                <div class="row" data-ng-if="qtrPieChart">
+                    <nvd3 options="options" data="qtrstat" labelType="qtrstat.value"></nvd3>
+                </div>
+
             </div>
 
         </div>

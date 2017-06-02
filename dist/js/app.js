@@ -2132,10 +2132,10 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
 
 
 
-    $scope.statistics = function () {
+
+    $scope.cumupie = function(){
+        $scope.qtrPieChart =  false;
         var cupie = [];
-        var qtrpie = [];
-        $scope.qtrData = [];
         var id =  $rootScope.id;
         var url_utilization = urlS.tools + id + '/utilization/'
         DataService.get(url_utilization).then(function (data) {
@@ -2145,10 +2145,32 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
             }, cupie);
             $scope.stat = cupie;
         });
+    };
+
+    $scope.cumupie();
+
+
+    $scope.qtrpie = function(){
+        $scope.qtrPieChart = true;
+        var id =  $rootScope.id;
+        var qtrpie = [];
+        $scope.pie = {};
         var url = urlS.tools + id + '/tool_utilization_qtr/'
         DataService.get(url).then(function (data) {
             $scope.toolqtrcumulative = data;
+            $scope.pie.idle = data.Idle_percent;
+            $scope.pie.productive = data.InUse_percent;
+            $scope.pie.installation = data.Installation_percent;
+            $scope.pie.maintenance = data.Maintenance_percent;
+            angular.forEach($scope.pie, function(value, key) {
+                this.push({key : key , y : value});
+            }, qtrpie);
+            $scope.qtrstat = qtrpie;
         });
+    }
+
+    $scope.statistics = function () {
+        var id =  $rootScope.id;
         var url_userUtilization = urlS.tools + id + '/user_utilization/'
         DataService.get(url_userUtilization).then(function (data) {
             $scope.userUtilization = data;
@@ -2181,7 +2203,7 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
             labelThreshold: 0.01,
             labelType : 'percent',
             labelSunbeamLayout: true,
-            showLegend : false,
+            showLegend : true,
             color: ['#ff7f7f','#c2de80','#ffff80','#9ac3f5'],
             legend: {
                 margin: {
