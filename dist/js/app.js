@@ -2168,7 +2168,7 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
             $scope.qtrstat = qtrpie;
         });
     }
-
+    $scope.qtrpie();
     $scope.statistics = function () {
         var id =  $rootScope.id;
         var url_userUtilization = urlS.tools + id + '/user_utilization/'
