@@ -1516,7 +1516,7 @@ angular.module('LabMonitoring').controller('LabTrendController', function($rootS
             $scope.stat = log;
              
             var n = $scope.trend.length;
-            for(i = n-1 ; i >= 0; i--){
+            for(i = 0 ; i <= n-1 ; i++){
                 pr.x = (new Date($scope.trend[i].date).formatMMDDYYYY());
                 pr.y = $scope.trend[i].PR;
                 Productive.push(pr);
@@ -1534,7 +1534,10 @@ angular.module('LabMonitoring').controller('LabTrendController', function($rootS
                 Installation.push(ins);
                 ins = {};
             }
-            var chart = nv.models.multiBarChart();
+            var chart = nv.models.multiBarChart()
+                        .showControls(false)
+                .stacked(true);
+
             d3.select('#chart svg').datum([
                 {
                     key: "Production",
@@ -2414,7 +2417,7 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
             $scope.trend = data.trend;
            
             var n = $scope.trend.length;
-            for(i = n-1 ; i >= 0; i--){
+            for(i = 0 ; i <= n-1 ; i++){
                 pr.x = (new Date($scope.trend[i].date).formatMMDDYYYY());
                 pr.y = $scope.trend[i].PR;
                 Productive.push(pr);
@@ -2432,7 +2435,9 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
                 Installation.push(ins);
                 ins = {};
             }
-            var chart = nv.models.multiBarChart();
+            var chart = nv.models.multiBarChart()
+                .showControls(false)
+                .stacked(true);
             d3.select('#chart svg').datum([
                 {
                     key: "Production",
