@@ -1069,20 +1069,40 @@ angular.module('LabMonitoring').controller('LabTrendController', function($rootS
             "/" +  this.getFullYear();
     }
 
+    $scope.date = {
+        startDate: '2017-02-18',
+        endDate: moment().format('YYYY-MM-DD')
+    };
+
+    $scope.setStartDate = function () {
+        $scope.date.startDate = moment().subtract(4, "days");
+    };
+
+    $scope.start = '2017-02-18';
+    $scope.end = moment().format('YYYY-MM-DD');
+
     $scope.labTrendBar = function(){
         var start = $scope.start;
         var end = $scope.end;
         $scope.loading = false;
+        var log = [];
         $scope.trend = [];
         var i = 0;
         var id =  $rootScope.id;
-      pr = {}, mn = {}, id = {}, ins = {};
-       Productive = [],  Maintenance = [], Idle = [], Installation = [];
+        pr = {}, mn = {}, id = {}, ins = {};
+        Productive = [],  Maintenance = [], Idle = [], Installation = [];
         var url_trend = 'api/api_trends_overall/?start_date=' + start +'&end_date='+ end
         DataService.get(url_trend).then(function (data) {
             $scope.trend = data.trend;
+            $scope.chart = data.Chart;
+           
+            angular.forEach($scope.chart, function(value, key) {
+                this.push({key : key , y : value});
+            }, log);
+            $scope.stat = log;
+           
             var n = $scope.trend.length;
-            for(i = n-1 ; i >= 0; i--){
+            for(i = 0 ; i <= n-1 ; i++){
                 pr.x = (new Date($scope.trend[i].date).formatMMDDYYYY());
                 pr.y = $scope.trend[i].PR;
                 Productive.push(pr);
@@ -1100,7 +1120,10 @@ angular.module('LabMonitoring').controller('LabTrendController', function($rootS
                 Installation.push(ins);
                 ins = {};
             }
-            var chart = nv.models.multiBarChart();
+            var chart = nv.models.multiBarChart()
+                .showControls(false)
+                .stacked(true);
+
             d3.select('#chart svg').datum([
                 {
                     key: "Production",
@@ -1135,21 +1158,6 @@ angular.module('LabMonitoring').controller('LabTrendController', function($rootS
     $scope.labTrendBar();
 
 
-    $scope.labTrendPie = function(){
-        var start = $scope.start;
-        var end = $scope.end;
-        var log = [];
-        var url_utilization = 'api/api_trends_pie/?start_date=' + start +'&end_date='+ end
-        DataService.get(url_utilization).then(function (data) {
-            $scope.utilization = data;
-            angular.forEach($scope.utilization, function(value, key) {
-                this.push({key : key , y : value});
-            }, log);
-            $scope.stat = log;
-        });
-    }
-    $scope.labTrendPie();
-
     $scope.options = {
         chart: {
             type: 'pieChart',
@@ -1176,17 +1184,7 @@ angular.module('LabMonitoring').controller('LabTrendController', function($rootS
 
 
 
-    $scope.date = {
-        startDate: moment().subtract(1, "days"),
-        endDate: moment()
-    };
 
-    $scope.setStartDate = function () {
-        $scope.date.startDate = moment().subtract(4, "days");
-    };
-
-    var start = moment().subtract(29, 'days');
-    var end = moment();
 
     $scope.opts = {
         locale: {
@@ -1212,7 +1210,6 @@ angular.module('LabMonitoring').controller('LabTrendController', function($rootS
         $scope.start = picker.startDate.format('YYYY-MM-DD');
         $scope.end = picker.endDate.format('YYYY-MM-DD');
         $scope.labTrendBar();
-        $scope.labTrendPie();
     });
 
 
@@ -1882,8 +1879,6 @@ angular.module('LabMonitoring').controller('ToolStatisticsController',  function
 
 
 
-    
-
 
     $scope.toolTrendBar = function(){
         var start = $scope.start;
@@ -1900,7 +1895,7 @@ angular.module('LabMonitoring').controller('ToolStatisticsController',  function
             $scope.trend = data.trend;
            
             var n = $scope.trend.length;
-            for(i = n-1 ; i >= 0; i--){
+            for(i = 0 ; i <= n-1 ; i++){
                 pr.x = (new Date($scope.trend[i].date).formatMMDDYYYY());
                 pr.y = $scope.trend[i].PR;
                 Productive.push(pr);
@@ -1918,7 +1913,8 @@ angular.module('LabMonitoring').controller('ToolStatisticsController',  function
                 Installation.push(ins);
                 ins = {};
             }
-            var chart = nv.models.multiBarChart();
+            var chart = nv.models.multiBarChart().showControls(false)
+                .stacked(true);
             d3.select('#chart svg').datum([
                 {
                     key: "Production",
