@@ -1,9 +1,15 @@
+<div>
+    <uib-alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)" dismiss-on-timeout="3000">{{alert.msg}}</uib-alert>
+</div>
 <div class="row">
     <div class="portlet light portlet-fit bordered">
         <div class="portlet-title">
             <div class="caption">
                 <i class=" fa fa-area-chart font-green"></i>
                 <span class="caption-subject font-green bold uppercase">Real-Time Data {{clock  | date:'medium'}}</span>
+            </div>
+            <div id="help" class="actions">
+                <img src="images/help.png" ng-click="help('lg')"/>
             </div>
         </div>
 
@@ -136,9 +142,6 @@
                     <span class="caption-subject font-blue-madison bold uppercase">Tool Status</span>
                     <span class="caption-helper">select the status</span>
                 </div>
-                <div id="help" class="actions">
-                    <img src="images/help.png" ng-click="help('lg')"/>
-                </div>
             </div>
             <div class="portlet-body form">
                 <div class="row">
@@ -183,22 +186,21 @@
                         </li>
                     </ul>
                 </div>
-                <div class="actions">
+                <!--<div class="actions">
                     <div class="btn-group btn-group-devided" data-toggle="buttons">
                         <label class="btn dark btn-outline  btn-sm active">
                             <input type="radio" name="options" class="toggle" id="option1">8 hr</label>
                         <label class="btn dark btn-outline  btn-sm">
                             <input type="radio" name="options" class="toggle" id="option2">24 hr</label>
                     </div>
-
-                </div>
+                </div>-->
             </div>
             <div class="portlet-body">
                 <div class="row" data-ng-if="!qtrPieChart">
                     <nvd3 options="options" data="stat" labelType="stat.value"></nvd3>
                 </div>
                 <div class="row" data-ng-if="qtrPieChart">
-                    <nvd3 options="options" data="qtrstat" labelType="qtrstat.value"></nvd3>
+                    <nvd3 options="qtroptions" data="qtrstat" labelType="qtrstat.value"></nvd3>
                 </div>
 
             </div>
@@ -211,17 +213,17 @@
                 <div class="caption">
                     <span class="caption-subject font-green bold uppercase">{{tool.name}}</span>
                 </div>
-                <div class="actions">
+               <!-- <div class="actions">
                     <div class="btn-group btn-group-devided" data-toggle="buttons">
                         <label class="btn dark btn-outline  btn-sm active">
                             <input type="radio" name="options" class="toggle" id="option1">8 hr</label>
                         <label class="btn dark btn-outline  btn-sm">
                             <input type="radio" name="options" class="toggle" id="option2">24 hr</label>
                     </div>
-                </div>
+                </div>-->
             </div>
             <div class="portlet-body">
-                <uib-tabset active="active">
+                <uib-tabset active="activeJustified">
                     <uib-tab index="0" heading="Users">
                         <ul class="feeds">
                             <li>

@@ -784,7 +784,27 @@ angular.module('LabMonitoring').controller('LabController', function($rootScope,
 
             });
         });
-        
+        $("#bay9").ready(function () {
+         var url = urlS.tools + 75 + '/'
+         DataService.get(url).then(function (data) {
+         $scope.tool = data;
+         $scope.tstatus = $scope.tool.status;
+         if ($scope.tstatus === 'IN') {
+         $('#bay9').css({fill: "#ffff80"});
+         }
+         else if ($scope.tstatus === 'ID') {
+         $('#bay9').css({fill: "#ff7f7f"});
+         }
+         else if ($scope.tstatus === 'PR') {
+         $('#bay9').css({fill: "#c2de80"});
+         }
+         else if ($scope.tstatus === 'MA') {
+         $('#bay9').css({fill: "#9ac3f5"});
+         }
+         }, function (err) {
+
+         });
+         });
         $("#bay10").ready(function () {
             var url = urlS.tools + 18 + '/'
             DataService.get(url).then(function (data) {
@@ -934,7 +954,27 @@ angular.module('LabMonitoring').controller('LabController', function($rootScope,
 
             });
         });
-        
+         $("#bay19").ready(function () {
+         var url = urlS.tools + 72 + '/'
+         DataService.get(url).then(function (data) {
+         $scope.tool = data;
+         $scope.tstatus = $scope.tool.status;
+         if ($scope.tstatus === 'IN') {
+         $('#bay19').css({fill: "#ffff80"});
+         }
+         else if ($scope.tstatus === 'ID') {
+         $('#bay19').css({fill: "#ff7f7f"});
+         }
+         else if ($scope.tstatus === 'PR') {
+         $('#bay19').css({fill: "#c2de80"});
+         }
+         else if ($scope.tstatus === 'MA') {
+         $('#bay19').css({fill: "#9ac3f5"});
+         }
+         }, function (err) {
+
+         });
+         });
         $("#bay20").ready(function () {
             var url = urlS.tools + 55 + '/'
             DataService.get(url).then(function (data) {
@@ -1125,7 +1165,27 @@ angular.module('LabMonitoring').controller('LabController', function($rootScope,
 
             });
         });
-        
+        $("#bay30").ready(function () {
+         var url = urlS.tools + 68 + '/'
+         DataService.get(url).then(function (data) {
+         $scope.tool = data;
+         $scope.tstatus = $scope.tool.status;
+         if ($scope.tstatus === 'IN') {
+         $('#bay30').css({fill: "#ffff80"});
+         }
+         else if ($scope.tstatus === 'ID') {
+         $('#bay30').css({fill: "#ff7f7f"});
+         }
+         else if ($scope.tstatus === 'PR') {
+         $('#bay30').css({fill: "#c2de80"});
+         }
+         else if ($scope.tstatus === 'MA') {
+         $('#bay30').css({fill: "#9ac3f5"});
+         }
+         }, function (err) {
+
+         });
+         });
         $("#bay31").ready(function () {
             var url = urlS.tools + 30 + '/'
             DataService.get(url).then(function (data) {
@@ -1148,7 +1208,27 @@ angular.module('LabMonitoring').controller('LabController', function($rootScope,
             });
         });
         
-        
+        $("#bay33").ready(function () {
+         var url = urlS.tools + 71 + '/'
+         DataService.get(url).then(function (data) {
+         $scope.tool = data;
+         $scope.tstatus = $scope.tool.status;
+         if ($scope.tstatus === 'IN') {
+         $('#bay33').css({fill: "#ffff80"});
+         }
+         else if ($scope.tstatus === 'ID') {
+         $('#bay33').css({fill: "#ff7f7f"});
+         }
+         else if ($scope.tstatus === 'PR') {
+         $('#bay33').css({fill: "#c2de80"});
+         }
+         else if ($scope.tstatus === 'MA') {
+         $('#bay33').css({fill: "#9ac3f5"});
+         }
+         }, function (err) {
+
+         });
+         });
         $("#bay34").ready(function () {
             var url = urlS.tools + 29 + '/'
             DataService.get(url).then(function (data) {
@@ -1338,7 +1418,27 @@ angular.module('LabMonitoring').controller('LabController', function($rootScope,
 
             });
         });
-        
+        $("#bay43").ready(function () {
+         var url = urlS.tools + 74 + '/'
+         DataService.get(url).then(function (data) {
+         $scope.tool = data;
+         $scope.tstatus = $scope.tool.status;
+         if ($scope.tstatus === 'IN') {
+         $('#bay43').css({fill: "#ffff80"});
+         }
+         else if ($scope.tstatus === 'ID') {
+         $('#bay43').css({fill: "#ff7f7f"});
+         }
+         else if ($scope.tstatus === 'PR') {
+         $('#bay43').css({fill: "#c2de80"});
+         }
+         else if ($scope.tstatus === 'MA') {
+         $('#bay43').css({fill: "#9ac3f5"});
+         }
+         }, function (err) {
+
+         });
+         });
         
          
         
@@ -2125,7 +2225,7 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
         DataService.get(url).then(function (data) {
             $scope.tool = data;
         }, function (err) {
-
+            $scope.alerts.push({type: 'danger', msg: 'Sorry!!! Something went wrong. Please try again.'});
         });
     }();
 
@@ -2169,6 +2269,9 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
         });
     }
     $scope.qtrpie();
+
+    $scope.qtrPieChart =  false;
+
     $scope.statistics = function () {
         var id =  $rootScope.id;
         var url_userUtilization = urlS.tools + id + '/user_utilization/'
@@ -2215,6 +2318,30 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
             }
         }
     };
+    $scope.qtroptions = {
+        chart: {
+            type: 'pieChart',
+            height: 400,
+            x: function(d){return d.key;},
+            y: function(d){return d.y;},
+            showLabels: true,
+            duration: 500,
+            labelThreshold: 0.01,
+            labelType : 'percent',
+            labelSunbeamLayout: true,
+            showLegend : true,
+            color: ['#ff7f7f','#c2de80','#ffff80','#9ac3f5'],
+            legend: {
+                margin: {
+                    top: 5,
+                    right: -30,
+                    bottom: 5,
+                    left: 0
+                }
+            }
+        }
+    };
+
 
     $scope.help =  function (opt_attributes) {
             var out = $uibModal.open(
@@ -2780,6 +2907,10 @@ LabMonitoring.service('DataService',[
                     deferred.resolve(success.data);
                 }
             },function (error){
+                var request = error.config.method + ' ' + error.config.url,
+                    err = 'API request ' + request + ' failed with response code ' + status;
+
+                deferred.reject(err);
                 $log.error('API Error:', error);
             });
            
