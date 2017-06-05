@@ -932,7 +932,7 @@ angular.module('LabMonitoring').controller('LabController', function($rootScope,
          });
          });
         $("#bay16").ready(function () {
-            var url = urlS.tools + 53 + '/'
+            var url = urlS.tools + 55 + '/'
             DataService.get(url).then(function (data) {
                 $scope.tool = data;
                 $scope.tstatus = $scope.tool.status;
@@ -952,7 +952,27 @@ angular.module('LabMonitoring').controller('LabController', function($rootScope,
 
             });
         });
-        
+        $("#bay17").ready(function () {
+         var url = urlS.tools + 53 + '/'
+         DataService.get(url).then(function (data) {
+         $scope.tool = data;
+         $scope.tstatus = $scope.tool.status;
+         if ($scope.tstatus === 'IN') {
+         $('#bay17').css({fill: "#ffff80"});
+         }
+         else if ($scope.tstatus === 'ID') {
+         $('#bay17').css({fill: "#ff7f7f"});
+         }
+         else if ($scope.tstatus === 'PR') {
+         $('#bay17').css({fill: "#c2de80"});
+         }
+         else if ($scope.tstatus === 'MA') {
+         $('#bay17').css({fill: "#9ac3f5"});
+         }
+         }, function (err) {
+
+         });
+         });
         $("#bay18").ready(function () {
             var url = urlS.tools + 54 + '/'
             DataService.get(url).then(function (data) {
@@ -995,27 +1015,7 @@ angular.module('LabMonitoring').controller('LabController', function($rootScope,
 
          });
          });
-        $("#bay20").ready(function () {
-            var url = urlS.tools + 55 + '/'
-            DataService.get(url).then(function (data) {
-                $scope.tool = data;
-                $scope.tstatus = $scope.tool.status;
-                if ($scope.tstatus === 'IN') {
-                    $('#bay20').css({fill: "#ffff80"});
-                }
-                else if ($scope.tstatus === 'ID') {
-                    $('#bay20').css({fill: "#ff7f7f"});
-                }
-                else if ($scope.tstatus === 'PR') {
-                    $('#bay20').css({fill: "#c2de80"});
-                }
-                else if ($scope.tstatus === 'MA') {
-                    $('#bay20').css({fill: "#9ac3f5"});
-                }
-            }, function (err) {
-
-            });
-        });
+        
         $("#bay21").ready(function () {
             var url = urlS.tools + 58 + '/'
             DataService.get(url).then(function (data) {
