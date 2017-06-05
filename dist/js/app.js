@@ -910,7 +910,27 @@ angular.module('LabMonitoring').controller('LabController', function($rootScope,
 
             });
         });
-        
+        $("#bay15").ready(function () {
+         var url = urlS.tools + 76 + '/'
+         DataService.get(url).then(function (data) {
+         $scope.tool = data;
+         $scope.tstatus = $scope.tool.status;
+         if ($scope.tstatus === 'IN') {
+         $('#bay15').css({fill: "#ffff80"});
+         }
+         else if ($scope.tstatus === 'ID') {
+         $('#bay15').css({fill: "#ff7f7f"});
+         }
+         else if ($scope.tstatus === 'PR') {
+         $('#bay15').css({fill: "#c2de80"});
+         }
+         else if ($scope.tstatus === 'MA') {
+         $('#bay15').css({fill: "#9ac3f5"});
+         }
+         }, function (err) {
+
+         });
+         });
         $("#bay16").ready(function () {
             var url = urlS.tools + 53 + '/'
             DataService.get(url).then(function (data) {
