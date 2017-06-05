@@ -1,20 +1,21 @@
+<!--
 
 
 <div class="login error">
-<!-- BEGIN LOGO -->
+&lt;!&ndash; BEGIN LOGO &ndash;&gt;
 <div class="logo">
     <a href="#">
         <img src="images/applied-materials-inc-logo-300x85.png" alt="" /> </a>
 </div>
-<!-- END LOGO -->
-<!-- BEGIN LOGIN -->
+&lt;!&ndash; END LOGO &ndash;&gt;
+&lt;!&ndash; BEGIN LOGIN &ndash;&gt;
 <div class="content">
-<!-- BEGIN LOGIN FORM -->
+&lt;!&ndash; BEGIN LOGIN FORM &ndash;&gt;
 <form class="login-form" ng-submit="userForm.$valid && submit(login)" name="userForm" novalidate="novalidate">
     <h3 class="form-title">Login to Dashboard</h3>
     <div><uib-alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)" dismiss-on-timeout="3000">{{alert.msg}}</uib-alert></div>
     <div class="form-group" ng-class="{'has-error': !userForm.email.$valid && (!userForm.$pristine || userForm.$submitted)}">
-        <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+        &lt;!&ndash;ie8, ie9 does not support html5 placeholder, so we just show field title for that&ndash;&gt;
         <label class="control-label visible-ie8 visible-ie9">Username</label>
                 <input class="form-control placeholder-no-fix" ng-model="login.email" type="email" autocomplete="off" placeholder="Email..." name="email" required ng-keyup="$event.keyCode == 13 && submit(login)"/>
         <p class="help-block" ng-show="userForm.email.$error.email && (!userForm.$pristine || userForm.$submitted)">Enter the valid email address</p>
@@ -31,12 +32,13 @@
     </div>
 
 </form>
-<!-- END REGISTRATION FORM -->
+&lt;!&ndash; END REGISTRATION FORM &ndash;&gt;
 </div>
-<!-- END LOGIN -->
-<!-- BEGIN COPYRIGHT -->
+&lt;!&ndash; END LOGIN &ndash;&gt;
+&lt;!&ndash; BEGIN COPYRIGHT &ndash;&gt;
 <div class="copyright"> Created by ASM Technologies. </div>
 </div>
 
 
 
+-->

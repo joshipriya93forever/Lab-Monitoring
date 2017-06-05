@@ -157,11 +157,7 @@ LabMonitoring.config([ '$stateProvider',
         })
 
 
-        .state("tool.statistics", {
-            url: "/statistics",
-            templateUrl: "templates/partials/toolStatistics.html",
-            data: {pageTitle: 'Tool Statistics'}
-        })
+       
 
         .state('labTrend', {
             url: "/labTrend",
@@ -205,20 +201,24 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
     };
     $scope.getCumulativeData();    
 
-    $scope.getMonthlyCumulativeData = function() {
-        var url = urlS.tools + 'monthlylab_utilization/'
+    $scope.getQuaterlyCumulativeData = function() {
+        var url = urlS.tools + 'lab_utilization_qtr/'
         DataService.get(url).then(function (data) {
-            $rootScope.monthlycumulative = data;
+            $rootScope.qtrcumulative = data;
         }, function (err) {
 
         });
     };
-    $scope.getMonthlyCumulativeData();
+    $scope.getQuaterlyCumulativeData();
+
 
     $scope.setId = function (id) {
         $rootScope.id = id;
-        $state.go('tool.statistics');
+        $state.go('tool');
     }
+
+
+
 
 
    
@@ -228,11 +228,11 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
 
 
 
-    $scope.clock = "loading clock...";
+    $rootScope.clock = "loading clock...";
     $scope.tickInterval = 1000
 
     var tick = function() {
-        $scope.clock = Date.now()
+        $rootScope.clock = Date.now()
         $timeout(tick, $scope.tickInterval);
     }
 
@@ -247,18 +247,6 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
                 templateUrl: "templates/modals/helpDashboard.html",
                 controller: "Modal_handlerController",
                 size : opt_attributes
-            })
-    }
-
-
-
-    $scope.labModal  =  function (opt_attributes) {
-        var out = $uibModal.open(
-            {
-                animation: $scope.animationsEnabled,
-                templateUrl: "templates/modals/labTrend.html",
-                controller: "Modal_handlerController",
-                size: opt_attributes
             })
     }
 
@@ -382,7 +370,27 @@ angular.module('LabMonitoring').controller('LabController', function($rootScope,
 
             });
         });
-        
+        $("#bay9").ready(function () {
+         var url = urlS.tools + 75 + '/'
+         DataService.get(url).then(function (data) {
+         $scope.tool = data;
+         $scope.tstatus = $scope.tool.status;
+         if ($scope.tstatus === 'IN') {
+         $('#bay9').css({fill: "#ffff80"});
+         }
+         else if ($scope.tstatus === 'ID') {
+         $('#bay9').css({fill: "#ff7f7f"});
+         }
+         else if ($scope.tstatus === 'PR') {
+         $('#bay9').css({fill: "#c2de80"});
+         }
+         else if ($scope.tstatus === 'MA') {
+         $('#bay9').css({fill: "#9ac3f5"});
+         }
+         }, function (err) {
+
+         });
+         });
         $("#bay10").ready(function () {
             var url = urlS.tools + 18 + '/'
             DataService.get(url).then(function (data) {
@@ -532,7 +540,27 @@ angular.module('LabMonitoring').controller('LabController', function($rootScope,
 
             });
         });
-        
+         $("#bay19").ready(function () {
+         var url = urlS.tools + 72 + '/'
+         DataService.get(url).then(function (data) {
+         $scope.tool = data;
+         $scope.tstatus = $scope.tool.status;
+         if ($scope.tstatus === 'IN') {
+         $('#bay19').css({fill: "#ffff80"});
+         }
+         else if ($scope.tstatus === 'ID') {
+         $('#bay19').css({fill: "#ff7f7f"});
+         }
+         else if ($scope.tstatus === 'PR') {
+         $('#bay19').css({fill: "#c2de80"});
+         }
+         else if ($scope.tstatus === 'MA') {
+         $('#bay19').css({fill: "#9ac3f5"});
+         }
+         }, function (err) {
+
+         });
+         });
         $("#bay20").ready(function () {
             var url = urlS.tools + 55 + '/'
             DataService.get(url).then(function (data) {
@@ -723,7 +751,27 @@ angular.module('LabMonitoring').controller('LabController', function($rootScope,
 
             });
         });
-        
+        $("#bay30").ready(function () {
+         var url = urlS.tools + 68 + '/'
+         DataService.get(url).then(function (data) {
+         $scope.tool = data;
+         $scope.tstatus = $scope.tool.status;
+         if ($scope.tstatus === 'IN') {
+         $('#bay30').css({fill: "#ffff80"});
+         }
+         else if ($scope.tstatus === 'ID') {
+         $('#bay30').css({fill: "#ff7f7f"});
+         }
+         else if ($scope.tstatus === 'PR') {
+         $('#bay30').css({fill: "#c2de80"});
+         }
+         else if ($scope.tstatus === 'MA') {
+         $('#bay30').css({fill: "#9ac3f5"});
+         }
+         }, function (err) {
+
+         });
+         });
         $("#bay31").ready(function () {
             var url = urlS.tools + 30 + '/'
             DataService.get(url).then(function (data) {
@@ -746,7 +794,27 @@ angular.module('LabMonitoring').controller('LabController', function($rootScope,
             });
         });
         
-        
+        $("#bay33").ready(function () {
+         var url = urlS.tools + 71 + '/'
+         DataService.get(url).then(function (data) {
+         $scope.tool = data;
+         $scope.tstatus = $scope.tool.status;
+         if ($scope.tstatus === 'IN') {
+         $('#bay33').css({fill: "#ffff80"});
+         }
+         else if ($scope.tstatus === 'ID') {
+         $('#bay33').css({fill: "#ff7f7f"});
+         }
+         else if ($scope.tstatus === 'PR') {
+         $('#bay33').css({fill: "#c2de80"});
+         }
+         else if ($scope.tstatus === 'MA') {
+         $('#bay33').css({fill: "#9ac3f5"});
+         }
+         }, function (err) {
+
+         });
+         });
         $("#bay34").ready(function () {
             var url = urlS.tools + 29 + '/'
             DataService.get(url).then(function (data) {
@@ -936,7 +1004,27 @@ angular.module('LabMonitoring').controller('LabController', function($rootScope,
 
             });
         });
-        
+        $("#bay43").ready(function () {
+         var url = urlS.tools + 74 + '/'
+         DataService.get(url).then(function (data) {
+         $scope.tool = data;
+         $scope.tstatus = $scope.tool.status;
+         if ($scope.tstatus === 'IN') {
+         $('#bay43').css({fill: "#ffff80"});
+         }
+         else if ($scope.tstatus === 'ID') {
+         $('#bay43').css({fill: "#ff7f7f"});
+         }
+         else if ($scope.tstatus === 'PR') {
+         $('#bay43').css({fill: "#c2de80"});
+         }
+         else if ($scope.tstatus === 'MA') {
+         $('#bay43').css({fill: "#9ac3f5"});
+         }
+         }, function (err) {
+
+         });
+         });
         
          
         
@@ -1119,12 +1207,11 @@ angular.module('LabMonitoring').controller('LoginController', function($rootScop
     var urlS = $rootScope.urlS;
     $scope.alerts = [];
 
-
-    $scope.submit = function (login) {
-           if(login === undefined || login.email === undefined || login.email === " " || login.password === " " || login.password === undefined) {
-               console.log('enter valid username && password');
-           }
-           else {
+        var login = {};
+    $scope.submit = function () {
+         
+               login.email = 'bay@amat.com';
+                login.password = 'bay123!'
                var url = urlS.login
                DataService.post(url, login).then(function (data) {
                    var token = data.token;
@@ -1133,8 +1220,10 @@ angular.module('LabMonitoring').controller('LoginController', function($rootScop
                }, function (err) {
                    $scope.alerts.push({type: 'danger', msg: 'Please enter valid Email and Password.'});
                });
-           }
+          
     }
+
+    $scope.submit();
 
     if($localStorage.token === undefined) {
         $location.path('/login');
@@ -1535,7 +1624,7 @@ angular.module('LabMonitoring').controller('ToolController',  function($rootScop
         var url = urlS.bays + bay_id + aurl.tool + id + '/';
         DataService.patch(url, item).then(function (data) {
             $rootScope.item = data;
-        }, function (err) {
+        }, function (error) {
 
         });
     }
@@ -1575,11 +1664,14 @@ angular.module('LabMonitoring').controller('ToolController',  function($rootScop
 
 
 
-angular.module('LabMonitoring').controller('ToolStatisticsController',  function($rootScope, $scope, settings, $state,DataService,$uibModal, $log,$interval,$http) {
+angular.module('LabMonitoring').controller('ToolStatisticsController',  function($rootScope, $scope, settings, $state, $log, $interval, $http,$timeout,DataService,$uibModal) {
 
     var urlS = $rootScope.urlS;
     var aurl = $rootScope.url;
     $scope.alerts = [];
+
+
+    $scope.clock = $rootScope.clock;
 
     
     $scope.statusChange = function(item) {
@@ -1599,10 +1691,10 @@ angular.module('LabMonitoring').controller('ToolStatisticsController',  function
         modalInstance.result.then(function (item) {
             var id = $rootScope.id;
             var url = urlS.tools + id + '/'
-            DataService.patch(url, item).then(function (data) {
+            DataService.put(url, item).then(function (data) {
                 $scope.item = data;
                 $scope.item.status.push = $scope.item.status;
-                $state.go('dashboard');
+                $state.go('main.dashboard');
                 $scope.alerts.push({type: 'success', msg: 'Changes Saved Successfully.'});
             }, function (err) {
                 $scope.alerts.push({type: 'danger', msg: 'Sorry!!! Something went wrong. Please try again.'});
@@ -1613,30 +1705,57 @@ angular.module('LabMonitoring').controller('ToolStatisticsController',  function
 
     
     $scope.status = function(){
-       var id =  $rootScope.id;
+        var id =  $rootScope.id;
         var url = urlS.tools + id + '/'
         DataService.get(url).then(function (data) {
             $scope.tool = data;
         }, function (err) {
 
         });
-    }
-
-    $scope.status() ;
+    }();
 
 
 
-    $scope.statistics = function () {
-        var log = [];
+
+
+    $scope.cumupie = function(){
+        $scope.qtrPieChart =  false;
+        var cupie = [];
         var id =  $rootScope.id;
         var url_utilization = urlS.tools + id + '/utilization/'
         DataService.get(url_utilization).then(function (data) {
             $scope.utilization = data;
             angular.forEach($scope.utilization, function(value, key) {
                 this.push({key : key , y : value});
-            }, log);
-            $scope.stat = log;
+            }, cupie);
+            $scope.stat = cupie;
         });
+    };
+
+    $scope.cumupie();
+
+
+    $scope.qtrpie = function(){
+        $scope.qtrPieChart = true;
+        var id =  $rootScope.id;
+        var qtrpie = [];
+        $scope.pie = {};
+        var url = urlS.tools + id + '/tool_utilization_qtr/'
+        DataService.get(url).then(function (data) {
+            $scope.toolqtrcumulative = data;
+            $scope.pie.idle = data.Idle_percent;
+            $scope.pie.productive = data.InUse_percent;
+            $scope.pie.installation = data.Installation_percent;
+            $scope.pie.maintenance = data.Maintenance_percent;
+            angular.forEach($scope.pie, function(value, key) {
+                this.push({key : key , y : value});
+            }, qtrpie);
+            $scope.qtrstat = qtrpie;
+        });
+    }
+    $scope.qtrpie();
+    $scope.statistics = function () {
+        var id =  $rootScope.id;
         var url_userUtilization = urlS.tools + id + '/user_utilization/'
         DataService.get(url_userUtilization).then(function (data) {
             $scope.userUtilization = data;
@@ -1645,8 +1764,13 @@ angular.module('LabMonitoring').controller('ToolStatisticsController',  function
         DataService.get(url_projectUtilization).then(function (data) {
             $scope.projectUtilization = data;
         });
-    }();
 
+    }
+
+    $scope.qtrPieChart =  false;
+
+
+    $scope.statistics();
 
    
     $scope.closeAlert = function(index){
@@ -1660,19 +1784,44 @@ angular.module('LabMonitoring').controller('ToolStatisticsController',  function
     $scope.options = {
         chart: {
             type: 'pieChart',
-            height: 500,
+            height: 400,
             x: function(d){return d.key;},
             y: function(d){return d.y;},
             showLabels: true,
             duration: 500,
             labelThreshold: 0.01,
+            labelType : 'percent',
             labelSunbeamLayout: true,
-            showLegend : false,
+            showLegend : true,
             color: ['#ff7f7f','#c2de80','#ffff80','#9ac3f5'],
             legend: {
                 margin: {
                     top: 5,
-                    right: 30,
+                    right: -30,
+                    bottom: 5,
+                    left: 0
+                }
+            }
+        }
+    };
+
+    $scope.qtroptions = {
+        chart: {
+            type: 'pieChart',
+            height: 400,
+            x: function(d){return d.key;},
+            y: function(d){return d.y;},
+            showLabels: true,
+            duration: 500,
+            labelThreshold: 0.01,
+            labelType : 'percent',
+            labelSunbeamLayout: true,
+            showLegend : true,
+            color: ['#ff7f7f','#c2de80','#ffff80','#9ac3f5'],
+            legend: {
+                margin: {
+                    top: 5,
+                    right: -30,
                     bottom: 5,
                     left: 0
                 }
@@ -1681,14 +1830,15 @@ angular.module('LabMonitoring').controller('ToolStatisticsController',  function
     };
 
     $scope.help =  function (opt_attributes) {
-            var out = $uibModal.open(
-                {
-                    animation: $scope.animationsEnabled,
-                    templateUrl: "templates/modals/helpStatus.html",
-                    controller: "Modal_handlerController",
-                    size : opt_attributes
-                })
+        var out = $uibModal.open(
+            {
+                animation: $scope.animationsEnabled,
+                templateUrl: "templates/modals/helpStatus.html",
+                controller: "Modal_handlerController",
+                size : opt_attributes
+            })
     }
+
 
 
 
@@ -1698,111 +1848,120 @@ angular.module('LabMonitoring').controller('ToolStatisticsController',  function
             "/" +  this.getDate() +
             "/" +  this.getFullYear();
     }
+    $scope.date = {
+        startDate: '2017-02-18',
+        endDate: moment().format('YYYY-MM-DD')
+    };
+
+    $scope.setStartDate = function () {
+        $scope.date.startDate = moment().subtract(4, "days");
+    };
+
+    $scope.start = '2017-02-18';
+    $scope.end = moment().format('YYYY-MM-DD');
 
 
 
+    
 
-        var label = [], Productive = [],  Maintenance = [], Idle = [], Installation = [], data1=[];
-        var update =  function (){
-            $scope.loading = false;
-            $scope.trend = [];
-            var i = 0;
-            var id =  $rootScope.id;
-            label = [], Productive = [],  Maintenance = [], Idle = [], Installation = [], data1=[];
-            var url_trend = urlS.tools + id + '/trend/'  
-            DataService.get(url_trend).then(function (data) {
-                $scope.trend = data.trend;
-                $scope.trends = $scope.trend;
-                var n = $scope.trend.length;
-                for(i = n-1 ; i >= 0; i--){
-                    label.push(new Date($scope.trend[i].date).formatMMDDYYYY());
-                    Productive.push($scope.trend[i].PR);
-                    Maintenance.push($scope.trend[i].MA);
-                    Idle.push($scope.trend[i].ID);
-                    Installation.push($scope.trend[i].IN);
-                }
-                data1.push(Productive,Maintenance,Idle,Installation);
-                $scope.labels = label;
-                $scope.series = ['Productive', 'Maintenance', 'Idle', 'Installation'];
-                $scope.data = data1;
-                $scope.colors = ['#c2de80','#9ac3f5','#ff7f7f','#ffff80' ];
-                $scope.datasetOverride = [
-                    {
-                        yAxisID: 'y-axis-1'
-                    },
-                    {
-                        label: "Line chart",
-                        borderWidth: 3,
-                        backgroundColor: "transparent",
-                        hoverBackgroundColor: "rgba(255,99,132,0.4)",
-                        hoverBorderColor: "rgba(255,99,132,1)",
-                        type: 'line'
-                    }
-                ];
-                $scope.optionsTrend = {
-                    scales: {
-                        yAxes: [
-                            {
-                                id: 'y-axis-1',
-                                type: 'linear',
-                                display: true,
-                                position: 'left',
-                                beginAtZero:true,
-                                labelString: 'probability'
-                            }
-                        ]
-                    },
-                    pan: {
-                       
-                        enabled: true,
-                        mode: 'xy'
-                    },
-                    zoom: {
-                        enabled: true,
-                        mode: 'xy'
-                    }
-                };
-            }, function myError(response) {
-                $scope.trend = response.statusText;
-            }).finally(function () {
-                $scope.loading = true;
-            });
+
+    $scope.toolTrendBar = function(){
+        var start = $scope.start;
+        var end = $scope.end;
+        $scope.loading = false;
+        var log = [];
+        $scope.trend = [];
+        var i = 0;
+        var id =  $rootScope.id;
+        pr = {}, mn = {}, idl = {}, ins = {};
+        Productive = [],  Maintenance = [], Idle = [], Installation = [];
+        var url_trend = urlS.tools + id +'/trend/?start_date='+ start +'&end_date='+ end
+        DataService.get(url_trend).then(function (data) {
+            $scope.trend = data.trend;
            
-        }();
-
-
-
-
-
-
-
-    $('input[name="datefilter"]').daterangepicker({
-        autoUpdateInput: false,
-        locale: {
-            cancelLabel: 'Clear'
-        }
-    });
-
-    $('#trend').on('apply.daterangepicker', function(ev, picker) {
-        $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
-        var start = picker.startDate.format('YYYY-MM-DD');
-        var end = picker.endDate.format('YYYY-MM-DD');
-        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
-        var export_url = 'http://152.135.122.61:8871/api/export_tool_xls/?start_date=' + start +'&end_date='+ end
-        DataService.get(url_report).then(function () {
-            window.location = export_url;
+            var n = $scope.trend.length;
+            for(i = n-1 ; i >= 0; i--){
+                pr.x = (new Date($scope.trend[i].date).formatMMDDYYYY());
+                pr.y = $scope.trend[i].PR;
+                Productive.push(pr);
+                pr = {};
+                mn.x = (new Date($scope.trend[i].date).formatMMDDYYYY());
+                mn.y = $scope.trend[i].MA;
+                Maintenance.push(mn);
+                mn = {};
+                idl.x = (new Date($scope.trend[i].date).formatMMDDYYYY());
+                idl.y = $scope.trend[i].ID;
+                Idle.push(idl);
+                idl = {};
+                ins.x = (new Date($scope.trend[i].date).formatMMDDYYYY());
+                ins.y = $scope.trend[i].IN;
+                Installation.push(ins);
+                ins = {};
+            }
+            var chart = nv.models.multiBarChart();
+            d3.select('#chart svg').datum([
+                {
+                    key: "Production",
+                    color: "#c2de80",
+                    values: Productive
+                },
+                {
+                    key: "Maintenance",
+                    color: "#9ac3f5",
+                    values:Maintenance
+                },
+                {
+                    key: "Idle",
+                    color: "#ff7f7f",
+                    values:Idle
+                },
+                {
+                    key: "Installation",
+                    color: "#ffff80",
+                    values:Installation
+                }
+            ]).transition().duration(500).call(chart);
+        }, function myError(response) {
+            $scope.trend = response.statusText;
+        }).finally(function () {
+            $scope.loading = true;
         });
+       
+
+    };
+
+    $scope.toolTrendBar();
+
+
+
+
+
+
+    $scope.opts = {
+        locale: {
+            applyClass: 'btn-green',
+            applyLabel: "Apply",
+            fromLabel: "From",
+            format: "YYYY-MM-DD",
+            toLabel: "To",
+            cancelLabel: 'Cancel',
+            customRangeLabel: 'Custom range'
+        },
+        ranges: {
+            'Weekly': [moment().subtract(7, 'days'), moment().subtract(1, 'days')],
+            'Last 30 Days': [moment().subtract(30, 'days'), moment().subtract(1, 'days')],
+            'Current Month': [moment().startOf('month'), moment().subtract(1, 'days')],
+            'Quaterly': [moment().subtract(2, 'month').startOf('month'), moment().subtract(1, 'days')]
+        }
+    };
+
+
+
+    $('#tooltrend').on('apply.daterangepicker', function(ev, picker) {
+        $scope.start = picker.startDate.format('YYYY-MM-DD');
+        $scope.end = picker.endDate.format('YYYY-MM-DD');
+        $scope.toolTrendBar();
     });
-
-
-    $('input[name="datefilter"]').on('cancel.daterangepicker', function(ev, picker) {
-        $(this).val('');
-    });
-
-    var dayOne = 2017-02-08;
-    var current = moment().format("YYYY-MM-DD");
-    $scope.realtime =  moment().format('h:mm:ss a, MMMM Do YYYY');
-
 
 
 });
@@ -1943,6 +2102,9 @@ LabMonitoring.service('DataService',[
                     deferred.resolve(success.data);
                 }
             },function (error){
+                var request = error.config.method + ' ' + error.config.url,
+                    err = 'API request ' + request + ' failed with response code ' + status;
+
                 $log.error('API Error:', error);
             });
            
