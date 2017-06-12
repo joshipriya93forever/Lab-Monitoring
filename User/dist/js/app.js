@@ -1228,7 +1228,7 @@ angular.module('LabMonitoring').controller('LoginController', function($rootScop
     $scope.submit = function () {
          
                login.email = 'bay@amat.com';
-                login.password = 'bay123!'
+                login.password = 'bay123'
                var url = urlS.login
                DataService.post(url, login).then(function (data) {
                    var token = data.token;
