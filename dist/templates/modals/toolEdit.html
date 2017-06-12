@@ -14,7 +14,7 @@
                         <label class="col-sm-4 control-label">Tool Name<span class="required"> * </span></label>
                         <div class="col-sm-8">
                             <div class="input-group">
-                                <input type="text" maxlength="20" name="tname" id="tool_name" placeholder="Enter your name" ng-model="item.name" class="form-control" my-directive required ng-keyup="$event.keyCode == 13 && ok(item)"/>
+                                <input type="text"  name="tname" id="tool_name" placeholder="Enter your name" ng-model="item.name" class="form-control" my-directive required ng-keyup="$event.keyCode == 13 && ok(item)"/>
                                 <p class="help-block" ng-show="itemForm.tname.$error.required && (!itemForm.$pristine || itemForm.$submitted)">This field is required</p>
                             </div>
                         </div>
@@ -23,7 +23,8 @@
                         <label class="col-sm-4 control-label">Bay Number</label>
                         <div class="col-sm-8">
                             <div class="input-group">
-                                <input type="text"  placeholder="Readonly" readonly="" ng-model="item.bay_number" class="form-control" />
+                                <input type="text"  name="bayno" id="item.bay_number" placeholder="Enter bay number" ng-model="item.bay_number" class="form-control" my-directive required ng-keyup="$event.keyCode == 13 && ok(item)"/>
+                                <p class="help-block" ng-show="itemForm.tname.$error.required && (!itemForm.$pristine || itemForm.$submitted)">This field is required</p>
                             </div>
                         </div>
                     </div>

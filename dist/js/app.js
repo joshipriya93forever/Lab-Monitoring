@@ -2436,7 +2436,7 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
                 ins = {};
             }
             var chart = nv.models.multiBarChart()
-                .showControls(false)
+                .showControls(true)
                 .stacked(true);
             d3.select('#chart svg').datum([
                 {
