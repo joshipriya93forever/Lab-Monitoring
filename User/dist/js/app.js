@@ -8,6 +8,7 @@ var LabMonitoring = angular.module("LabMonitoring", [
     'chart.js',
     "ngMessages",
     'nvd3',
+    "angularUtils.directives.dirPagination",
     'daterangepicker'
 ]); 
 
@@ -164,6 +165,13 @@ LabMonitoring.config([ '$stateProvider',
             templateUrl: "templates/views/labTrend.html",
             data: {pageTitle: 'Lab Trend'},
             controller: "LabTrendController"
+        })
+
+        .state('report', {
+            url: "/report",
+            templateUrl: "templates/views/toolReport.html",
+            data: {pageTitle: 'Report'},
+            controller: "ReportGenerationController"
         })
 
 }]);
@@ -1228,7 +1236,7 @@ angular.module('LabMonitoring').controller('LoginController', function($rootScop
     $scope.submit = function () {
          
                login.email = 'bay@amat.com';
-                login.password = 'bay123'
+                login.password = 'bay123!'
                var url = urlS.login
                DataService.post(url, login).then(function (data) {
                    var token = data.token;
@@ -1478,7 +1486,7 @@ angular.module('LabMonitoring').controller('ReportGenerationController', functio
     $scope.alerts = [];
 
     $scope.date = {
-        startDate: moment().subtract(1, "days"),
+        startDate: '2017-02-18',
         endDate: moment()
     };
 
@@ -1486,8 +1494,8 @@ angular.module('LabMonitoring').controller('ReportGenerationController', functio
         $scope.date.startDate = moment().subtract(4, "days");
     };
 
-    var start = moment().subtract(29, 'days');
-    var end = moment();
+    $scope.start = '2017-02-18';
+    $scope.end = moment().format('YYYY-MM-DD');
 
     $scope.opts = {
         locale: {
@@ -1509,118 +1517,80 @@ angular.module('LabMonitoring').controller('ReportGenerationController', functio
 
 
 
-
-    $('#tooltrend').on('apply.daterangepicker', function(ev, picker) {
+    $('#reportgenerate').on('apply.daterangepicker', function(ev, picker) {
         $scope.start = picker.startDate.format('YYYY-MM-DD');
         $scope.end = picker.endDate.format('YYYY-MM-DD');
-        var start = $scope.start;
-        var end = $scope.end;
-        $scope.loading = false;
-        $scope.trend = [];
-        var i = 0;
-        var id =  $rootScope.id;
-        label = [], Productive = [],  Maintenance = [], Idle = [], Installation = [], data1=[];
-        var url_trend = urlS.tools + id +'/trend/?start_date='+ start +'&end_date='+ end  
-        DataService.get(url_trend).then(function (data) {
-            $scope.trend = data.trend;
-            $scope.trends = $scope.trend;
-            var n = $scope.trend.length;
-            for(i = n-1 ; i >= 0; i--){
-                label.push(new Date($scope.trend[i].date).formatMMDDYYYY());
-                Productive.push($scope.trend[i].PR);
-                Maintenance.push($scope.trend[i].MA);
-                Idle.push($scope.trend[i].ID);
-                Installation.push($scope.trend[i].IN);
-            }
-        }, function myError(response) {
-            $scope.trend = response.statusText;
-        }).finally(function () {
-            $scope.loading = true;
-        });
     });
 
-    $scope.start = moment().startOf('month').format('YYYY-MM-DD');
-    $scope.end = moment().format('YYYY-MM-DD');
 
-
-    var label = [], Productive = [],  Maintenance = [], Idle = [], Installation = [], data1=[];
-    $scope.toolTrend =  function (){
+    $scope.getLabReport = function () {
         var start =  $scope.start;
         var end =    $scope.end;
-        $scope.loading = false;
-        $scope.trend = [];
-        var i = 0;
-        var id =  $rootScope.id;
-        label = [], Productive = [],  Maintenance = [], Idle = [], Installation = [], data1=[];
-        var url_trend = urlS.tools + id +'/trend/?start_date='+ start +'&end_date='+ end  
-        DataService.get(url_trend).then(function (data) {
-            $scope.trend = data.trend;
-            $scope.trends = $scope.trend;
-            var n = $scope.trend.length;
-            for(i = n-1 ; i >= 0; i--){
-                label.push(new Date($scope.trend[i].date).formatMMDDYYYY());
-                Productive.push($scope.trend[i].PR);
-                Maintenance.push($scope.trend[i].MA);
-                Idle.push($scope.trend[i].ID);
-                Installation.push($scope.trend[i].IN);
-            }
-        }, function myError(response) {
-            $scope.trend = response.statusText;
-        }).finally(function () {
-            $scope.loading = true;
+        var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
+        var export_url = 'http://152.135.122.61:8871/api/export_tool_xls/?start_date=' + start +'&end_date='+ end
+        DataService.get(url_report).then(function () {
+            window.location = export_url;
         });
-       
-    }();
+    }
 
-    $scope.$watch('trend', function(){
-        data1.push(Productive,Maintenance,Idle,Installation);
-        $scope.labels = label;
-        $scope.series = ['Productive', 'Maintenance', 'Idle', 'Installation'];
-        $scope.data = data1;
-        $scope.colors = ['#c2de80','#9ac3f5','#ff7f7f','#ffff80' ];
-        $scope.datasetOverride = [
-            {
-                yAxisID: 'y-axis-1'
-            },
-            {
-                label: "Line chart",
-                borderWidth: 3,
-                backgroundColor: "transparent",
-                hoverBackgroundColor: "rgba(255,99,132,0.4)",
-                hoverBorderColor: "rgba(255,99,132,1)",
-                type: 'line'
-            }
-        ];
-        $scope.optionsTrend = {
-            scales: {
-                yAxes: [
-                    {
-                        id: 'y-axis-1',
-                        type: 'linear',
-                        display: true,
-                        position: 'left',
-                        beginAtZero:true,
-                        labelString: 'probability'
-                    }
-                ]
-            },
-            pan: {
-               
-                enabled: true,
-                mode: 'xy'
-            },
-            zoom: {
-                enabled: true,
-                mode: 'xy'
-            }
-        };
+    $scope.getProjectReport = function () {
+        var start =  $scope.start;
+        var end =    $scope.end;
+        var url_report = 'api/export_project_xls/?start_date=' + start +'&end_date='+ end;
+        var export_url = 'http://152.135.122.61:8871/api/export_project_xls/?start_date=' + start +'&end_date='+ end
+        DataService.get(url_report).then(function () {
+            window.location = export_url;
+        });
+    }
+    $scope.getUserReport = function () {
+        var start =  $scope.start;
+        var end =    $scope.end;
+        var url_report = 'api/export_user_xls/?start_date=' + start +'&end_date='+ end;
+        var export_url = 'http://152.135.122.61:8871/api/export_user_xls/?start_date=' + start +'&end_date='+ end
+        DataService.get(url_report).then(function () {
+            window.location = export_url;
+        });
+    }
+
+    $('#toolreportgenerate').on('apply.daterangepicker', function(ev, picker) {
+        $scope.start = picker.startDate.format('YYYY-MM-DD');
+        $scope.end = picker.endDate.format('YYYY-MM-DD');
     });
 
-    Date.prototype.formatMMDDYYYY = function() {
-        return (this.getMonth() + 1) +
-            "/" +  this.getDate() +
-            "/" +  this.getFullYear();
+    $scope.getToolReport = function (item) {
+        var id = item.id;
+        var start =  $scope.start;
+        var end =    $scope.end;
+        var url_report = 'api/export_tools/'+ id +'/?start_date=' + start +'&end_date='+ end
+        var export_url = 'http://152.135.122.61:8871/api/export_tools/'+ id +'?start_date=' + start +'&end_date='+ end
+        DataService.get(url_report).then(function () {
+            window.location = export_url;
+        });
     }
+
+
+
+
+
+    $rootScope.getToolDetails = function(){
+        var url = urlS.tools
+        DataService.get(url).then(function (data) {
+            $scope.tools = data;
+        }, function (err) {
+            $scope.alerts.push({type: 'danger', msg: 'Sorry we are not able to get table information.Please try again.'});
+        });
+    }();
+    
+    $scope.currentPage = 1;
+    $scope.pageSize = 10;
+    $scope.tools = [];
+
+
+
+
+
+
+
 
 
 });
