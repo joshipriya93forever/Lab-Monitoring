@@ -13,7 +13,8 @@ var LabMonitoring = angular.module("LabMonitoring", [
     "checklist-model",
     "ngMessages",
     'nvd3',
-    'daterangepicker'
+    'daterangepicker',
+    'ngScrollbars'
 ]); 
 
 
@@ -605,25 +606,39 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
     };
     $scope.getBaysData();              
 
-    $scope.getCumulativeData = function() {
+
+
+
+    $scope.cumupie = function(){
+        $scope.quater =  false;
         var url = urlS.tools + 'lab_utilization/'
         DataService.get(url).then(function (data) {
-            $rootScope.cumulative = data;
+            $rootScope.cumulative = data;;
         }, function (err) {
 
         });
     };
-    $scope.getCumulativeData();    
 
-    $scope.getQuaterlyCumulativeData = function() {
+    $scope.cumupie()
+
+
+    $scope.qtrpie = function(){
+        $scope.quater =  true;
         var url = urlS.tools + 'lab_utilization_qtr/'
         DataService.get(url).then(function (data) {
             $rootScope.qtrcumulative = data;
         }, function (err) {
 
         });
-    };
-    $scope.getQuaterlyCumulativeData();
+    }
+
+
+
+
+
+      
+
+   
 
 
     $scope.setId = function (id) {
@@ -663,6 +678,9 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
                 size : opt_attributes
             })
     }
+
+
+    $rootScope.settings.layout.pageSidebarClosed = true;
 
 });
 
@@ -1627,7 +1645,7 @@ angular.module('LabMonitoring').controller('LabTrendController', function($rootS
     });
 
 
-
+    $rootScope.settings.layout.pageSidebarClosed = true;
 });
 
 
@@ -2211,6 +2229,20 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
 
     $scope.clock = $rootScope.clock;
 
+
+
+    $scope.config = {
+        autoHideScrollbar: false,
+        theme: 'dark-thick',
+        advanced:{
+            updateOnContentResize: true
+        },
+        setHeight: 200,
+        scrollInertia: 0
+    }
+
+
+
     
     $scope.statusChange = function(item) {
         var _item = {},
@@ -2291,7 +2323,6 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
             $scope.qtrstat = qtrpie;
         });
     }
-    $scope.qtrpie();
 
     $scope.qtrPieChart =  false;
 
@@ -2329,7 +2360,7 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
             labelThreshold: 0.01,
             labelType : 'percent',
             labelSunbeamLayout: true,
-            showLegend : true,
+            showLegend : false,
             color: ['#ff7f7f','#c2de80','#ffff80','#9ac3f5'],
             legend: {
                 margin: {
@@ -2352,7 +2383,7 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
             labelThreshold: 0.01,
             labelType : 'percent',
             labelSunbeamLayout: true,
-            showLegend : true,
+            showLegend : false,
             color: ['#ff7f7f','#c2de80','#ffff80','#9ac3f5'],
             legend: {
                 margin: {
@@ -2399,7 +2430,6 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
 
 
 
- 
 
 
     $scope.toolTrendBar = function(){
@@ -2502,7 +2532,7 @@ angular.module('LabMonitoring').controller('ToolStatusController',  function($ro
         $scope.toolTrendBar();
     });
 
-
+    $rootScope.settings.layout.pageSidebarClosed = true;
 });
 
 

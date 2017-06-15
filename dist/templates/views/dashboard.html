@@ -2,25 +2,32 @@
     <uib-alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)" dismiss-on-timeout="3000">{{alert.msg}}</uib-alert>
 </div>
 <!-- BEGIN MAIN CONTENT -->
+<div id="help" class="actions">
+    <img src="images/help.png" ng-click="help('lg')"/>
+</div>
 <div>
     <div class="portlet light portlet-fit bordered">
-        <div class="portlet-title">
+        <div class="portlet-title tabbable-line">
             <div class="caption">
                 <i class=" fa fa-area-chart font-green"></i>
                 <span class="caption-subject font-green bold uppercase">Real-Time Data {{clock  | date:'medium'}}</span>
             </div>
-            <div id="help" class="actions dash">
-
-                <img src="images/help.png" ng-click="help('lg')"/>
-            </div>
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a ng-click="cumupie()" data-toggle="tab"> Cumulative </a>
+                </li>
+                <li>
+                    <a ng-click="qtrpie()" data-toggle="tab"> Quaterly </a>
+                </li>
+            </ul>
         </div>
 
         <div class="portlet-body dashboard">
-            <uib-tabset active="active">
-                <uib-tab index="0" heading="CUMULATIVE LAB ANALYTICS">
+            <div class="portlet-body">
+                <div class="row" data-ng-if="!quater">
                     <div class="row">
                         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                            <div class="dashboard-stat productive" ng-click="getAcumulativeData()">
+                            <div class="dashboard-stat productive">
                                 <div class="visual">
                                     <i class="fa fa-pie-chart"></i>
                                 </div>
@@ -65,61 +72,66 @@
                         </div>
                     </div>
                     <div class="row" style="margin-top: 10px">
-                    <a type="button" style="float: right;" id="export" class="btn blue-ebonyclay" href="http://152.135.122.61:8871/api/export_tool_xls" target="_self" download="status.pdf">Export Excel</a>
-                    </div>
-                </uib-tab>
-                <uib-tab index="1" heading="QUATERLY CUMULATIVE LAB ANALYTICS">
-                    <div class="row">
-                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <div class="dashboard-stat productive" ng-click="getAcumulativeData()">
-                            <div class="visual">
-                                <i class="fa fa-pie-chart"></i>
-                            </div>
-                            <div class="details">
-                                <div class="number"> {{qtrcumulative.Productive_Time | number : 2}}%</div>
-                                <div class="desc"> Productive </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <div class="dashboard-stat idle">
-                            <div class="visual">
-                                <i class="fa fa-pie-chart"></i>
-                            </div>
-                            <div class="details">
-                                <div class="number"> {{qtrcumulative.Idle_Time| number : 2}}%</div>
-                                <div class="desc"> Idle </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <div class="dashboard-stat instal">
-                            <div class="visual">
-                                <i class="fa fa-pie-chart"></i>
-                            </div>
-                            <div class="details">
-                                <div class="number"> {{qtrcumulative.Installation_Time| number : 2}}%</div>
-                                <div class="desc"> Installation/Config </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <div class="dashboard-stat maintenance">
-                            <div class="visual">
-                                <i class="fa fa-pie-chart"></i>
-                            </div>
-                            <div class="details">
-                                <div class="number">{{qtrcumulative.Maintenance_Time| number : 2}}%</div>
-                                <div class="desc"> Maintenance </div>
-                            </div>
+                        <div class="col-lg-offset-10 col-md-offset-10 col-sm-offset-10">
+                        <a type="button" id="export" class="btn blue-ebonyclay" href="http://152.135.122.61:8871/api/export_tool_xls" target="_self" download="status.pdf">Export Excel</a>
                         </div>
                     </div>
                 </div>
-                    <div class="row" style="margin-top: 20px">
-                        <a type="button" style="float: right;" id="qtrexport" class="btn blue-ebonyclay" href="http://152.135.122.61:8871/api/export_tool_qtr_xls" target="_self" download="status.pdf">Export Excel</a>
+                <div class="row" data-ng-if="quater">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div class="dashboard-stat productive">
+                                <div class="visual">
+                                    <i class="fa fa-pie-chart"></i>
+                                </div>
+                                <div class="details">
+                                    <div class="number"> {{qtrcumulative.Productive_Time | number : 2}}%</div>
+                                    <div class="desc"> Productive </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div class="dashboard-stat idle">
+                                <div class="visual">
+                                    <i class="fa fa-pie-chart"></i>
+                                </div>
+                                <div class="details">
+                                    <div class="number"> {{qtrcumulative.Idle_Time| number : 2}}%</div>
+                                    <div class="desc"> Idle </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div class="dashboard-stat instal">
+                                <div class="visual">
+                                    <i class="fa fa-pie-chart"></i>
+                                </div>
+                                <div class="details">
+                                    <div class="number"> {{qtrcumulative.Installation_Time| number : 2}}%</div>
+                                    <div class="desc"> Installation/Config </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div class="dashboard-stat maintenance">
+                                <div class="visual">
+                                    <i class="fa fa-pie-chart"></i>
+                                </div>
+                                <div class="details">
+                                    <div class="number">{{qtrcumulative.Maintenance_Time| number : 2}}%</div>
+                                    <div class="desc"> Maintenance </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </uib-tab>
-            </uib-tabset>
+                    <div class="row" style="margin-top: 10px">
+                        <div class="col-lg-offset-10 col-md-offset-10 col-sm-offset-10">
+                        <a type="button"  id="qtrexport" class="btn blue-ebonyclay" href="http://152.135.122.61:8871/api/export_tool_qtr_xls" target="_self" download="status.pdf">Export Excel</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
 </div>
@@ -1774,7 +1786,7 @@
     <!--<rect id="bay5" ng-click="setId(129)" x="680" y="383" height="45" width="25" fill="white"></rect>-->
      <rect id="bay3" ng-click="setId(65)" x="680" y="304" height="38" width="25" fill="white"></rect>
 <text transform="matrix(5.7905 0 -0 5.7905 314.428 530.857)" font-family="Arial,'sans-serif'" font-size="2">Bay 41</text>
-<text transform="matrix(5.7905 0 -0 5.7905 203.092 443.294)" font-family="Arial,'sans-serif'" font-size="2">bay 43</text>
+<text transform="matrix(5.7905 0 -0 5.7905 203.092 443.294)" font-family="Arial,'sans-serif'" font-size="2">Bay 43</text>
 <text transform="matrix(4.34287 0 -0 4.34287 682.452 330.114)" font-family="Arial,'sans-serif'" font-size="2">Bay-3</text>
 <text transform="matrix(4.34287 0 -0 4.34287 681.15 408.257)" font-family="Arial,'sans-serif'" font-size="2">Bay-5</text>
 <text transform="matrix(4.34287 0 -0 4.34287 514.965 586.753)" font-family="Arial,'sans-serif'" font-size="2">Bay 15</text>
@@ -1869,26 +1881,6 @@
         </div>
     </div>
 
-        <!--<div class="col-lg-4 col-md-6 col-sm-12" data-ng-repeat="bay in Bays" ng-class="{'hide' : bay.name === ''|| bay.name === null}">
-            &lt;!&ndash; BEGIN PORTLET&ndash;&gt;
-            <div class="portlet light bordewhite baybox">
-                <div class="portlet-title">
-                    <div class="caption caption-md">
-                        <span class="caption-subject font-white bold uppercase">{{bay.name}}</span>
-                    </div>
 
-                </div>
-                <div class="portlet-body">
-                                    <div class="row" id="tool">
-                                        <div class="col-lg-6 col-md-6 toolStat"  data-ng-repeat="tool in bay.tools" ng-class="{'idle' : tool.status === 'ID', 'productive' : tool.status === 'PR', 'instal' : tool.status === 'IN'}">
-                                            <a ng-click="toolstat(tool)">{{tool.name}}</a>
-                                        </div>
-
-                                    </div>
-                        &lt;!&ndash; END CONTENT BODY &ndash;&gt;
-                    </div>
-              </div>
-         </div>-->
-            <!-- END PORTLET-->
 
 </div>
