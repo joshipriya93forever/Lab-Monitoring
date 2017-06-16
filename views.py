@@ -22,7 +22,7 @@ from rest_framework.permissions import BasePermission
 from rest_framework.permissions import IsAuthenticated
 from easy_pdf.views import PDFTemplateView
 
-
+# Start of ToolViewSet Class --
 class AddToolPermission(BasePermission):
 
     def has_permission(self, request, view):
@@ -202,101 +202,84 @@ class ToolViewSet(viewsets.ModelViewSet):
    
     @detail_route(methods=['post','get'], url_path='utilization')
     def utilization(self, request,bid=None, pk=None):
-        #ToolUtil = Logging.objects.filter(tool_id=pk).order_by('created_on')
         today = timezone.now()
-        #start_date = tool.created_on
 	start_date = datetime.date.today()
 	start_date = start_date.replace(month=2,day=18) 
         time_zone = pytz.timezone(settings.TIME_ZONE)
         first_date = start_date.strftime('%Y-%m-%d')
         start_date = time_zone.localize(datetime.datetime.strptime(first_date,'%Y-%m-%d'))
-        total_seconds = ((today - start_date).total_seconds())
     	ToolUtil = Logging.objects.filter(created_on__gte=start_date, created_on__lte=today, tool_id=pk).order_by('created_on')
         tool = Tool.objects.get(id=pk)
+	con = tool.created_on
+	if con > start_date:
+		start_date = con
+		Idle_Time = (ToolUtil.first().created_on - tool.created_on).total_seconds() if ToolUtil else 0
+	else:
+		Idle_Time = (ToolUtil.first().created_on - start_date).total_seconds() if ToolUtil else 0
+        total_seconds = ((today - start_date).total_seconds())
+    	ToolUtil = Logging.objects.filter(created_on__gte=start_date, created_on__lte=today, tool_id=pk).order_by('created_on')
         InUse_Time = 0
-        #Idle_Time = (ToolUtil.first().created_on - tool.created_on).total_seconds() if ToolUtil else 0
-        Idle_Time = (ToolUtil.first().created_on - start_date).total_seconds() if ToolUtil else 0
         Maintenance_Time = 0
         Installation_Time = 0
-        #requested_time = int(request.query_params.get("hours", 8))
         total_seconds_day = 24 * 60 * 60
-        try:
-            Total_Time = 0
-            Last = (len(ToolUtil)) - 1
-            Last_Time = ToolUtil[Last].created_on
-            Start_Time = ToolUtil[0].created_on
-            Status = ""
-            for i in range(0,len(ToolUtil)-1):
-                Status = ToolUtil[i].status
-                TimeDiff = ToolUtil[i+1].created_on - ToolUtil[i].created_on
-                print TimeDiff
-                if(Status == "PR"):
-                    InUse_Time = ((InUse_Time + TimeDiff.total_seconds()))#/total_seconds_day
-                elif(Status == "ID"):
-                    Idle_Time = ((Idle_Time + TimeDiff.total_seconds()))#/total_seconds_day
-                elif(Status == "IN"):
-                    Installation_Time = ((Installation_Time + TimeDiff.total_seconds()))#/total_seconds_day
-                else:
-                    Maintenance_Time = ((Maintenance_Time + TimeDiff.total_seconds()))#/total_seconds_day
+        previous_log = Logging.objects.filter(created_on__lt=start_date,tool_id=pk).order_by('created_on').last()
+        second_date = today
+        next_log = Logging.objects.filter(created_on__gt=second_date, tool_id=pk).order_by('created_on').first()
+        data = {}
+        data['date'] = start_date
+        data[u'PR'] = 0
+        data[u'IN'] = 0
+        data[u'MA'] = 0
+        data[u'ID'] = 0
+        logging = Logging.objects.filter(created_on__gte=start_date,created_on__lt=second_date,tool_id=pk).order_by('created_on')
+        for i in range(0,len(logging)):
+            log = logging[i]
+            if i>0:
+                previous_log = logging[i-1]
+                start_date = previous_log.created_on
+            if log.created_on > start_date:
+                first_time =  ((log.created_on - start_date).total_seconds())/3600
+                previous_status = previous_log.status if previous_log else 'ID'
+                data[previous_status] += first_time
+            if i == len(logging) -1:
+                second_time =  ((second_date - log.created_on).total_seconds())/3600
+                data[log.status] += second_time
+        if len(logging)==0 and previous_log:
+            data[previous_log.status] = total_seconds/3600
+        elif len(logging)==0 and previous_log == None:
+            data[u'ID'] += total_seconds/3600
+
+        InUse_Time = data[u'PR']
+        Idle_Time = data[u'ID']
+        Installation_Time = data[u'IN']
+        Maintenance_Time = data[u'MA']
 
 
-	    if Start_Time.date() != start_date.date():
-                TimeDiff = Start_Time - start_date
-               	obj = Logging.objects.filter(created_on__lt = Start_Time, tool_id=tool.id).order_by('created_on')
-	        status = obj.last().status
-	        if(status == "PR"):
-	            InUse_Time +=  TimeDiff.total_seconds()
-	        elif(status == "ID"):
-	            Idle_Time += TimeDiff.total_seconds()
-	        elif(status == "IN"):
-	            Installation_Time += TimeDiff.total_seconds()
-	        else:
-                    Maintenance_Time += TimeDiff.total_seconds()
+        total_percent = InUse_Time + Idle_Time + Maintenance_Time + Installation_Time + 0.001
 
-            status = ToolUtil.last().status
-            remain_time = (today - ToolUtil.last().created_on).total_seconds()
-            if(status == "PR"):
-                InUse_Time += remain_time
-            elif(status == "ID"):
-                Idle_Time += remain_time 
-            elif(status == "IN"):
-                Installation_Time += remain_time
-            else:
-                Maintenance_Time += remain_time
-        except:
-            pass
-        # will take care of  if there is no swipe between dates
-        if len(ToolUtil) ==0:
-            #Idle_Time = total_seconds
-            obj = Logging.objects.filter(created_on__lt=start_date,tool_id=tool.id).order_by('created_on')
-	    tool = obj.last()
-	    if(tool.status == "PR"):
-	        InUse_Time = total_seconds
-	    elif(tool.status == "ID"):
-	        Idle_Time = total_seconds
-	    elif(tool.status == "IN"):
-	        Installation_Time = total_seconds
-	    else:
-                Maintenance_Time = total_seconds
+        InUse_Time = (InUse_Time/total_percent)*100
+        Idle_Time = (Idle_Time/total_percent)*100
+        Maintenance_Time = (Maintenance_Time/total_percent)*100
+        Installation_Time = (Installation_Time/total_percent)*100
 
-        print "--------------------->",total_seconds
-        InUse_Time = (InUse_Time/total_seconds)*100
-        #Idle_Time = (InUse_Time/total_seconds)*100
-        Installation_Time = (Installation_Time/total_seconds)*100
-        Maintenance_Time = (Maintenance_Time/total_seconds)*100
-        Idle_Time = 100 - (InUse_Time+Installation_Time+Maintenance_Time)
         time = {"Productive":InUse_Time,"Idle":Idle_Time,"Maintenance":Maintenance_Time,"Installation":Installation_Time}
         return Response(time)
-
-
 
     @detail_route(methods=['post','get'], url_path='user_utilization')
     def user_utilization(self, request,bid=None, pk=None):
         tool = Tool.objects.get(id=pk)
         users= tool.tool_users.all()
-        response_data = []
+	start_date = datetime.date.today()
+        start_date = start_date.replace(month=2,day=18)
+        time_zone = pytz.timezone(settings.TIME_ZONE)
+        first_date = start_date.strftime('%Y-%m-%d')
+        start_date = time_zone.localize(datetime.datetime.strptime(first_date,'%Y-%m-%d'))
+        today = timezone.now()
+        end_date = today
+	total_seconds = ( today-start_date).total_seconds()
+        response_data= []
         for user in users:
-            ToolUtil = Logging.objects.filter(tool_id=pk,user=user).order_by('created_on')
+            ToolUtil = Logging.objects.filter (created_on__gte=start_date, created_on__lte=today,tool_id=pk, user=user).order_by('created_on')
             # today = timezone.now()
             # start_date = tool.created_on
             # total_seconds = (today - start_date).total_seconds()
@@ -306,9 +289,8 @@ class ToolViewSet(viewsets.ModelViewSet):
             Installation_Time = 0
             # requested_time = int(request.query_params.get("hours", 8))
             # total_seconds_day = requested_time * 60 * 60
-
-            try:
-                Total_Time = 0
+	    try:
+	        Total_Time = 0
                 Last = (len(ToolUtil)) - 1
                 Last_Time = ToolUtil[Last].created_on
                 Start_Time = ToolUtil[0].created_on
@@ -326,8 +308,47 @@ class ToolViewSet(viewsets.ModelViewSet):
                         Installation_Time = Installation_Time + TimeDiff.total_seconds()#)*100)/total_seconds_day
                     else:
                         Maintenance_Time = Maintenance_Time + TimeDiff.total_seconds()#)*100)/total_seconds_day
+
+                if Start_Time.date() != start_date.date():
+                        TimeDiff = Start_Time - start_date
+                        obj = Logging.objects.filter(created_on__lt = Start_Time, tool_id=pk ,user=user).order_by('created_on')
+                        status = obj.last().status
+                        if(status == "PR"):
+                            InUse_Time +=  TimeDiff.total_seconds()
+                        elif(status == "ID"):
+                            Idle_Time += TimeDiff.total_seconds()
+                        elif(status == "IN"):
+                            Installation_Time += TimeDiff.total_seconds()
+                        else:
+                            Maintenance_Time += TimeDiff.total_seconds()
+		status = ToolUtil.last().status
+                remain_time = (today - ToolUtil.last().created_on).total_seconds()
+                if(status == "PR"):
+                    InUse_Time += remain_time
+                elif(status == "ID"):
+                    Idle_Time += remain_time
+                elif(status == "IN"):
+                    Installation_Time += remain_time
+                else:
+                    Maintenance_Time += remain_time
+
             except:
                 pass
+	    if len(ToolUtil) ==0:
+                obj = Logging.objects.filter(created_on__lt=start_date,tool_id=pk,user=user).order_by('created_on')
+                Last = len(obj)
+                if Last > 0:
+                    tool = obj.last()
+                    if(tool.status == "PR"):
+                        InUse_Time = total_seconds
+                    elif(tool.status == "ID"):
+                        Idle_Time = total_seconds
+                    elif(tool.status == "IN"):
+                        Installation_Time = total_seconds
+                    elif(tool.status == "MA"):
+                        Maintenance_Time = total_seconds
+		    else:
+			pass
             #utilization = InUse_Time + Idle_Time + Installation_Time + Maintenance_Time #commented by cpu
             utilization = InUse_Time + Installation_Time
             utilzation_data= {}
@@ -337,19 +358,28 @@ class ToolViewSet(viewsets.ModelViewSet):
             response_data.append(utilzation_data)
             
         return Response(response_data)
-  
+
+
     @detail_route(methods=['post','get'], url_path='project_utilization')
     def project_utilization(self, request,bid=None, pk=None):
         tool = Tool.objects.get(id=pk)
+	start_date = datetime.date.today()
+	start_date = start_date.replace(month=2,day=18) 
+        time_zone = pytz.timezone(settings.TIME_ZONE)
+        first_date = start_date.strftime('%Y-%m-%d')
+        start_date = time_zone.localize(datetime.datetime.strptime(first_date,'%Y-%m-%d'))
+        today = timezone.now()
+	end_date = today
         projects = tool.projects.all()
         response_data = []
         for project in projects:
-            ToolUtil = Logging.objects.filter(tool_id=pk,project=project).order_by('created_on')
+            #ToolUtil = Logging.objects.filter(tool_id=pk,project=project).order_by('created_on')
+            ToolUtil = Logging.objects.filter(created_on__gte=start_date, created_on__lte=today,tool_id=pk,project=project).order_by('created_on')
             # today = timezone.now()
             # start_date = tool.created_on
-            # total_seconds = (today - start_date).total_seconds()
+            total_seconds = (today - start_date).total_seconds()
             InUse_Time = 0
-            Idle_Time = 0
+            Idle_Time = (ToolUtil.first().created_on - start_date).total_seconds() if ToolUtil else 0
             Maintenance_Time = 0
             Installation_Time = 0
             # requested_time = int(request.query_params.get("hours", 8))
@@ -374,65 +404,10 @@ class ToolViewSet(viewsets.ModelViewSet):
                         Installation_Time = Installation_Time + TimeDiff.total_seconds()#)*100)/total_seconds_day
                     else:
                         Maintenance_Time = Maintenance_Time + TimeDiff.total_seconds()#)*100)/total_seconds_day
-            except:
-                pass
-            utilization = InUse_Time + Idle_Time + Installation_Time + Maintenance_Time
-            utilzation_data= {}
-            utilzation_data['project_name'] = project.name
-	    utilzation_data['utilization'] = utilization/3600
-            response_data.append(utilzation_data)
-
-        return Response(response_data)
-
-    @list_route(methods=['get','put','delete'], url_path='lab_utilization')
-    def lab_utilization(self, request, *args, **kwargs):
-        tools = Tool.objects.all()
-        total_inuse = 0
-        total_idle = 0
-        total_installation = 0
-        total_maintenance = 0
-        total_seconds_console = 0
-        for tool in tools:
-            #ToolUtil = Logging.objects.filter(tool_id=tool.id).order_by('created_on')
-            today = timezone.now()
-            #start_date = tool.created_on
-	    start_date = datetime.date.today()
-	    start_date = start_date.replace(month=2,day=18) 
-            time_zone = pytz.timezone(settings.TIME_ZONE)
-            first_date = start_date.strftime('%Y-%m-%d')
-            start_date = time_zone.localize(datetime.datetime.strptime(first_date,'%Y-%m-%d'))
-            total_seconds = ((today - start_date).total_seconds())
-    	    ToolUtil = Logging.objects.filter(created_on__gte=start_date, created_on__lte=today, tool_id=tool.id).order_by('created_on')
-            InUse_Time = 0
-            #Idle_Time = (ToolUtil.first().created_on - tool.created_on).total_seconds() if ToolUtil else 0
-            Idle_Time = (ToolUtil.first().created_on - start_date).total_seconds() if ToolUtil else 0
-            Maintenance_Time = 0
-            Installation_Time = 0
-            #requested_time = int(request.query_params.get("hours", 8))
-            total_seconds_day = 24 * 60 * 60
-            try:
-                Total_Time = 0
-                Last = (len(ToolUtil)) - 1
-                Last_Time = ToolUtil[Last].created_on
-                Start_Time = ToolUtil[0].created_on
-                Status = ""
-                for i in range(0,len(ToolUtil)-1):
-                    Status = ToolUtil[i].status
-                    TimeDiff = ToolUtil[i+1].created_on - ToolUtil[i].created_on
-                    print TimeDiff
-                    if(Status == "PR"):
-                        InUse_Time = ((InUse_Time + TimeDiff.total_seconds()))#/total_seconds_day
-                    elif(Status == "ID"):
-                        Idle_Time = ((Idle_Time + TimeDiff.total_seconds()))#/total_seconds_day
-                    elif(Status == "IN"):
-                        Installation_Time = ((Installation_Time + TimeDiff.total_seconds()))#/total_seconds_day
-                    else:
-                        Maintenance_Time = ((Maintenance_Time + TimeDiff.total_seconds()))#/total_seconds_day
-
 
 		if Start_Time.date() != start_date.date():
         	        TimeDiff = Start_Time - start_date
-                	obj = Logging.objects.filter(created_on__lt = Start_Time, tool_id=tool.id).order_by('created_on')
+                	obj = Logging.objects.filter(created_on__lt = Start_Time, tool_id=pk ,project=project).order_by('created_on')
 	                status = obj.last().status
 	                if(status == "PR"):
 	                    InUse_Time +=  TimeDiff.total_seconds()
@@ -443,61 +418,46 @@ class ToolViewSet(viewsets.ModelViewSet):
 	                else:
         	            Maintenance_Time += TimeDiff.total_seconds()
 
-                status = ToolUtil.last().status
+		
+		status = ToolUtil.last().status
                 remain_time = (today - ToolUtil.last().created_on).total_seconds()
                 if(status == "PR"):
                     InUse_Time += remain_time
                 elif(status == "ID"):
-                    Idle_Time += remain_time 
+                    Idle_Time += remain_time
                 elif(status == "IN"):
                     Installation_Time += remain_time
                 else:
                     Maintenance_Time += remain_time
             except:
-                pass
-    
-	    # will take care of  if there is no swipe between dates
+		pass  
 	    if len(ToolUtil) ==0:
-	        #Idle_Time = total_seconds
-		obj = Logging.objects.filter(created_on__lt=start_date,tool_id=tool.id).order_by('created_on')
-		tool = obj.last()
-		if(tool.status == "PR"):
-	            InUse_Time = total_seconds
-	        elif(tool.status == "ID"):
-	            Idle_Time = total_seconds
-	        elif(tool.status == "IN"):
-	            Installation_Time = total_seconds
-	        else:
-        	    Maintenance_Time = total_seconds
+               	#Idle_Time = total_seconds
 
+                obj = Logging.objects.filter(created_on__lt=start_date,tool_id=pk,project=project).order_by('created_on')
+	        Last = len(obj)
+	        if Last > 0:
+        	    #status = obj.last().status
+                    tool = obj.last()
+                    if(tool.status == "PR"):
+                    	InUse_Time = total_seconds
+                    elif(tool.status == "ID"):
+                    	Idle_Time = total_seconds
+                    elif(tool.status == "IN"):
+                    	Installation_Time = total_seconds
+                    else:
+                    	Maintenance_Time = total_seconds
 
-            #total_inuse += InUse_Time 
-            #total_idle += Idle_Time 
-            #total_installation += Installation_Time 
-            #total_maintenance += Maintenance_Time
-            total_inuse += ((InUse_Time/total_seconds)*100 )
-            total_idle += ((Idle_Time/total_seconds)*100) 
-            total_installation += ((Installation_Time/total_seconds)*100) 
-            total_maintenance += ((Maintenance_Time/total_seconds)*100)
-            total_seconds_console += total_seconds 
+            utilization = InUse_Time + Installation_Time #Idle_Time + Maintenance_Time
+            utilzation_data= {}
+            utilzation_data['project_name'] = project.name
+	    utilzation_data['utilization'] = utilization/3600
+            response_data.append(utilzation_data)
 
-        print "---------------------", total_inuse
+        return Response(response_data)  
 
-        #InUse_Time = (total_inuse/total_seconds_console)*100
-        #Idle_Time = (total_idle/total_seconds_console)*100
-        #Installation_Time = (total_installation/total_seconds_console)*100
-        #Maintenance_Time = (total_maintenance/total_seconds_console)*100
-        InUse_Time = (total_inuse/31)
-        Idle_Time = (total_idle/31)
-        Installation_Time = (total_installation/31)
-        Maintenance_Time = (total_maintenance/31)
-        Idle_Time = 100 - (InUse_Time+Installation_Time+Maintenance_Time)
-        #time = {"Productive_Time":InUse_Time,"Idle_Time":Idle_Time,"Maintenance_Time":Maintenance_Time,"Installation_Time":Installation_Time}
-        time = {"Productive_Time":InUse_Time,"Idle_Time":Idle_Time,"Maintenance_Time":Maintenance_Time,"Installation_Time":Installation_Time,"PR":total_inuse,"TOT":total_seconds_console,"IN":total_installation,"MA":total_maintenance,"ID":total_idle}
-        return Response(time)
-
-    @list_route(methods=['get','put','delete'], url_path='monthlylab_utilization')
-    def monthlylab_utilization(self, request, *args, **kwargs):
+    @list_route(methods=['get','put','delete'], url_path='lab_utilization')
+    def lab_utilization(self, request, *args, **kwargs):
         tools = Tool.objects.all()
         total_inuse = 0
         total_idle = 0
@@ -505,84 +465,80 @@ class ToolViewSet(viewsets.ModelViewSet):
         total_maintenance = 0
         total_seconds_console = 0
         for tool in tools:
-            
             today = timezone.now()
-            today_date = datetime.date.today()
-            if today_date.day > 25:
-                today_date += datetime.timedelta(7)
-            first_date = today_date.replace(day=1)
+	    start_date = datetime.date.today()
+	    start_date = start_date.replace(month=2,day=18) 
             time_zone = pytz.timezone(settings.TIME_ZONE)
-            first_date = first_date.strftime('%Y-%m-%d')
+            first_date = start_date.strftime('%Y-%m-%d')
             start_date = time_zone.localize(datetime.datetime.strptime(first_date,'%Y-%m-%d'))
-	    print start_date
-            ToolUtil = Logging.objects.filter(tool_id=tool.id,created_on__gte = start_date ).order_by('created_on')
-            total_seconds = ((today - start_date).total_seconds())
+    	    ToolUtil = Logging.objects.filter(created_on__gte=start_date, created_on__lte=today, tool_id=tool.id).order_by('created_on')
             InUse_Time = 0
-            Idle_Time = (ToolUtil.first().created_on - start_date).total_seconds() if ToolUtil else 0
+	    con = tool.created_on
+	    if con > start_date:
+            	start_date = con
+                Idle_Time = (ToolUtil.first().created_on - tool.created_on).total_seconds() if ToolUtil else 0
+            else:
+                Idle_Time = (ToolUtil.first().created_on - start_date).total_seconds() if ToolUtil else 0
+            total_seconds = ((today - start_date).total_seconds())
+    	    ToolUtil = Logging.objects.filter(created_on__gte=start_date, created_on__lte=today, tool_id=tool.id).order_by('created_on')
+            
             Maintenance_Time = 0
             Installation_Time = 0
-            #requested_time = int(request.query_params.get("hours", 24))
+            #requested_time = int(request.query_params.get("hours", 8))
             total_seconds_day = 24 * 60 * 60
-            try:
-                Total_Time = 0
-                Last = (len(ToolUtil)) - 1
-                Last_Time = ToolUtil[Last].created_on
-                Start_Time = ToolUtil[0].created_on
-                Status = ""
-                for i in range(0,len(ToolUtil)-1):
-                    Status = ToolUtil[i].status
-                    TimeDiff = ToolUtil[i+1].created_on - ToolUtil[i].created_on
-                    
-                    if(Status == "PR"):
-                        InUse_Time = ((InUse_Time + TimeDiff.total_seconds()))#/total_seconds_day
-                    elif(Status == "ID"):
-                        Idle_Time = ((Idle_Time + TimeDiff.total_seconds()))#/total_seconds_day
-                    elif(Status == "IN"):
-                        Installation_Time = ((Installation_Time + TimeDiff.total_seconds()))#/total_seconds_day
-                    else:
-                        Maintenance_Time = ((Maintenance_Time + TimeDiff.total_seconds()))#/total_seconds_day
+            
+	    previous_log = Logging.objects.filter(created_on__lt=start_date,tool_id=tool.id).order_by('created_on').last()
+            second_date = today
+            next_log = Logging.objects.filter(created_on__gt=second_date, tool_id=tool.id).order_by('created_on').first()
+            data = {}
+            data['date'] = start_date
+            data[u'PR'] = 0
+            data[u'IN'] = 0
+            data[u'MA'] = 0
+            data[u'ID'] = 0
+            logging = Logging.objects.filter(created_on__gte=start_date,created_on__lt=second_date,tool_id=tool.id).order_by('created_on')
+            for i in range(0,len(logging)):
+                log = logging[i]
+                if i>0:
+                    previous_log = logging[i-1]
+                    start_date = previous_log.created_on
+                if log.created_on > start_date:
+                    first_time =  ((log.created_on - start_date).total_seconds())/3600
+                    previous_status = previous_log.status if previous_log else 'ID'
+                    data[previous_status] += first_time
+                if i == len(logging) -1:
+                    second_time =  ((second_date - log.created_on).total_seconds())/3600
+                    data[log.status] += second_time
+            if len(logging)==0 and previous_log:
+                data[previous_log.status] = total_seconds/3600
+            elif len(logging)==0 and previous_log == None:
+                data[u'ID'] = total_seconds/3600
 
-                status = ToolUtil.last().status
-                remain_time = (today - ToolUtil.last().created_on).total_seconds()
-                if(status == "PR"):
-                    InUse_Time += remain_time
-                elif(status == "ID"):
-                    Idle_Time += remain_time 
-                elif(status == "IN"):
-                    Installation_Time += remain_time
-                else:
-                    Maintenance_Time += remain_time
-            except:
-                pass
-    	    if len(ToolUtil) ==0:
-		#Idle_Time = total_seconds
-        	if(tool.status == "PR"):
-            	    InUse_Time = total_seconds
-		elif(tool.status == "ID"):
-		    Idle_Time = total_seconds
-		elif(tool.status == "IN"):
-		    Installation_Time = total_seconds
-		else:
-		    Maintenance_Time = total_seconds
+            InUse_Time = data[u'PR']
+            Idle_Time = data[u'ID']
+            Installation_Time = data[u'IN']
+            Maintenance_Time = data[u'MA']
 
+            total_percent = InUse_Time + Idle_Time + Maintenance_Time + Installation_Time + 0.001
 
-            total_inuse += InUse_Time 
-            total_idle += Idle_Time 
-            total_installation += Installation_Time 
-            total_maintenance += Maintenance_Time
-            # tool_total_seconds = InUse_Time + Idle_Time + Installation_Time + total_maintenance
+            total_inuse += ((InUse_Time/total_percent)*100 )
+            total_idle += ((Idle_Time/total_percent)*100) 
+            total_installation += ((Installation_Time/total_percent)*100) 
+            total_maintenance += ((Maintenance_Time/total_percent)*100)
             total_seconds_console += total_seconds 
 
         print "---------------------", total_inuse
 
-        InUse_Time = (total_inuse/total_seconds_console)*100
-        Idle_Time = (total_idle/total_seconds_console)*100
-        Installation_Time = (total_installation/total_seconds_console)*100
-        Maintenance_Time = (total_maintenance/total_seconds_console)*100
+	nooftools = len(tools)
+        InUse_Time = (total_inuse/nooftools)
+        Idle_Time = (total_idle/nooftools)
+        Installation_Time = (total_installation/nooftools)
+        Maintenance_Time = (total_maintenance/nooftools)
         Idle_Time = 100 - (InUse_Time+Installation_Time+Maintenance_Time)
-        time = {"Productive_Time":InUse_Time,"Idle_Time":Idle_Time,"Maintenance_Time":Maintenance_Time,"Installation_Time":Installation_Time}
+        #time = {"Productive_Time":InUse_Time,"Idle_Time":Idle_Time,"Maintenance_Time":Maintenance_Time,"Installation_Time":Installation_Time}
+        time = {"Productive_Time":InUse_Time,"Idle_Time":Idle_Time,"Maintenance_Time":Maintenance_Time,"Installation_Time":Installation_Time,"PR":total_inuse,"TOT":total_seconds_console,"IN":total_installation,"MA":total_maintenance,"ID":total_idle}
         return Response(time)
-
+    
     @list_route(methods=['get','put','delete'], url_path='lab_utilization_qtr')
     def lab_utilization_qtr(self, request, *args, **kwargs):
 	out = []
@@ -590,7 +546,16 @@ class ToolViewSet(viewsets.ModelViewSet):
         overall_In =0
         overall_Id = 0
         overall_Ma= 0
+        InUse_Time = 0
+        Maintenance_Time = 0
+        Installation_Time = 0
+ 	Idle_Time = 0
+	total_inuse = 0
+        total_idle  = 0
+        total_installation = 0
+        total_maintenance = 0
 
+	
         today = timezone.now()
         end_date = today
         today_date = datetime.date.today()
@@ -604,23 +569,144 @@ class ToolViewSet(viewsets.ModelViewSet):
                 today_date = today_date.replace(month=8,day=1)
         elif (presentmonth >=11 ) and ( presentmonth <= 1 ):
                 today_date = today_date.replace(month=11,day=1)
-#	 first_date = today_date.replace(day=1)
-	#first_date = startqtr(today_date)
  	first_date = today_date
         time_zone = pytz.timezone(settings.TIME_ZONE)
         first_date = first_date.strftime('%Y-%m-%d')
         start_date = time_zone.localize(datetime.datetime.strptime(first_date,'%Y-%m-%d'))
-
-        tool = Tool.objects.all()
-        val_tool = len(tool)
+        tools = Tool.objects.all()
+        val_tool = len(tools)
         print val_tool
-        tool_cnt = 0
+        #tool_cnt = 0
+        for tool in tools:
+            ToolUtil = Logging.objects.filter(created_on__gte=start_date, created_on__lte=today, tool_id=tool.id).order_by('created_on')
+            InUse_Time = 0
+            con = tool.created_on
+            if con > start_date:
+                start_date = con
+                Idle_Time = (ToolUtil.first().created_on - tool.created_on).total_seconds() if ToolUtil else 0
+            else:
+                Idle_Time = (ToolUtil.first().created_on - start_date).total_seconds() if ToolUtil else 0
+            total_seconds = ((today - start_date).total_seconds())
+            ToolUtil = Logging.objects.filter(created_on__gte=start_date, created_on__lte=today, tool_id=tool.id).order_by('created_on')
+
+            Maintenance_Time = 0
+            Installation_Time = 0
+            #requested_time = int(request.query_params.get("hours", 8))
+            total_seconds_day = 24 * 60 * 60
+
+            previous_log = Logging.objects.filter(created_on__lt=start_date,tool_id=tool.id).order_by('created_on').last()
+            second_date = today
+            next_log = Logging.objects.filter(created_on__gt=second_date, tool_id=tool.id).order_by('created_on').first()
+            data = {}
+            data['date'] = start_date
+            data[u'PR'] = 0
+            data[u'IN'] = 0
+            data[u'MA'] = 0
+            data[u'ID'] = 0
+            logging = Logging.objects.filter(created_on__gte=start_date,created_on__lt=second_date,tool_id=tool.id).order_by('created_on')
+            for i in range(0,len(logging)):
+                log = logging[i]
+                if i>0:
+                    previous_log = logging[i-1]
+                    start_date = previous_log.created_on
+                if log.created_on > start_date:
+                    first_time =  ((log.created_on - start_date).total_seconds())/3600
+                    previous_status = previous_log.status if previous_log else 'ID'
+                    data[previous_status] += first_time
+                if i == len(logging) -1:
+                    second_time =  ((second_date - log.created_on).total_seconds())/3600
+                    data[log.status] += second_time
+            if len(logging)==0 and previous_log:
+                data[previous_log.status] = total_seconds/3600
+            elif len(logging)==0 and previous_log == None:
+                data[u'ID'] = total_seconds/3600
+
+            InUse_Time = data[u'PR']
+            Idle_Time = data[u'ID']
+            Installation_Time = data[u'IN']
+            Maintenance_Time = data[u'MA']
+            total_percent = InUse_Time + Idle_Time + Maintenance_Time + Installation_Time + 0.001
+            total_inuse += ((InUse_Time/total_percent)*100 )
+            total_idle += ((Idle_Time/total_percent)*100)
+            total_installation += ((Installation_Time/total_percent)*100)
+            total_maintenance += ((Maintenance_Time/total_percent)*100)
+            #total_seconds_console += total_seconds
+
+        print "---------------------", total_inuse
+
+        nooftools = len(tools)
+        InUse_Time = (total_inuse/nooftools)
+        Idle_Time = (total_idle/nooftools)
+        Installation_Time = (total_installation/nooftools)
+        Maintenance_Time = (total_maintenance/nooftools)
+        Idle_Time = 100 - (InUse_Time+Installation_Time+Maintenance_Time)
+
+	"""
         for pk_val in tool:
+    	    ToolUtil = Logging.objects.filter(created_on__gte=start_date, created_on__lte=today, tool_id=pk_val).order_by('created_on')
+	    con = pk_val.created_on
+	    if con > start_date:
+            	start_date = con
+                Idle_Time = (ToolUtil.first().created_on - tool.created_on).total_seconds() if ToolUtil else 0
+            else:
+                Idle_Time = (ToolUtil.first().created_on - start_date).total_seconds() if ToolUtil else 0
+            total_seconds = ((today - start_date).total_seconds())
+            previous_log = Logging.objects.filter(created_on__lt=start_date,tool_id=pk_val).order_by('created_on').last()
+            second_date = today
+            next_log = Logging.objects.filter(created_on__gt=second_date, tool_id=pk_val).order_by('created_on').first()
+            data = {}
+            data['date'] = start_date
+            data[u'PR'] = 0
+            data[u'IN'] = 0
+            data[u'MA'] = 0
+            data[u'ID'] = 0
+	    
+            logging = Logging.objects.filter(created_on__gte=start_date,created_on__lt=second_date,tool_id=pk_val).order_by('created_on')
+            for i in range(0,len(logging)):
+                log = logging[i]
+                if i>0:
+                    previous_log = logging[i-1]
+                    start_date = previous_log.created_on
+                if log.created_on > start_date:
+                    first_time =  ((log.created_on - start_date).total_seconds())/3600
+                    previous_status = previous_log.status if previous_log else 'ID'
+                    data[previous_status] += first_time
+                if i == len(logging) -1:
+                    second_time =  ((second_date - log.created_on).total_seconds())/3600
+                    data[log.status] += second_time
+            if len(logging)==0 and previous_log:
+                data[previous_log.status] = total_seconds/3600
+            elif len(logging)==0 and previous_log == None:
+                data[u'ID'] = total_seconds/3600
+
+            InUse_Time = data[u'PR']
+            Idle_Time = data[u'ID']
+            Installation_Time = data[u'IN']
+            Maintenance_Time = data[u'MA']
+            total_percent = InUse_Time + Idle_Time + Maintenance_Time + Installation_Time + 0.001
+
+            total_inuse += ((InUse_Time/total_percent)*100 )
+            total_idle += ((Idle_Time/total_percent)*100)
+            total_installation += ((Installation_Time/total_percent)*100)
+            total_maintenance += ((Maintenance_Time/total_percent)*100)
+
+        print "---------------------", total_inuse
+
+        nooftools = len(tool)
+        InUse_Time = (total_inuse/nooftools)
+        Idle_Time = (total_idle/nooftools)
+        Installation_Time = (total_installation/nooftools)
+        Maintenance_Time = (total_maintenance/nooftools)
+        Idle_Time = 100 - (InUse_Time+Installation_Time+Maintenance_Time)
+	"""
+	
+	"""
             result = valid_date(pk_val,start_date,end_date)
+        total_maintenancc = ((Maintenance_Time/total_percent)*100)
             tool_cnt += 1
             for i in range(0,len(result)):
                 overall_Pr += result[i][u'PR']
-                overall_Id +=result[i][u'ID']
+                overall_Id += result[i][u'ID']
                 overall_In += result[i][u'IN']
                 overall_Ma += result[i][u'MA']
 
@@ -646,35 +732,12 @@ class ToolViewSet(viewsets.ModelViewSet):
         overall_Id = (overall_Id/total_value)*100
         overall_In = (overall_In/total_value)*100
         overall_Ma = (overall_Ma/total_value)*100
-        time = {"Productive_Time":overall_Pr,"Idle_Time":overall_Id,"Maintenance_Time":overall_Ma,"Installation_Time":overall_In,"StartDate":start_date,"EndDate":end_date}
- 
+	"""
+        time = {"Productive_Time":InUse_Time,"Idle_Time":Idle_Time,"Maintenance_Time":Maintenance_Time,"Installation_Time":Installation_Time}
     	return Response(time)				
 
     @detail_route(methods=['get','put','delete'], url_path='tool_utilization_qtr')
     def tool_utilization_qtr(self, request, pk):
-	"""
-        yr = datetime.date.today()
-        year = yr.year
-        start= datetime.date(year,2,1)
-        qtr = list(rrule(freq=MONTHLY,bymonth=(2,5,8,11), count=4, dtstart=start))
-        Q1 = qtr[0]
-        Q2 = qtr[1]
-        Q3 = qtr[2]
-        Q4 = qtr[3]
-        d = yr.month
-        if d>=11 and d<=1:
-                first_date = Q4
-        elif d>=8 and d<=10:
-                first_date = Q3
-        elif d>=5 and d<=7:
-                first_date = Q2
-        elif d>=2 and d<=4:
-                first_date=Q1
-	InUse_Time=0
-        today = datetime.datetime.today()
-	end_date = today
-        start_date = first_date
-	"""
         today = timezone.now()
         end_date = today
         today_date = datetime.date.today()
@@ -702,11 +765,16 @@ class ToolViewSet(viewsets.ModelViewSet):
         total_installation = 0
         total_maintenance = 0
         total_seconds_console = 0
-        
+        tool = Tool.objects.get(id=pk)
+        con = tool.created_on
+        if con > start_date:
+            start_date = con
+ 
         ToolUtil = Logging.objects.filter(tool_id=tool.id,created_on__gte = start_date, created_on__lte= end_date ).order_by('created_on')
         total_seconds = ((today - start_date).total_seconds())
     	try:
-            time  = utilization_tool(tool.id, start_date, end_date)
+            #time  = utilization_tool(tool.id, start_date, end_date)
+            time  = utilization(tool.id, start_date, end_date)
 
         except:
             pass
@@ -736,7 +804,10 @@ class ToolViewSet(viewsets.ModelViewSet):
 	    import sys
 	    print sys.exc_info()
             end_date = timezone.now()
-        days = (end_date - start_date).days
+       	con = tool.created_on
+	if con > start_date:
+	    start_date = con
+	days = (end_date - start_date).days
         list_date = []
         list_date.append(start_date)
         for i in range(1, days+1):
@@ -755,6 +826,8 @@ class ToolViewSet(viewsets.ModelViewSet):
             data[u'MA'] = 0
             data[u'ID'] = 0
             logging = Logging.objects.filter(created_on__gte=start_date,created_on__lt=second_date,tool_id=pk).order_by('created_on')
+	    loopcnt = len(logging) - 1
+            #for i in range(0,len(logging)-1):
             for i in range(0,len(logging)):
                 log = logging[i]
                 if i>0:
@@ -771,6 +844,9 @@ class ToolViewSet(viewsets.ModelViewSet):
                 data[previous_log.status] = 24
             elif len(logging)==0 and previous_log == None:
                 data[u'ID'] = 24
+	    #if loopcnt == 0 :
+	    #	first_time = ( (logging[0].created_on - start_date).total_seconds())/3600
+            #	data[logging[0].status] += first_time
             trend_data.append(data)
         return Response({'trend':trend_data}, status=status.HTTP_200_OK)
 
@@ -947,6 +1023,7 @@ def export_console_xls(request):
     return response
  
 def utilization_tool(tool_id, start_date=None,end_date=None):
+
     end_date = end_date
     tool_id = tool_id
     tool = Tool.objects.get(id=tool_id)
@@ -954,147 +1031,48 @@ def utilization_tool(tool_id, start_date=None,end_date=None):
     today = end_date
     ToolUtil = Logging.objects.filter(created_on__gte=start_date, created_on__lte=end_date, tool_id=tool_id).order_by('created_on')
     print today
+    con = tool.created_on
+    if con > start_date:
+	start_date = con
+    ToolUtil = Logging.objects.filter(created_on__gte=start_date, created_on__lte=today, tool_id=tool.id).order_by('created_on')
     total_seconds = ((today - start_date).total_seconds())
     InUse_Time = 0
     Maintenance_Time = 0
     Installation_Time = 0
     Idle_Time=0
 
-    try:
-        Total_Time = 0
-        Last = (len(ToolUtil)) - 1
-        Last_Time = ToolUtil[Last].created_on
-        Start_Time = ToolUtil[0].created_on
-        Status = ""
+    previous_log = Logging.objects.filter(created_on__lt=start_date,tool_id=tool_id).order_by('created_on').last()
+    second_date = start_date + datetime.timedelta(1)
+    next_log = Logging.objects.filter(created_on__gt=second_date, tool_id=tool_id).order_by('created_on').first()
+    data = {}
+    data['date'] = start_date
+    data[u'PR'] = 0
+    data[u'IN'] = 0
+    data[u'MA'] = 0
+    data[u'ID'] = 0
+    logging = Logging.objects.filter(created_on__gte=start_date,created_on__lt=second_date,tool_id=tool_id).order_by('created_on')
+    for i in range(0,len(logging)):
+        log = logging[i]
+        if i>0:
+            previous_log = logging[i-1]
+            start_date = previous_log.created_on
+        if log.created_on > start_date:
+            first_time =  ((log.created_on - start_date).total_seconds())/3600
+            previous_status = previous_log.status if previous_log else 'ID'
+            data[previous_status] += first_time
+        if i == len(logging) -1:
+            second_time =  ((second_date - log.created_on).total_seconds())/3600
+            data[log.status] += second_time
+    if len(logging)==0 and previous_log:
+        data[previous_log.status] = 24
+    elif len(logging)==0 and previous_log == None:
+        data[u'ID'] = 24
 
-        #if len(ToolUtil) == 1:
-        #   loopcnt = 0
-        #else:
-        #   loopcnt = len(ToolUtil) -1
-        loopcnt = len(ToolUtil) -1
-
-        #for i in range(0,loopcnt):
-        for i in range(0,len(ToolUtil)-1):
-            Status = ToolUtil[i].status
-            TimeDiff = ToolUtil[i+1].created_on - ToolUtil[i].created_on
-            print TimeDiff
-            if(Status == "PR"):
-                InUse_Time = ((InUse_Time + TimeDiff.total_seconds()))#/total_seconds_day
-            elif(Status == "ID"):
-                Idle_Time = ((Idle_Time + TimeDiff.total_seconds()))#/total_seconds_day
-            elif(Status == "IN"):
-                Installation_Time = ((Installation_Time + TimeDiff.total_seconds()))#/total_seconds_day
-            else:
-                Maintenance_Time = ((Maintenance_Time + TimeDiff.total_seconds()))#/total_seconds_day
-        
-
-	status = ToolUtil.last().status
-        remain_time = (today - ToolUtil.last().created_on).total_seconds()
-        if(status == "PR"):
-            InUse_Time += remain_time
-	    obj = Logging.objects.filter(created_on__lt=start_date,tool_id=tool.id).order_by('created_on')
-	    tool = obj.last()
-            if(tool.status == "PR"):
-            	InUse_Time = (total_seconds - ( Idle_Time + Installation_Time + Maintenance_Time ))
-	    elif(tool.status == "IN"):
-            	Installation_Time = (total_seconds - ( Idle_Time + InUse_Time + Maintenance_Time ))
-	    elif(tool.status == "ID"):
-            	Idle_Time = (total_seconds - ( Installation_Time + InUse_Time + Maintenance_Time ))
-	    else:
-            	Maintenance_Time = (total_seconds - ( Idle_Time + InUse_Time + Installation_Time ))
-	    #Idle_Time = total_seconds -(InUse_Time+Installation_Time+Maintenance_Time)
-        elif(status == "ID"):
-            Idle_Time += remain_time
-	    obj = Logging.objects.filter(created_on__lt=start_date,tool_id=tool.id).order_by('created_on')
-	    tool = obj.last()
-            if(tool.status == "PR"):
-            	InUse_Time = (total_seconds - ( Idle_Time + Installation_Time + Maintenance_Time ))
-	    elif(tool.status == "IN"):
-            	Installation_Time = (total_seconds - ( Idle_Time + InUse_Time + Maintenance_Time ))
-	    elif(tool.status == "ID"):
-            	Idle_Time = (total_seconds - ( Installation_Time + InUse_Time + Maintenance_Time ))
-	    else:
-            	Maintenance_Time = (total_seconds - ( Idle_Time + InUse_Time + Installation_Time ))
-        elif(status == "IN"):
-            Installation_Time += remain_time
-	    obj = Logging.objects.filter(created_on__lt=start_date,tool_id=tool.id).order_by('created_on')
-	    tool = obj.last()
-            if(tool.status == "PR"):
-            	InUse_Time = (total_seconds - ( Idle_Time + Installation_Time + Maintenance_Time ))
-	    elif(tool.status == "IN"):
-            	Installation_Time = (total_seconds - ( Idle_Time + InUse_Time + Maintenance_Time ))
-	    elif(tool.status == "ID"):
-            	Idle_Time = (total_seconds - ( Installation_Time + InUse_Time + Maintenance_Time ))
-	    else:
-            	Maintenance_Time = (total_seconds - ( Idle_Time + InUse_Time + Installation_Time ))
-            #Idle_Time = total_seconds -(InUse_Time+Installation_Time+Maintenance_Time)
-        else:
-            Maintenance_Time += remain_time
-	    obj = Logging.objects.filter(created_on__lt=start_date,tool_id=tool.id).order_by('created_on')
-	    tool = obj.last()
-            if(tool.status == "PR"):
-            	InUse_Time = (total_seconds - ( Idle_Time + Installation_Time + Maintenance_Time ))
-	    elif(tool.status == "IN"):
-            	Installation_Time = (total_seconds - ( Idle_Time + InUse_Time + Maintenance_Time ))
-	    elif(tool.status == "ID"):
-            	Idle_Time = (total_seconds - ( Installation_Time + InUse_Time + Maintenance_Time ))
-	    else:
-            	Maintenance_Time = (total_seconds - ( Idle_Time + InUse_Time + Installation_Time ))
-            #Idle_Time = total_seconds -(InUse_Time+Installation_Time+Maintenance_Time)
-
-	if ( loopcnt == 0 ):
-	    prevobj = Logging.objects.filter(created_on__lt=start_date,tool_id=tool.id).order_by('created_on')
-	    prevlog = prevobj.last()
-	    if ( ( prevlog.status == "PR") and (status == "PR") ):
-		InUse_Time = total_seconds
-		Installation_Time = Idle_Time = Maintenance_Time = 0
-	    else:
-            	InUse_Time = (total_seconds - ( Idle_Time + Installation_Time + Maintenance_Time ))
-	    if ( ( prevlog.status == "IN") and (status == "IN") ):
-		Installation_Time = total_seconds
-		InUse_Time = Idle_Time = Maintenance_Time = 0
-	    else:
-            	Installation_Time = (total_seconds - ( Idle_Time + InUse_Time + Maintenance_Time ))
-	    if ( ( prevlog.status == "MA") and (status == "MA") ):
-		Maintenance_Time = total_seconds
-		InUse_Time = Idle_Time = Installation_Time = 0
-	    else:
-            	Maintenance_Time = (total_seconds - ( Idle_Time + InUse_Time + Installation_Time ))
-	    if ( ( prevlog.status == "ID") and (status == "ID") ):
-		Idle_Time = total_seconds
-		InUse_Time = Maintenance_Time = Installation_Time = 0
-	    else:
-            	Idle_Time = (total_seconds - ( Maintenance_Time + InUse_Time + Installation_Time ))
-
-
-    except:
-        pass
-    # will take care of  if there is no swipe between dates
-    if len(ToolUtil) ==0:
-        #Idle_Time = total_seconds
-        obj = Logging.objects.filter(created_on__lt=start_date,tool_id=tool.id).order_by('created_on')
-        tool = obj.last()
-        if(tool.status == "PR"):
-            InUse_Time = total_seconds
-        elif(tool.status == "ID"):
-            Idle_Time = total_seconds
-        elif(tool.status == "IN"):
-            Installation_Time = total_seconds
-        else:
-            Maintenance_Time = total_seconds
-
-    print "---------------------->", total_seconds, start_date
-    print "---------------------->", InUse_Time
-    print "---------------------->", Idle_Time
-    print "---------------------->", Installation_Time
-    print "---------------------->", Maintenance_Time
-    InUse_Time = (InUse_Time/3600)
-    Idle_Time = (Idle_Time/3600)
-    Installation_Time = (Installation_Time/3600)
-    Maintenance_Time = (Maintenance_Time/3600)
-    #Idle_Times = Idle_Time (InUse_Time+Installation_Time+Maintenance_Time)
-
-    total_percent = InUse_Time + Idle_Time + Maintenance_Time + Installation_Time
+    InUse_Time = data[u'PR']
+    Idle_Time = data[u'ID']
+    Installation_Time = data[u'IN']
+    Maintenance_Time = data[u'MA']
+    total_percent = InUse_Time + Idle_Time + Maintenance_Time + Installation_Time + 0.001
 
     InUse_percent = (InUse_Time/total_percent)*100
     Idle_percent = (Idle_Time/total_percent)*100
@@ -1116,85 +1094,51 @@ def utilization(tool_id, start_date=None,end_date=None):
     print today
     total_seconds = ((today - start_date).total_seconds())
     InUse_Time = 0
-    #Idle_Time = (ToolUtil.first().created_on - start_date).total_seconds() if ToolUtil else 0
+    con = tool.created_on
+    if con > start_date:
+    	start_date = con
+        Idle_Time = (ToolUtil.first().created_on - tool.created_on).total_seconds() if ToolUtil else 0
+    else:
+        Idle_Time = (ToolUtil.first().created_on - start_date).total_seconds() if ToolUtil else 0
+    ToolUtil = Logging.objects.filter(created_on__gte=start_date, created_on__lte=end_date, tool_id=tool_id).order_by('created_on')
+
     Maintenance_Time = 0
     Installation_Time = 0
     Idle_Time=0
+    previous_log = Logging.objects.filter(created_on__lt=start_date,tool_id=tool_id).order_by('created_on').last()
+    second_date = today
+    next_log = Logging.objects.filter(created_on__gt=second_date, tool_id=tool_id).order_by('created_on').first()
+    data = {}
+    data['date'] = start_date
+    data[u'PR'] = 0
+    data[u'IN'] = 0
+    data[u'MA'] = 0
+    data[u'ID'] = 0
+    logging = Logging.objects.filter(created_on__gte=start_date,created_on__lt=second_date,tool_id=tool_id).order_by('created_on')
+    for i in range(0,len(logging)):
+        log = logging[i]
+        if i>0:
+            previous_log = logging[i-1]
+            start_date = previous_log.created_on
+        if log.created_on > start_date:
+            first_time =  ((log.created_on - start_date).total_seconds())/3600
+            previous_status = previous_log.status if previous_log else 'ID'
+            data[previous_status] += first_time
+        if i == len(logging) -1:
+            second_time =  ((second_date - log.created_on).total_seconds())/3600
+            data[log.status] += second_time
+    if len(logging)==0 and previous_log:
+	data[previous_log.status] = total_seconds/3600
+    elif len(logging)==0 and previous_log == None:
+	data[u'ID'] = total_seconds/3600
 
-    try:
-        Total_Time = 0
-        Last = (len(ToolUtil)) - 1
-        Last_Time = ToolUtil[Last].created_on
-        Start_Time = ToolUtil[0].created_on
-        Status = ""
-		
-        for i in range(0,len(ToolUtil)-1):
-            Status = ToolUtil[i].status
-            TimeDiff = ToolUtil[i+1].created_on - ToolUtil[i].created_on
-            print TimeDiff
-            if(Status == "PR"):
-                InUse_Time = ((InUse_Time + TimeDiff.total_seconds()))#/total_seconds_day
-            elif(Status == "ID"):
-                Idle_Time = ((Idle_Time + TimeDiff.total_seconds()))#/total_seconds_day
-            elif(Status == "IN"):
-                Installation_Time = ((Installation_Time + TimeDiff.total_seconds()))#/total_seconds_day
-            else:
-                Maintenance_Time = ((Maintenance_Time + TimeDiff.total_seconds()))#/total_seconds_day
+    InUse_Time = data[u'PR']
+    Idle_Time = data[u'ID']
+    Installation_Time = data[u'IN']
+    Maintenance_Time = data[u'MA']
 
-
-	if Start_Time.date() != start_date.date():
-                TimeDiff = Start_Time - start_date
-                obj = Logging.objects.filter(created_on__lt = Start_Time, tool_id=tool.id).order_by('created_on')
-                status = obj.last().status
-                if(status == "PR"):
-                    InUse_Time +=  TimeDiff.total_seconds()
-                elif(status == "ID"):
-                    Idle_Time += TimeDiff.total_seconds()
-                elif(status == "IN"):
-                    Installation_Time += TimeDiff.total_seconds()
-                else:
-                    Maintenance_Time += TimeDiff.total_seconds()
-
-
-        status = ToolUtil.last().status
-        remain_time = (today - ToolUtil.last().created_on).total_seconds()
-        if(status == "PR"):
-            InUse_Time += remain_time
-        elif(status == "ID"):
-            Idle_Time += remain_time 
-        elif(status == "IN"):
-            Installation_Time += remain_time
-        else:
-            Maintenance_Time += remain_time
-
-    except:
-        pass
-    # will take care of  if there is no swipe between dates
-    if len(ToolUtil) ==0:
-        #Idle_Time = total_seconds
-	obj = Logging.objects.filter(created_on__lt=start_date,tool_id=tool.id).order_by('created_on')
-	tool = obj.last()
-	if(tool.status == "PR"):
-            InUse_Time = total_seconds
-        elif(tool.status == "ID"):
-            Idle_Time = total_seconds
-        elif(tool.status == "IN"):
-            Installation_Time = total_seconds
-        else:
-            Maintenance_Time = total_seconds
-
-    print "---------------------->", total_seconds, start_date
-    print "---------------------->", InUse_Time
-    print "---------------------->", Idle_Time
-    print "---------------------->", Installation_Time
-    print "---------------------->", Maintenance_Time
-    InUse_Time = (InUse_Time/3600)
-    Idle_Time = (Idle_Time/3600)
-    Installation_Time = (Installation_Time/3600)
-    Maintenance_Time = (Maintenance_Time/3600)
-    #Idle_Times = Idle_Time (InUse_Time+Installation_Time+Maintenance_Time)
     
-    total_percent = InUse_Time + Idle_Time + Maintenance_Time + Installation_Time
+    total_percent = InUse_Time + Idle_Time + Maintenance_Time + Installation_Time + 0.001
     
     InUse_percent = (InUse_Time/total_percent)*100
     Idle_percent = (Idle_Time/total_percent)*100
@@ -1205,109 +1149,11 @@ def utilization(tool_id, start_date=None,end_date=None):
     return time
 
 
-
-def utilization_RT(tool_id, start_date=None,end_date=None):
-    end_date = end_date
-    tool_id = tool_id
-    tool = Tool.objects.get(id=tool_id)
-    start_date = start_date if start_date else tool.created_on
-    today = end_date
-    ToolUtil = Logging.objects.filter(created_on__gte=start_date, created_on__lte=end_date, tool_id=tool_id).order_by('created_on')
-    #today = timezone.now()
-    print today
-    total_seconds = ((today - start_date).total_seconds())
-    InUse_Time = 0
-    Idle_Time = (ToolUtil.first().created_on - start_date).total_seconds() if ToolUtil else 0
-    Maintenance_Time = 0
-    Installation_Time = 0
-    #Idle_Time=0
-
-    try:
-        Total_Time = 0
-        Last = (len(ToolUtil)) - 1
-        Last_Time = ToolUtil[Last].created_on
-        Start_Time = ToolUtil[0].created_on
-        Status = ""
-
-
-        for i in range(0,len(ToolUtil)-1):
-            Status = ToolUtil[i].status
-            TimeDiff = ToolUtil[i+1].created_on - ToolUtil[i].created_on
-            print TimeDiff
-            if(Status == "PR"):
-                InUse_Time = ((InUse_Time + TimeDiff.total_seconds()))#/total_seconds_day
-            elif(Status == "ID"):
-                Idle_Time = ((Idle_Time + TimeDiff.total_seconds()))#/total_seconds_day
-            elif(Status == "IN"):
-                Installation_Time = ((Installation_Time + TimeDiff.total_seconds()))#/total_seconds_day
-            else:
-                Maintenance_Time = ((Maintenance_Time + TimeDiff.total_seconds()))#/total_seconds_day
-
-
-
-	if Start_Time.date() != start_date.date():
-                TimeDiff = Start_Time - start_date
-                obj = Logging.objects.filter(created_on__lt = Start_Time, tool_id=tool.id).order_by('created_on')
-                status = obj.last().status
-                if(status == "PR"):
-                    InUse_Time +=  TimeDiff.total_seconds()
-                elif(status == "ID"):
-                    Idle_Time += TimeDiff.total_seconds()
-                elif(status == "IN"):
-                    Installation_Time += TimeDiff.total_seconds()
-                else:
-                    Maintenance_Time += TimeDiff.total_seconds()
-
-        status = ToolUtil.last().status
-        remain_time = (today - ToolUtil.last().created_on).total_seconds()
-        if(status == "PR"):
-            InUse_Time += remain_time
-        elif(status == "ID"):
-            Idle_Time += remain_time
-        elif(status == "IN"):
-            Installation_Time += remain_time
-        else:
-            Maintenance_Time += remain_time
-    except:
-        pass
-    if len(ToolUtil) ==0:
-        #Idle_Time = total_seconds
-        obj = Logging.objects.filter(created_on__lt=start_date,tool_id=tool.id).order_by('created_on')
-        tool = obj.last()
-        if(tool.status == "PR"):
-            InUse_Time = total_seconds
-        elif(tool.status == "ID"):
-            Idle_Time = total_seconds
-        elif(tool.status == "IN"):
-            Installation_Time = total_seconds
-        else:
-            Maintenance_Time = total_seconds
-
-    print "---------------------->", total_seconds, start_date
-    print "---------------------->", InUse_Time
-    print "---------------------->", Idle_Time
-    print "---------------------->", Installation_Time
-    print "---------------------->", Maintenance_Time
-    InUse_Time = (InUse_Time/3600)
-    Idle_Time = (Idle_Time/3600)
-    Installation_Time = (Installation_Time/3600)
-    Maintenance_Time = (Maintenance_Time/3600)
-    #Idle_Times = Idle_Time (InUse_Time+Installation_Time+Maintenance_Time)
-
-    total_percent = InUse_Time + Idle_Time + Maintenance_Time + Installation_Time
-
-    InUse_percent = (InUse_Time/total_percent)*100
-    Idle_percent = (Idle_Time/total_percent)*100
-    Maintenance_percent = (Maintenance_Time/total_percent)*100
-    Installation_percent = (Installation_Time/total_percent)*100
-
-    time = {"InUse_Time":InUse_Time,"Idle_Time":Idle_Time,"Maintenance_Time":Maintenance_Time,"Installation_Time":Installation_Time,"InUse_percent":InUse_percent,"Idle_percent":Idle_percent,"Maintenance_percent":Maintenance_percent, "Installation_percent":Installation_percent}
-    return time
-
 import xlsxwriter
 import StringIO
 from django.utils.translation import ugettext
 def export_tool_xls(request):
+    end = datetime.datetime.now()
     rt = 0
     try:
         time_zone = pytz.timezone(settings.TIME_ZONE)
@@ -1354,10 +1200,12 @@ def export_tool_xls(request):
     queryset = Tool.objects.all()
 
     for obj in queryset:
-	if start_date == None:
-	        time  = utilization_RT(obj.id, start_date, end_date)
-	else:
-		time = utilization(obj.id,start_date,end_date)
+        tool = Tool.objects.get(id=obj.id)
+	con = tool.created_on
+	if con > start_date :
+	    start_date = con
+	time = utilization(obj.id,start_date,end_date)
+	#time = utilization_tool(obj.id,start_date,end_date)
 	total_pr += time['InUse_Time']
 	total_id += time['Idle_Time']
 	total_in += time['Installation_Time']
@@ -1372,7 +1220,7 @@ def export_tool_xls(request):
             obj.current_project.name if obj.current_project else "No project currently running",
             obj.get_status_display(),
   	        start_date.strftime('%Y-%m-%d %H:%M') if start_date else obj.created_on.strftime('%Y-%m-%d %H:%M'),
-            end_date.strftime('%Y-%m-%d %H:%M'),
+            end.strftime('%Y-%m-%d %H:%M'),
             time["InUse_Time"] if time else None ,
 	        time["InUse_percent"],
             time["Maintenance_Time"] if time else None,
@@ -1481,6 +1329,172 @@ def export_tool_xls(request):
     
     return response
 
+def export_tool_qtr_xls(request):
+    end = datetime.datetime.now()
+    today = timezone.now()
+    end_date = today
+    today_date = datetime.date.today()
+    
+    presentmonth = today_date.month
+    if (presentmonth >=2 ) and ( presentmonth <= 4 ):
+           today_date = today_date.replace(month=2,day=1)
+    elif (presentmonth >=5 ) and ( presentmonth <= 7 ):
+           today_date = today_date.replace(month=5,day=1)
+    elif (presentmonth >=8 ) and ( presentmonth <= 10 ):
+           today_date = today_date.replace(month=8,day=1)
+    elif (presentmonth >=11 ) and ( presentmonth <= 1 ):
+           today_date = today_date.replace(month=11,day=1)
+
+    first_date = today_date
+    time_zone = pytz.timezone(settings.TIME_ZONE)
+    first_date = first_date.strftime('%Y-%m-%d')
+    start_date = time_zone.localize(datetime.datetime.strptime(first_date,'%Y-%m-%d'))
+
+
+    total_pr =0
+    total_id =0
+    total_in =0
+    total_mn =0
+
+    output = StringIO.StringIO()
+    wb = xlsxwriter.Workbook(output,{'in_memory':True})
+    ws = wb.add_worksheet("Tools Report")
+    bold = wb.add_format({'bold':True})
+    row_num = 0
+
+    headings = ['Tool Name', 'Console Name', 'Bay Number','Number of Project assigned','Number of user assigned', 'Current Project','Current Status','Bay Start date', 'End Date','Production Time in hour','Production Time %','Mainatinence Time in hour','Maintainence Time %','idle Time in hour','Idle Time %','Installation Time in hour','Installation Time %']
+    format = wb.add_format()
+    headings = ['Tool Name', 'Console Name', 'Bay Number','Number of Project assigned','Number of user assigned', 'Current Project','Current Status','Bay Start date', 'End Date','Production Time in hour','Production Time %','Mainatinence Time in hour','Maintainence Time %','idle Time in hour','Idle Time %','Installation Time in hour','Installation Time %']
+    format = wb.add_format()
+    format.set_font_color('black')
+    for col_num in xrange(len(headings)):
+        ws.write(row_num, col_num, headings[col_num], format)
+        ws.set_column(row_num, col_num, 20)
+
+    queryset = Tool.objects.all()
+
+    for obj in queryset:
+        tool = Tool.objects.get(id=obj.id)
+	con = tool.created_on
+	if con > start_date :
+	    start_date = con
+        time = utilization(obj.id,start_date,end_date)
+        total_pr += time['InUse_Time']
+        total_id += time['Idle_Time']
+        total_in += time['Installation_Time']
+        total_mn += time['Maintenance_Time']
+        row_num += 1
+        row = [
+            obj.name,
+            obj.bay.name,
+            obj.bay_number,
+            len(obj.projects.all()),
+            len(obj.tool_users.all()),
+            obj.current_project.name if obj.current_project else "No project currently running",
+            obj.get_status_display(),
+                start_date.strftime('%Y-%m-%d %H:%M') if start_date else obj.created_on.strftime('%Y-%m-%d %H:%M'),
+            end.strftime('%Y-%m-%d %H:%M'),
+            time["InUse_Time"] if time else None ,
+                time["InUse_percent"],
+            time["Maintenance_Time"] if time else None,
+                time["Maintenance_percent"],
+            time["Idle_Time"] if time else None,
+                time["Idle_percent"],
+            time["Installation_Time"] if time else None,
+                time["Installation_percent"],
+        ]
+        for col_num in xrange(len(row)):
+            ws.write(row_num, col_num, row[col_num], format)
+    worksheet_d = wb.add_worksheet("Chart Data")
+    worksheet_c = wb.add_worksheet("Charts")
+
+     #pie chart
+    pie_chart = wb.add_chart({'type': 'pie'})
+    pie_values = []
+    pie_values.append(total_pr)
+    pie_values.append(total_in)
+    pie_values.append(total_id)
+    pie_values.append(total_mn)
+    pie_categories = ["Production","Installation","Idle","Maintenance"]
+    cell_index = 4
+    worksheet_d.write_column("{0}1".format(chr(ord('A') + cell_index)),
+                             pie_values)
+    worksheet_d.write_column("{0}1".format(chr(ord('A') + cell_index + 1)),
+                             pie_categories)
+    pie_chart.add_series({
+        'name': ugettext('overall status statistics'),
+        'values': '=Chart Data!${0}${1}:${0}${2}'
+        .format(chr(ord('A') + cell_index), 1, 4),
+        'categories': '=Chart Data!${0}${1}:${0}${2}'
+        .format(chr(ord('A') + cell_index + 1), 1, 4),
+        'data_labels': {'percentage': True},
+        'points':[{'fill':{'color':'#c2de80'}},
+                  {'fill':{'color':'#ffff80'}},
+                  {'fill':{'color':'#ff7f7f'}},
+                  {'fill':{'color':'#9ac3f5'}}]
+        })
+    worksheet_c.insert_chart('B5', pie_chart)
+
+
+    # Creating the column chart
+    bar_chart = wb.add_chart({'type': 'column'})
+    bar_chart.add_series({
+        'name': 'Production Status',
+        'values': '=Chart Data!${0}${1}:${0}${2}'
+        .format(chr(ord('A') + cell_index), 1, 1),
+        'categories': '=Chart Data!${0}${1}:${0}${2}'
+        .format(chr(ord('A') + cell_index+1), 1,1),
+        'data_labels': {'value': True, 'num_format': u'#0 "hrs"'},
+        'fill':{'color':'#c2de80'}
+    })
+
+    bar_chart.add_series({
+        'name': 'Installation Status',
+        'values': '=Chart Data!${0}${1}:${0}${2}'
+        .format(chr(ord('A') + cell_index), 2, 2),
+        'categories': '=Chart Data!${0}${1}:${0}${2}'
+        .format(chr(ord('A') + cell_index+1), 2,2),
+        'data_labels': {'value': True, 'num_format': u'#0 "hrs"'},
+        'fill':{'color':'#ffff80'}
+    })
+
+    bar_chart.add_series({
+        'name': 'Idle Status',
+        'values': '=Chart Data!${0}${1}:${0}${2}'
+        .format(chr(ord('A') + cell_index), 3, 3),
+        'categories': '=Chart Data!${0}${1}:${0}${2}'
+        .format(chr(ord('A') + cell_index+1), 3,3),
+        'data_labels': {'value': True, 'num_format': u'#0 "hrs"'},
+        'fill':{'color':'#ff7f7f'}
+    })
+    bar_chart.add_series({
+        'name': 'Maintenance Status',
+        'values': '=Chart Data!${0}${1}:${0}${2}'
+        .format(chr(ord('A') + cell_index), 4, 4),
+        'categories': '=Chart Data!${0}${1}:${0}${2}'
+        .format(chr(ord('A') + cell_index+1), 4,4),
+        'data_labels': {'value': True, 'num_format': u'#0 "hrs"'},
+        'fill':{'color':'#9ac3f5'}
+    })
+
+    # adding other options
+    bar_chart.set_title({'name': ugettext("Bar chart for status")})
+
+    worksheet_c.insert_chart('B20', bar_chart, {'x_scale': 1, 'y_scale': 1})
+
+    #construct response
+    wb.close()
+    output.seek(0)
+
+    filename = 'RealTimeQtrData_'+timezone.now().strftime("%Y_%m_%d_%H_%M")+'.xlsx'
+    response = HttpResponse(output.read(), content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    response['Content-Disposition'] = "attachment; filename="+filename
+    return response
+
+
+ 
+
+
 def project_utilization(project, start_date=None,end_date=None):
     #tool_id = tool_id
     #tool = Tool.objects.get(id=tool_id)
@@ -1488,14 +1502,15 @@ def project_utilization(project, start_date=None,end_date=None):
     end_date = end_date 
     today = end_date
     ToolUtil = Logging.objects.filter(created_on__gte=start_date, created_on__lte=end_date, project=project).order_by('created_on')
-    #today = timezone.now()
+    #today = timeizone.now()
+    Last = 0
     print today
     total_seconds = ((today - start_date).total_seconds())
     InUse_Time = 0
     Idle_Time = (ToolUtil.first().created_on - start_date).total_seconds() if ToolUtil else 0
     Maintenance_Time = 0
     Installation_Time = 0
-
+    status = ""
     try:
         Total_Time = 0
         Last = (len(ToolUtil)) - 1
@@ -1514,20 +1529,21 @@ def project_utilization(project, start_date=None,end_date=None):
                 Installation_Time = ((Installation_Time + TimeDiff.total_seconds()))#/total_seconds_day
             else:
                 Maintenance_Time = ((Maintenance_Time + TimeDiff.total_seconds()))#/total_seconds_day
-	"""
+
 	if Start_Time.date() != start_date.date():
-                TimeDiff = Start_Time - start_date
-                obj = Logging.objects.filter(created_on__lt = Start_Time, project=project).order_by('created_on')
-                status = obj.last().status
-                if(status == "PR"):
-                    InUse_Time +=  TimeDiff.total_seconds()
-                elif(status == "ID"):
-                    Idle_Time += TimeDiff.total_seconds()
-                elif(status == "IN"):
-                    Installation_Time += TimeDiff.total_seconds()
-                else:
-                    Maintenance_Time += TimeDiff.total_seconds()
-	"""
+            TimeDiff = Start_Time - start_date
+            obj = Logging.objects.filter(created_on__lt = Start_Time, project=project).order_by('created_on')
+	    status = obj.last().status
+	    if(status == "PR"):
+	        InUse_Time +=  TimeDiff.total_seconds()
+	    elif(status == "ID"):
+	        Idle_Time += TimeDiff.total_seconds()
+	    elif(status == "IN"):
+	        Installation_Time += TimeDiff.total_seconds()
+	    else:
+                Maintenance_Time += TimeDiff.total_seconds()
+
+	
         status = ToolUtil.last().status
         remain_time = (today - ToolUtil.last().created_on).total_seconds()
         if(status == "PR"):
@@ -1540,16 +1556,20 @@ def project_utilization(project, start_date=None,end_date=None):
             Maintenance_Time += remain_time
     except:
         pass
-    '''if len(ToolUtil) ==0:
-        #Idle_Time = total_seconds
-        if(tool.status == "PR"):
-            InUse_Time = total_seconds
-        elif(tool.status == "ID"):
-            Idle_Time = total_seconds
-        elif(tool.status == "IN"):
-            Installation_Time = total_seconds
-        else:
-            Maintenance_Time = total_seconds'''
+    	    
+    if len(ToolUtil) ==0:
+        obj = Logging.objects.filter(created_on__lt=start_date, project=project).order_by('created_on')
+        Last = len(obj) 
+        if Last > 0:
+	   status = obj.last().status
+           if(status == "PR"):
+               InUse_Time = total_seconds
+           elif(status == "ID"):
+               Idle_Time = total_seconds
+           elif(status == "IN"):
+               Installation_Time = total_seconds
+           else:
+               Maintenance_Time = total_seconds
 
     print "---------------------->", total_seconds, start_date
     print "---------------------->", InUse_Time
@@ -1571,6 +1591,7 @@ def project_utilization(project, start_date=None,end_date=None):
 
 
 def export_project_xls(request):
+    end = datetime.datetime.now()
     try:
         time_zone = pytz.timezone(settings.TIME_ZONE)
         start_time_str = request.GET.get("start_date",None)
@@ -1581,7 +1602,7 @@ def export_project_xls(request):
         time_zone = pytz.timezone(settings.TIME_ZONE)
         end_date_str = request.GET.get("end_date",None)
         end_date = time_zone.localize(datetime.datetime.strptime(end_date_str,'%Y-%m-%d'))
-	end_date = end_date + datetime.timedelta(1)
+	end_date = end_date #+ datetime.timedelta(1)
     except:
         end_date = timezone.now()
 
@@ -1627,7 +1648,7 @@ def export_project_xls(request):
             str(obj.ToolProject.all().values_list('name',flat=True)),
             len(obj.users.all()),
   	    start_date.strftime('%Y-%m-%d %H:%M') if start_date else obj.created_on.strftime('%Y-%m-%d %H:%M'),
-            end_date.strftime('%Y-%m-%d %H:%M'),
+            end.strftime('%Y-%m-%d %H:%M'),
             time["InUse_Time"] if time else None ,
             time["Maintenance_Time"] if time else None,
             time["Idle_Time"] if time else None,
@@ -1640,22 +1661,23 @@ def export_project_xls(request):
     return response      
 
 def user_utilization(tool_id, user, start_date=None,end_date=None):
-    end_date = end_date 
+    end_date = end_date
     tool_id = tool_id
     tool = Tool.objects.get(id=tool_id)
-    start_date = start_date if start_date else tool.created_on
     today = end_date
-    ToolUtil = Logging.objects.filter(created_on__gte=start_date, created_on__lte=end_date, tool_id=tool_id, user=user).order_by('created_on')
-    #today = timezone.now()
+    ToolUtil = Logging.objects.filter(created_on__gte=start_date, created_on__lte=end_date,tool_id=tool_id, user=user).order_by('created_on')
+    #today = timeizone.now()
+    Last = 0
     print today
     total_seconds = ((today - start_date).total_seconds())
     InUse_Time = 0
     Idle_Time = (ToolUtil.first().created_on - start_date).total_seconds() if ToolUtil else 0
     Maintenance_Time = 0
     Installation_Time = 0
+    
 
     try:
-        Total_Time = 0
+	Total_Time = 0
         Last = (len(ToolUtil)) - 1
         Last_Time = ToolUtil[Last].created_on
         Start_Time = ToolUtil[0].created_on
@@ -1673,6 +1695,21 @@ def user_utilization(tool_id, user, start_date=None,end_date=None):
             else:
                 Maintenance_Time = ((Maintenance_Time + TimeDiff.total_seconds()))#/total_seconds_day
 
+        if Start_Time.date() != start_date.date():
+            TimeDiff = Start_Time - start_date
+            obj = Logging.objects.filter(created_on__lt = Start_Time, user=user).order_by('created_on')
+            status = obj.last().status
+            if(status == "PR"):
+                InUse_Time +=  TimeDiff.total_seconds()
+            elif(status == "ID"):
+                Idle_Time += TimeDiff.total_seconds()
+            elif(status == "IN"):
+                Installation_Time += TimeDiff.total_seconds()
+            else:
+                Maintenance_Time += TimeDiff.total_seconds()
+
+
+
         status = ToolUtil.last().status
         remain_time = (today - ToolUtil.last().created_on).total_seconds()
         if(status == "PR"):
@@ -1685,16 +1722,21 @@ def user_utilization(tool_id, user, start_date=None,end_date=None):
             Maintenance_Time += remain_time
     except:
         pass
-    '''if len(ToolUtil) ==0:
+    if len(ToolUtil) ==0:
+        obj = Logging.objects.filter(created_on__lt=start_date, user=user).order_by('created_on')
+        Last = len(obj)
+        if Last > 0:
+            status = obj.last().status
+
         #Idle_Time = total_seconds
-        if(tool.status == "PR"):
-            InUse_Time = total_seconds
-        elif(tool.status == "ID"):
-            Idle_Time = total_seconds
-        elif(tool.status == "IN"):
-            Installation_Time = total_seconds
-        else:
-            Maintenance_Time = total_seconds'''
+       	    if(tool.status == "PR"):
+            	InUse_Time = total_seconds
+            elif(tool.status == "ID"):
+            	Idle_Time = total_seconds
+            elif(tool.status == "IN"):
+            	Installation_Time = total_seconds
+            else:
+            	Maintenance_Time = total_seconds
 
     print "---------------------->", total_seconds, start_date
     print "---------------------->", InUse_Time
@@ -1713,20 +1755,23 @@ def user_utilization(tool_id, user, start_date=None,end_date=None):
     #time = {"InUse_Time":InUse_Time,"Idle_Time":Idle_Time,"Maintenance_Time":Maintenance_Time,"Installation_Time":Installation_Time}    
     #return time
 
+
 def export_user_xls(request):
+    end = datetime.datetime.now()
     try:
         time_zone = pytz.timezone(settings.TIME_ZONE)
         start_time_str = request.GET.get("start_date",None)
         start_date = time_zone.localize(datetime.datetime.strptime(start_time_str,'%Y-%m-%d'))
     except:
-        start_date = None
+        start_date = time_zone.localize(datetime.datetime.strptime('2017-2-18','%Y-%m-%d'))
     try:
         time_zone = pytz.timezone(settings.TIME_ZONE)
         end_date_str = request.GET.get("end_date",None)
         end_date = time_zone.localize(datetime.datetime.strptime(end_date_str,'%Y-%m-%d'))
-	end_date = end_date + datetime.timedelta(1)
+        end_date = end_date# + datetime.timedelta(1)
     except:
         end_date = timezone.now()
+
 
     response = HttpResponse(content_type='application/ms-excel')
     filename = 'user_'+timezone.now().strftime("%Y_%m_%d_%H_%M")+'.xls'
@@ -1773,7 +1818,7 @@ def export_user_xls(request):
             len(obj.project_set.all()),
             len(obj.ToolUser.all()),
   	    start_date.strftime('%Y-%m-%d %H:%M') if start_date else obj.created_on.strftime('%Y-%m-%d %H:%M'),
-            end_date.strftime('%Y-%m-%d %H:%M'),
+            end.strftime('%Y-%m-%d %H:%M'),
 	    utilization
 	]
         for col_num in xrange(len(row)):
@@ -1784,6 +1829,7 @@ def export_user_xls(request):
 
 
 def export_user_raw_xls(request):
+    end = datetime.datetime.now()
     try:
         time_zone = pytz.timezone(settings.TIME_ZONE)
         start_date_str = request.GET.get("start_date", None)
@@ -1849,6 +1895,7 @@ def export_user_raw_xls(request):
             
     wb.save(response)
     return response
+
 
 def valid_date(pk,start_date=None,end_date=None):
 	    if start_date == None:
@@ -2041,12 +2088,15 @@ def tools_report(request,tool_id):
     font_style.alignment.wrap = 1
     
     queryset = Tool.objects.get(id = tool_id)
+    con = queryset.created_on
+    if con > start_date:
+	start_date = con 
     date_range = (end_date - start_date).days
     print date_range
     for obj in range(0,date_range):
         start = start_date + datetime.timedelta(obj)
         end = start_date + datetime.timedelta(obj+1)
-
+	
         time  = utilization_tool(queryset.id, start, end)
         row_num += 1
         row = [
@@ -2079,11 +2129,15 @@ def trend_pie_tool(pk,start_date=None,end_date=None):
 
      ToolUtil = Logging.objects.filter(tool_id=pk).order_by('created_on')
      tool = Tool.objects.get(id=pk)
+     con = tool.created_on
+     if con > start_date:
+         start_date = con
      today = end_date
      start_date = start_date
      total_seconds = ((today - start_date).total_seconds())
      InUse_Time = 0
-     Idle_Time = (ToolUtil.first().created_on - tool.created_on).total_seconds() if ToolUtil else 0
+     #Idle_Time = (ToolUtil.first().created_on - tool.created_on).total_seconds() if ToolUtil else 0
+     Idle_Time = (ToolUtil.first().created_on - start_date).total_seconds() if ToolUtil else 0
      Maintenance_Time = 0
      Installation_Time = 0
      #requested_time = int(request.query_params.get("hours", 8))
