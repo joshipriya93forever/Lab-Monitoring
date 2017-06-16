@@ -1,123 +1,16 @@
-<div class="row">
-    <div class="portlet light portlet-fit bordered">
-        <div class="portlet-title">
-            <div class="caption">
-                <i class=" fa fa-area-chart font-green"></i>
-                <span class="caption-subject font-green bold uppercase">Real-Time Data {{clock  | date:'medium'}}</span>
-            </div>
-            <div id="help" class="actions">
-                <img src="images/help.png" ng-click="help('lg')"/>
-            </div>
-        </div>
-
-        <div class="portlet-body dashboard">
-            <uib-tabset active="active">
-                <uib-tab index="0" heading="CUMULATIVE TOOL ANALYTICS">
-                    <div class="row">
-                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                            <div class="dashboard-stat productive" ng-click="getAcumulativeData()">
-                                <div class="visual">
-                                    <i class="fa fa-pie-chart"></i>
-                                </div>
-                                <div class="details">
-                                    <div class="number"> {{utilization.Productive | number : 2}}%</div>
-                                    <div class="desc"> Productive </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                            <div class="dashboard-stat idle">
-                                <div class="visual">
-                                    <i class="fa fa-pie-chart"></i>
-                                </div>
-                                <div class="details">
-                                    <div class="number"> {{utilization.Idle | number : 2}}%</div>
-                                    <div class="desc"> Idle </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                            <div class="dashboard-stat instal">
-                                <div class="visual">
-                                    <i class="fa fa-pie-chart"></i>
-                                </div>
-                                <div class="details">
-                                    <div class="number"> {{utilization.Installation| number : 2}}%</div>
-                                    <div class="desc"> Installation/Config </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                            <div class="dashboard-stat maintenance">
-                                <div class="visual">
-                                    <i class="fa fa-pie-chart"></i>
-                                </div>
-                                <div class="details">
-                                    <div class="number">{{utilization.Maintenance| number : 2}}%</div>
-                                    <div class="desc"> Maintenance </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </uib-tab>
-                <uib-tab index="1" heading="QUATERLY CUMULATIVE TOOL ANALYTICS">
-                    <div class="row">
-                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                            <div class="dashboard-stat productive" ng-click="getAcumulativeData()">
-                                <div class="visual">
-                                    <i class="fa fa-pie-chart"></i>
-                                </div>
-                                <div class="details">
-                                    <div class="number"> {{toolqtrcumulative.InUse_percent| number : 2}}%</div>
-                                    <div class="desc"> Productive </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                            <div class="dashboard-stat idle">
-                                <div class="visual">
-                                    <i class="fa fa-pie-chart"></i>
-                                </div>
-                                <div class="details">
-                                    <div class="number"> {{toolqtrcumulative.Idle_percent| number : 2}}%</div>
-                                    <div class="desc"> Idle </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                            <div class="dashboard-stat instal">
-                                <div class="visual">
-                                    <i class="fa fa-pie-chart"></i>
-                                </div>
-                                <div class="details">
-                                    <div class="number"> {{toolqtrcumulative.Installation_percent| number : 2}}%</div>
-                                    <div class="desc"> Installation/Config </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                            <div class="dashboard-stat maintenance">
-                                <div class="visual">
-                                    <i class="fa fa-pie-chart"></i>
-                                </div>
-                                <div class="details">
-                                    <div class="number">{{toolqtrcumulative.Maintenance_percent| number : 2}}%</div>
-                                    <div class="desc"> Maintenance </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </uib-tab>
-            </uib-tabset>
-        </div>
-    </div>
+<div>
+    <uib-alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)" dismiss-on-timeout="3000">{{alert.msg}}</uib-alert>
+</div>
+<div id="help" class="actions">
+    <img src="images/help.png" ng-click="help('lg')"/>
 </div>
 <div class="row">
-    <div class="col-lg-6 col-md-4 col-sm-4">
+    <div class="col-lg-4 col-md-4 col-sm-4">
         <div class="profile-sidebar">
             <!-- PORTLET MAIN -->
             <div class="portlet light profile-sidebar-portlet" ng-class="{'idle' : tool.status === 'ID', 'productive' : tool.status === 'PR', 'instal' : tool.status === 'IN', 'maintenance' : tool.status === 'MA'}">
                 <!-- SIDEBAR USERPIC -->
+
                 <div class="profile-userpic">
                     <img src="{{tool.image_url}}" class="img-responsive" alt=""> </div>
                 <!-- END SIDEBAR USERPIC -->
@@ -125,65 +18,140 @@
                 <div class="profile-usertitle">
                     <div class="profile-usertitle-name">{{tool.name}} </div>
                 </div>
-
             </div>
             <!-- END PORTLET MAIN -->
 
+
         </div>
     </div>
-    <div class="col-lg-6 col-md-8 col-sm-8">
+    <div class="col-lg-8 col-md-8 col-sm-8">
         <div class="portlet light portlet-fit bordered">
-            <div class="portlet-title">
+            <div class="portlet-title tabbable-line">
                 <div class="caption">
-                    <ul class="nav nav-tabs">
-                        <li class="active">
-                            <a ng-click="cumupie()" data-toggle="tab"> Cumulative </a>
-                        </li>
-                        <li>
-                            <a ng-click="qtrpie()" data-toggle="tab"> Quaterly </a>
-                        </li>
-                    </ul>
+                    <i class=" fa fa-area-chart font-green"></i>
+                    <span class="caption-subject font-green bold uppercase">Real-Time Data {{clock  | date:'medium'}}</span>
                 </div>
-                <!--<div class="actions">
-                    <div class="btn-group btn-group-devided" data-toggle="buttons">
-                        <label class="btn dark btn-outline  btn-sm active">
-                            <input type="radio" name="options" class="toggle" id="option1">8 hr</label>
-                        <label class="btn dark btn-outline  btn-sm">
-                            <input type="radio" name="options" class="toggle" id="option2">24 hr</label>
-                    </div>
-                </div>-->
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a ng-click="cumupie()" data-toggle="tab"> Cumulative </a>
+                    </li>
+                    <li>
+                        <a ng-click="qtrpie()" data-toggle="tab"> Quaterly </a>
+                    </li>
+                </ul>
             </div>
-            <div class="portlet-body">
-                <div class="row" data-ng-if="!qtrPieChart">
-                    <nvd3 options="options" data="stat" labelType="stat.value"></nvd3>
-                </div>
-                <div class="row" data-ng-if="qtrPieChart">
-                    <nvd3 options="qtroptions" data="qtrstat" labelType="qtrstat.value"></nvd3>
-                </div>
 
-            </div>
-            <div class="portlet-footer" style="margin-top: 25px;">
-                <div class="row">
-                    <div class="col-lg-offset-10 col-md-offset-10 col-lg-2 col-md-2">
-                        <div class="btn-group btn-group btn-group-justified">
-                            <a ui-sref="dashboard" class="btn blue">
-                                <i class="icon-back"></i> Back </a>
+            <div class="portlet-body dashboard">
+                <div class="portlet-body">
+                    <div class="row" data-ng-if="!qtrPieChart">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div class="dashboard-stat productive" ng-click="getAcumulativeData()">
+                                    <div class="visual">
+                                        <!--<i class="fa fa-pie-chart"></i>-->
+                                    </div>
+                                    <div class="details">
+                                        <div class="number"> {{utilization.Productive | number : 2}}%</div>
+                                        <div class="desc"> Productive </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div class="dashboard-stat idle">
+                                    <div class="visual">
+                                        <!--<i class="fa fa-pie-chart"></i>-->
+                                    </div>
+                                    <div class="details">
+                                        <div class="number"> {{utilization.Idle | number : 2}}%</div>
+                                        <div class="desc"> Idle </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div class="dashboard-stat instal">
+                                    <div class="visual">
+                                        <!--<i class="fa fa-pie-chart"></i>-->
+                                    </div>
+                                    <div class="details">
+                                        <div class="number"> {{utilization.Installation| number : 2}}%</div>
+                                        <div class="desc"> Installation/Config </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div class="dashboard-stat maintenance">
+                                    <div class="visual">
+                                        <!--<i class="fa fa-pie-chart"></i>-->
+                                    </div>
+                                    <div class="details">
+                                        <div class="number">{{utilization.Maintenance| number : 2}}%</div>
+                                        <div class="desc"> Maintenance </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                        <nvd3 options="options" data="stat" labelType="stat.value"></nvd3>
                     </div>
+                    <div class="row" data-ng-if="qtrPieChart">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div class="dashboard-stat productive" ng-click="getAcumulativeData()">
+                                    <div class="visual">
+                                        <!-- <i class="fa fa-pie-chart"></i>-->
+                                    </div>
+                                    <div class="details">
+                                        <div class="number"> {{toolqtrcumulative.InUse_percent| number : 2}}%</div>
+                                        <div class="desc"> Productive </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div class="dashboard-stat idle">
+                                    <div class="visual">
+                                        <!--<i class="fa fa-pie-chart"></i>-->
+                                    </div>
+                                    <div class="details">
+                                        <div class="number"> {{toolqtrcumulative.Idle_percent| number : 2}}%</div>
+                                        <div class="desc"> Idle </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div class="dashboard-stat instal">
+                                    <div class="visual">
+                                        <!--<i class="fa fa-pie-chart"></i>-->
+                                    </div>
+                                    <div class="details">
+                                        <div class="number"> {{toolqtrcumulative.Installation_percent| number : 2}}%</div>
+                                        <div class="desc"> Installation/Config </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                <div class="dashboard-stat maintenance">
+                                    <div class="visual">
+                                        <!--<i class="fa fa-pie-chart"></i>-->
+                                    </div>
+                                    <div class="details">
+                                        <div class="number">{{toolqtrcumulative.Maintenance_percent| number : 2}}%</div>
+                                        <div class="desc"> Maintenance </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <nvd3 options="qtroptions" data="qtrstat" labelType="qtrstat.value"></nvd3>
+                    </div>
+
                 </div>
             </div>
-
         </div>
     </div>
 </div>
-
+</div>
 <div class="row">
-    <!--<div class="col-lg-6 col-md-6 col-sm-6">
-
-    </div>-->
     <div class="col-lg-12 col-md-12 col-sm-12">
         <div class="portlet light portlet-fit bordered">
-            <div class="portlet-title">
+            <div class="portlet-title tabbable-line">
                 <div class="caption">
                     <span class="caption-subject font-green bold uppercase">{{tool.name}}</span>
                 </div>
@@ -199,7 +167,7 @@
             <div class="portlet-body">
                 <uib-tabset active="activeJustified">
                     <uib-tab index="0" heading="Users">
-                        <ul class="feeds">
+                        <ul class="feeds" ng-scrollbars ng-scrollbars-config="config">
                             <li>
                                 <div class="col1">
                                     <div class="cont">
@@ -227,7 +195,7 @@
                         </ul>
                     </uib-tab>
                     <uib-tab index="1" heading="Projects">
-                        <ul class="feeds">
+                        <ul class="feeds" ng-scrollbars ng-scrollbars-config="config">
                             <li>
                                 <div class="col1">
                                     <div class="cont">
@@ -278,16 +246,15 @@
                     </div>
                 </div>
                 <div class="row">
-
-                    <!-- <canvas id="line" class="chart-line" chart-data="data"
-                             chart-labels="labels" chart-series="series" chart-options="optionsTrend"  chart-colors="colors"  legend="true"
-                             chart-dataset-override="datasetOverride"  chart-click="onClick">
-                     </canvas>-->
-                </div>
-                <div class="row">
                     <div id="chart" style="height: 200px;"><svg></svg></div>
                 </div>
             </div>
         </div>
+    </div>
+</div>
+<div class="scroll-to-top" ui-sref="dashboard"  style="display: block;">
+    <div class="btn-group btn-group-justified" style="width: 70px;">
+        <a  class="btn blue">
+            <i class="icon-back"></i> Back </a>
     </div>
 </div>

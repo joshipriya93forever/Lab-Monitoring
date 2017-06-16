@@ -9,7 +9,8 @@ var LabMonitoring = angular.module("LabMonitoring", [
     "ngMessages",
     'nvd3',
     "angularUtils.directives.dirPagination",
-    'daterangepicker'
+    'daterangepicker',
+    'ngScrollbars'
 ]); 
 
 
@@ -199,25 +200,29 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
     };
     $scope.getBaysData();              
 
-    $scope.getCumulativeData = function() {
+
+    $scope.cumupie = function(){
+        $scope.quater =  false;
         var url = urlS.tools + 'lab_utilization/'
         DataService.get(url).then(function (data) {
-            $rootScope.cumulative = data;
+            $rootScope.cumulative = data;;
         }, function (err) {
 
         });
     };
-    $scope.getCumulativeData();    
 
-    $scope.getQuaterlyCumulativeData = function() {
+    $scope.cumupie()
+
+
+    $scope.qtrpie = function(){
+        $scope.quater =  true;
         var url = urlS.tools + 'lab_utilization_qtr/'
         DataService.get(url).then(function (data) {
             $rootScope.qtrcumulative = data;
         }, function (err) {
 
         });
-    };
-    $scope.getQuaterlyCumulativeData();
+    }
 
 
     $scope.setId = function (id) {
@@ -1236,7 +1241,7 @@ angular.module('LabMonitoring').controller('LoginController', function($rootScop
     $scope.submit = function () {
          
                login.email = 'bay@amat.com';
-                login.password = 'bay123'
+                login.password = 'bay123!'
                var url = urlS.login
                DataService.post(url, login).then(function (data) {
                    var token = data.token;
@@ -1660,6 +1665,21 @@ angular.module('LabMonitoring').controller('ToolStatisticsController',  function
 
     $scope.clock = $rootScope.clock;
 
+
+
+
+    $scope.config = {
+        autoHideScrollbar: false,
+        theme: 'dark-thick',
+        advanced:{
+            updateOnContentResize: true
+        },
+        setHeight: 200,
+        scrollInertia: 0
+    }
+
+
+
     
     $scope.statusChange = function(item) {
         var _item = {},
@@ -1779,7 +1799,7 @@ angular.module('LabMonitoring').controller('ToolStatisticsController',  function
             labelThreshold: 0.01,
             labelType : 'percent',
             labelSunbeamLayout: true,
-            showLegend : true,
+            showLegend : false,
             color: ['#ff7f7f','#c2de80','#ffff80','#9ac3f5'],
             legend: {
                 margin: {
@@ -1803,7 +1823,7 @@ angular.module('LabMonitoring').controller('ToolStatisticsController',  function
             labelThreshold: 0.01,
             labelType : 'percent',
             labelSunbeamLayout: true,
-            showLegend : true,
+            showLegend : false,
             color: ['#ff7f7f','#c2de80','#ffff80','#9ac3f5'],
             legend: {
                 margin: {
