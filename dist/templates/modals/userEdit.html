@@ -1,0 +1,84 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" ng-click="cancel()" aria-hidden="true"></button>
+</div>
+<div class="modal-body">
+    <div class="portlet box cblue">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-pencil"></i>Edit <span class="upercase" ng-model="item.name">{{item.name}}</span> </div>
+        </div>
+        <div class="portlet-body form">
+            <form role="form" name="useredForm" class="form-horizontal form-row-seperated" ng-submit="change(item)" novalidate>
+                <div class="form-body">
+                    <div class="form-group" ng-class="{'has-error': useredForm.tname.$error.required (!useredForm.$pristine || useredForm.$submitted)}">
+                        <label class="col-sm-4 control-label">RFID<span class="required"> * </span></label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <input type="text"  name="rfid" id="rfid" placeholder="Enter the RFID" ng-model="item.rfid" class="form-control" my-directive required ng-keyup="$event.keyCode == 13 && ok(item)"/>
+                                <p class="help-block" ng-show="useredForm.rfid.$error.required && (!useredForm.$pristine || useredForm.$submitted)">This field is required</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">First Name</label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <input type="text"  placeholder="Readonly" readonly="" ng-model="item.first_name" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Last Name</label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <input type="text"  placeholder="Readonly" readonly="" ng-model="item.last_name" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Email</label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <input type="text"  placeholder="Readonly" readonly="" ng-model="item.email" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Group</label>
+                        <div class="col-sm-8">
+                            <select name="repeatSelect" id="repeatSelect" ng-model="item.group" required>
+                                <option ng-repeat="group in item.groups" value="{{group.id}}">{{group.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group form-md-radios">
+                                <div class="md-radio-inline">
+                                    <div class="md-radio">
+                                        <input type="radio" id="checkbox1_9" name="Admin" class="md-radiobtn" ng-model="user.is_admin" uib-btn-radio="'true'">
+                                        <label for="checkbox1_9">
+                                            <span></span>
+                                            <span class="check"></span>
+                                            <span class="box"></span> Admin </label>
+                                    </div>
+                                    <div class="md-radio">
+                                        <input type="radio" id="checkbox1_10" name="Owner" class="md-radiobtn" ng-model="user.is_owner"  uib-btn-radio="'true'">
+                                        <label for="checkbox1_10">
+                                            <span></span>
+                                            <span class="check"></span>
+                                            <span class="box"></span> Owner </label>
+                                    </div>
+                                </div>
+
+                    </div>
+
+                </div>
+                <div class="form-actions center">
+                    <div class="col-md-offset-3 col-md-9">
+                        <button type="submit" type="submit" class="btn green">Submit</button>
+                        <button type="button" ng-click="cancel()" class="btn default">Cancel</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
