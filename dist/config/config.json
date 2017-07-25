@@ -1,12 +1,14 @@
 {
-  "baseURL" : "http://152.135.122.61:8871/" ,
+  "baseURL" : "http://152.135.122.61:9999/" ,
   "urlS" : {
     "login" : "api-token-auth/",
      "bays" : "api/bay/",
     "tools" : "api/tools/",
     "projects" : "api/projects/",
     "users" : "api/user/user_info/",
-    "groups" : "api/user/usergroup/"
+    "groups" : "api/user/usergroup/",
+    "inactive_tools" : "/api/tool_list/nonactivetools/",
+    "tool_category" : "api/tool_category_data/"
   },
   "url" :{
     "tool" : "/tools/",

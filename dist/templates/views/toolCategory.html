@@ -5,145 +5,17 @@
 <div id="help" class="actions">
     <img src="images/help.png" ng-click="help('lg')"/>
 </div>
-<div>
-    <div class="portlet light portlet-fit bordered">
-        <div class="portlet-title tabbable-line">
-            <div class="caption">
-                <i class=" fa fa-area-chart font-green"></i>
-                <span class="caption-subject font-green bold uppercase">Real-Time Data {{clock  | date:'medium'}}</span>
-            </div>
-            <ul class="nav nav-tabs">
-                <li class="active">
-                    <a ng-click="cumupie()" data-toggle="tab"> Cumulative </a>
-                </li>
-                <li>
-                    <a ng-click="qtrpie()" data-toggle="tab"> Quaterly </a>
-                </li>
-            </ul>
-        </div>
-
-        <div class="portlet-body dashboard">
-            <div class="portlet-body">
-                <div class="row" data-ng-if="!quater">
-                    <div class="row">
-                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                            <div class="dashboard-stat productive">
-                                <div class="visual">
-                                    <i class="fa fa-pie-chart"></i>
-                                </div>
-                                <div class="details">
-                                    <div class="number"> {{cumulative.Productive_Time | number : 2}}%</div>
-                                    <div class="desc"> Productive </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                            <div class="dashboard-stat idle">
-                                <div class="visual">
-                                    <i class="fa fa-pie-chart"></i>
-                                </div>
-                                <div class="details">
-                                    <div class="number"> {{cumulative.Idle_Time| number : 2}}%</div>
-                                    <div class="desc"> Idle </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                            <div class="dashboard-stat instal">
-                                <div class="visual">
-                                    <i class="fa fa-pie-chart"></i>
-                                </div>
-                                <div class="details">
-                                    <div class="number"> {{cumulative.Installation_Time| number : 2}}%</div>
-                                    <div class="desc"> Installation/Config </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                            <div class="dashboard-stat maintenance">
-                                <div class="visual">
-                                    <i class="fa fa-pie-chart"></i>
-                                </div>
-                                <div class="details">
-                                    <div class="number">{{cumulative.Maintenance_Time| number : 2}}%</div>
-                                    <div class="desc"> Maintenance </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row" style="margin-top: 10px">
-                        <div class="col-lg-offset-10 col-md-offset-10 col-sm-offset-10">
-                        <a type="button" id="export" class="btn blue-ebonyclay" href="http://152.135.122.61:9999/api/export_tool_xls" target="_self" download="status.pdf">Export Excel</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="row" data-ng-if="quater">
-                    <div class="row">
-                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                            <div class="dashboard-stat productive">
-                                <div class="visual">
-                                    <i class="fa fa-pie-chart"></i>
-                                </div>
-                                <div class="details">
-                                    <div class="number"> {{qtrcumulative.Productive_Time | number : 2}}%</div>
-                                    <div class="desc"> Productive </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                            <div class="dashboard-stat idle">
-                                <div class="visual">
-                                    <i class="fa fa-pie-chart"></i>
-                                </div>
-                                <div class="details">
-                                    <div class="number"> {{qtrcumulative.Idle_Time| number : 2}}%</div>
-                                    <div class="desc"> Idle </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                            <div class="dashboard-stat instal">
-                                <div class="visual">
-                                    <i class="fa fa-pie-chart"></i>
-                                </div>
-                                <div class="details">
-                                    <div class="number"> {{qtrcumulative.Installation_Time| number : 2}}%</div>
-                                    <div class="desc"> Installation/Config </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                            <div class="dashboard-stat maintenance">
-                                <div class="visual">
-                                    <i class="fa fa-pie-chart"></i>
-                                </div>
-                                <div class="details">
-                                    <div class="number">{{qtrcumulative.Maintenance_Time| number : 2}}%</div>
-                                    <div class="desc"> Maintenance </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row" style="margin-top: 10px">
-                        <div class="col-lg-offset-10 col-md-offset-10 col-sm-offset-10">
-                        <a type="button"  id="qtrexport" class="btn blue-ebonyclay" href="http://152.135.122.61:9999/api/export_tool_qtr_xls" target="_self" download="status.pdf">Export Excel</a>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</div>
 
 
-<div class="portlet light portlet-fit bordered" ng-controller="LabController">
+
+
+<div class="portlet light portlet-fit bordered">
     <div class="portlet-title">
         <div class="caption">
             <i class=" fa fa-map-o font-green"></i>
             <span class="caption-subject font-green bold uppercase">CONCEPT & PROTO LAB</span>
         </div>
-        <!--<div class="actions dash">
+       <!-- <div class="actions dash">
             <a type="button" class="btn red-thunderbird" ng-click="labModal('lg')">LAB TREND</a>
         </div>-->
     </div>
@@ -203,16 +75,16 @@
                     <line x1="440" y1="280" x2="440" y2="400" style="stroke:black;stroke-width:0.8" />
                     <line x1="570" y1="280" x2="570" y2="400" style="stroke:black;stroke-width:0.8" />
                     <line x1="440" y1="400" x2="570" y2="400" style="stroke:black;stroke-width:0.8" />
-                     <rect  x="450" y="300" height="10" width="10" fill="#c2de80"  style="stroke:black;stroke-width:0.8"></rect>
-                    <text x="480" y="308" font-family="Arial,'sans-serif'" font-size="10">Productive</text>
-                    <rect  x="450" y="320" height="10" width="10" fill="#ffff80" style="stroke:black;stroke-width:0.8"></rect>
-                    <text x="480" y="328" font-family="Arial,'sans-serif'" font-size="10">Installation/Config</text>
-                     <rect  x="450" y="340" height="10" width="10" fill="#9ac3f5" style="stroke:black;stroke-width:0.8"></rect>
-                    <text x="480" y="348" font-family="Arial,'sans-serif'" font-size="10">Maintenance</text>
-                     <rect  x="450" y="360" height="10" width="10" fill="#ff7f7f" style="stroke:black;stroke-width:0.8"></rect>
-                    <text x="480" y="368" font-family="Arial,'sans-serif'" font-size="10">Idle</text>
-                     <rect  x="450" y="380" height="10" width="10" fill="white"  style="stroke:black;stroke-width:0.8"></rect>
-                    <text x="480" y="388" font-family="Arial,'sans-serif'" font-size="10">vaccant</text>
+                     <rect  x="450" y="300" height="10" width="10" fill="rgb(140, 192, 19)"  style="stroke:black;stroke-width:0.8"></rect>
+                    <text x="480" y="308" font-family="Arial,'sans-serif'" font-size="10">Above Efficiency</text>
+                    <rect  x="450" y="320" height="10" width="10" fill="rgb(237, 5, 5)" style="stroke:black;stroke-width:0.8"></rect>
+                    <text x="480" y="328" font-family="Arial,'sans-serif'" font-size="10">Under Efficiency</text>
+                  <rect  x="450" y="340" height="10" width="10" fill="#aee9ca" style="stroke:black;stroke-width:0.8"></rect>
+                    <text x="480" y="348" font-family="Arial,'sans-serif'" font-size="10">Process</text>
+                     <rect  x="450" y="360" height="10" width="10" fill="rgb(125, 109, 196)" style="stroke:black;stroke-width:0.8"></rect>
+                    <text x="480" y="368" font-family="Arial,'sans-serif'" font-size="10">Qualifications</text>
+                     <rect  x="450" y="380" height="10" width="10" fill="#ba4d4d"  style="stroke:black;stroke-width:0.8"></rect>
+                    <text x="480" y="388" font-family="Arial,'sans-serif'" font-size="10">Field issues</text>
 
 <g clip-path="url(#clipId1)" fill="none" stroke="rgb(255,0,255)" stroke-width="0.25">
 <polyline points="379.488,429.93 367.183,429.93 367.183,441.511 379.488,441.511 379.488,429.93 "></polyline>
@@ -1108,8 +980,8 @@
 <text transform="matrix(3.25715 0 -0 4.34287 242.852 474.254)" font-family="Arial Unicode MS,'sans-serif'" font-size="1.39744">I6-E4</text>
 </g>
 <g clip-path="url(#clipId1)" fill="rgb(0,0,0)" stroke="rgb(0,0,0)" stroke-width="0">
-     <rect id="bay40" ng-click="setId(45)" x="260" y="580" height="70" width="125" fill="white"></rect>
-    <rect id="bay38" ng-click="setId(43)" x="390" y="580" height="70" width="90" fill="white"></rect>
+    <rect id="bay40" ng-click="setId(45)" x="260" y="580" height="70" width="125" fill="white"> <title>Tool Name : {{catdetail.Tool_Name}}<br><br>Category : {{catdetail.Tool_Category}}<br><br>Threshold : {{catdetail.Tool_Threshold}}%</title></rect>
+    <rect id="bay38" ng-click="setId(43)" x="390" y="580" height="70" width="90" fill="white"><title>Tool Name : {{catdetail.Tool_Name}}<br><br>Category : {{catdetail.Tool_Category}}<br><br>Threshold : {{catdetail.Tool_Threshold}}%</title></rect>
 <text transform="matrix(5.7905 0 -0 5.7905 276.886 616.716)" font-family="Arial,'sans-serif'" font-size="2">Bay 40</text>
 <text transform="matrix(5.7905 0 -0 5.7905 401.529 613.779)" font-family="Arial,'sans-serif'" font-size="2">Bay - 38</text>
 </g>
@@ -1419,7 +1291,7 @@
 <polyline points="261.853,254.623 261.853,251.727 "></polyline>
 </g>
 <g clip-path="url(#clipId1)" fill="rgb(0,0,0)" stroke="rgb(0,0,0)" stroke-width="0">
-    <rect id="bay42" ng-click="setId(67)" x="187" y="488" height="65" width="87" fill="white"></rect>
+    <rect id="bay42" ng-click="setId(67)" x="187" y="488" height="65" width="87" fill="white"><title>Tool Name : {{catdetail.Tool_Name}}<br><br>Category : {{catdetail.Tool_Category}}<br><br>Threshold : {{catdetail.Tool_Threshold}}%</title></rect>
 <text transform="matrix(2.89525 0 -0 2.89525 227.767 280.775)" font-family="Arial,'sans-serif'" font-size="1.39636">STAGING</text>
 <text transform="matrix(5.7905 0 -0 5.7905 197.893 518.367)" font-family="Arial,'sans-serif'" font-size="2">Bay 42</text>
 </g>
@@ -1430,8 +1302,8 @@
 <polyline points="190.757,358.978 274.466,358.978 274.466,409.627 190.757,409.627 190.757,358.978 "></polyline>
 </g>
 <g clip-path="url(#clipId1)" fill="rgb(0,0,0)" stroke="rgb(0,0,0)" stroke-width="0">
-    <!--<rect id="bay45" ng-click="setId(129)" x="188" y="307" height="52" width="85" fill="white"></rect>-->
-    <!--<rect id="bay44" ng-click="setId(129)" x="188" y="360" height="52" width="85" fill="white"></rect>-->
+    <!--<rect id="bay45" ng-click="setId(129)" x="188" y="307" height="52" width="85" fill="white"><title>Tool Name : {{catdetail.Tool_Name}}<br><br>Category : {{catdetail.Tool_Category}}<br><br>Threshold : {{catdetail.Tool_Threshold}}%</title></rect>-->
+    <!--<rect id="bay44" ng-click="setId(129)" x="188" y="360" height="52" width="85" fill="white"><title>Tool Name : {{catdetail.Tool_Name}}<br><br>Category : {{catdetail.Tool_Category}}<br><br>Threshold : {{catdetail.Tool_Threshold}}%</title></rect>-->
 <text transform="matrix(5.7905 0 -0 5.7905 206.645 379.488)" font-family="Arial,'sans-serif'" font-size="2">Bay 44</text>
 <text transform="matrix(5.7905 0 -0 5.7905 206.645 332.433)" font-family="Arial,'sans-serif'" font-size="2">Bay 45</text>
 </g>
@@ -1726,7 +1598,7 @@
 <text transform="matrix(1.30286 0 -0 1.73715 493.486 583.386)" font-size="1.28571" style="font-family: romans">5'-11"</text>
 </g>
 <g clip-path="url(#clipId1)" fill="rgb(0,0,0)" stroke="rgb(0,0,0)" stroke-width="0">
-    <!-- <rect id="bay46" ng-click="setId(129)" x="320" y="300" height="26" width="20" fill="white"></rect>-->
+    <!-- <rect id="bay46" ng-click="setId(129)" x="320" y="300" height="26" width="20" fill="white"><title>Tool Name : {{catdetail.Tool_Name}}<br><br>Category : {{catdetail.Tool_Category}}<br><br>Threshold : {{catdetail.Tool_Threshold}}%</title></rect>-->
 <text transform="matrix(0.0144705 0 -0 0.0144705 320.501 311.169)" font-family="Arial,'sans-serif'" font-size="1.39636">IG-68</text>
 <text transform="matrix(2.89525 0 -0 2.89525 322.26 318.36)" font-family="Arial,'sans-serif'" font-size="2">Bay 46</text>
 </g>
@@ -1752,7 +1624,7 @@
 <polyline points="432.51,482.044 536.377,482.044 "></polyline>
 </g>
 <g clip-path="url(#clipId1)" fill="rgb(0,0,0)" stroke="rgb(0,0,0)" stroke-width="0">
- <rect id="bay39" ng-click="setId(44)" x="412" y="480" height="70" width="70" fill="white"></rect>
+ <rect id="bay39" ng-click="setId(44)" x="412" y="480" height="70" width="70" fill="white"><title>Tool Name : {{catdetail.Tool_Name}}<br><br>Category : {{catdetail.Tool_Category}}<br><br>Threshold : {{catdetail.Tool_Threshold}}%</title></rect>
 <text transform="matrix(5.7905 0 -0 5.7905 441.522 477.697)" font-family="Arial,'sans-serif'" font-size="1.39636">Storage</text>
 <text transform="matrix(5.7905 0 -0 5.7905 492.231 477.697)" font-family="Arial,'sans-serif'" font-size="1.39636">Storage</text>
 <text transform="matrix(2.89525 0 -0 2.89525 489.121 639.188)" font-family="Arial,'sans-serif'" font-size="1.39636">Vacuum</text>
@@ -1766,29 +1638,29 @@
 <polyline points="586.131,589.959 647.653,589.723 "></polyline>
 </g>
 <g clip-path="url(#clipId1)" fill="rgb(0,0,0)" stroke="rgb(0,0,0)" stroke-width="0">
-    <rect id="bay41" ng-click="setId(46)" x="302" y="488" height="65" width="90" fill="white"></rect>
-    <rect id="bay43" ng-click="setId(74)" x="188" y="415" height="70" width="85" fill="white"></rect>
-    <rect id="bay16" ng-click="setId(53)" x="510" y="630" height="20" width="77" fill="white"></rect>
-    <rect id="bay17" ng-click="setId(53)" x="590" y="630" height="20" width="35" fill="white"></rect>
-    <rect id="bay18" ng-click="setId(54)" x="628" y="630" height="20" width="43" fill="white"></rect>
-    <rect id="bay19" ng-click="setId(72)" x="675" y="630" height="20" width="49" fill="white"></rect>
-    <rect id="bay20" ng-click="setId(55)" x="727" y="622" height="30" width="35" fill="white"></rect>
-    <rect id="bay21" ng-click="setId(58)" x="727" y="565" height="55" width="35" fill="white"></rect>
-    <rect id="bay22" ng-click="setId(52)" x="727" y="465" height="95" width="35" fill="white"></rect>
-    <rect id="bay15" ng-click="setId(76)" x="510" y="548" height="65" width="37" fill="white"></rect>
-    <rect id="bay14" ng-click="setId(27)" x="549" y="548" height="65" width="37" fill="white"></rect>
-    <rect id="bay13" ng-click="setId(38)" x="588" y="548" height="40" width="60" fill="white"></rect>
-    <rect id="bay7" ng-click="setId(50)" x="588" y="589" height="23" width="60" fill="white"></rect>
-    <rect id="bay12" ng-click="setId(48)" x="648" y="548" height="65" width="58" fill="white"></rect>
-    <rect id="bay11" ng-click="setId(26)" x="510" y="505" height="42" width="65" fill="white"></rect>
-    <rect id="bay10" ng-click="setId(18)" x="576" y="505" height="42" width="55" fill="white"></rect>
-     <rect id="bay9" ng-click="setId(75)" x="632" y="505" height="42" width="25" fill="white"></rect>
-    <rect id="bay8" ng-click="setId(49)" x="660" y="505" height="42" width="45" fill="white"></rect>
-    <rect id="bay24" ng-click="setId(14)" x="863" y="465" height="75" width="75" fill="white"></rect>
-    <!--<rect id="bay32" ng-click="setId(129)" x="963" y="333" height="37" width="27" fill="white"></rect>-->
-    <rect id="bay33" ng-click="setId(71)" x="993" y="333" height="37" width="25" fill="white"></rect>
-    <!--<rect id="bay5" ng-click="setId(129)" x="680" y="383" height="45" width="25" fill="white"></rect>-->
-     <rect id="bay3" ng-click="setId(65)" x="680" y="304" height="38" width="25" fill="white"></rect>
+    <rect id="bay41" ng-click="setId(46)" x="302" y="488" height="65" width="90" fill="white"><title>Tool Name : {{catdetail.Tool_Name}}<br><br>Category : {{catdetail.Tool_Category}}<br><br>Threshold : {{catdetail.Tool_Threshold}}%</title></rect>
+    <rect id="bay43" ng-click="setId(74)" x="188" y="415" height="70" width="85" fill="white"><title>Tool Name : {{catdetail.Tool_Name}}<br><br>Category : {{catdetail.Tool_Category}}<br><br>Threshold : {{catdetail.Tool_Threshold}}%</title></rect>
+    <rect id="bay16" ng-click="setId(53)" x="510" y="630" height="20" width="77" fill="white"><title>Tool Name : {{catdetail.Tool_Name}}<br><br>Category : {{catdetail.Tool_Category}}<br><br>Threshold : {{catdetail.Tool_Threshold}}%</title></rect>
+    <rect id="bay17" ng-click="setId(53)" x="590" y="630" height="20" width="35" fill="white"><title>Tool Name : {{catdetail.Tool_Name}}<br><br>Category : {{catdetail.Tool_Category}}<br><br>Threshold : {{catdetail.Tool_Threshold}}%</title></rect>
+    <rect id="bay18" ng-click="setId(54)" x="628" y="630" height="20" width="43" fill="white"><title>Tool Name : {{catdetail.Tool_Name}}<br><br>Category : {{catdetail.Tool_Category}}<br><br>Threshold : {{catdetail.Tool_Threshold}}%</title></rect>
+    <rect id="bay19" ng-click="setId(72)" x="675" y="630" height="20" width="49" fill="white"><title>Tool Name : {{catdetail.Tool_Name}}<br><br>Category : {{catdetail.Tool_Category}}<br><br>Threshold : {{catdetail.Tool_Threshold}}%</title></rect>
+    <rect id="bay20" ng-click="setId(55)" x="727" y="622" height="30" width="35" fill="white"><title>Tool Name : {{catdetail.Tool_Name}}<br><br>Category : {{catdetail.Tool_Category}}<br><br>Threshold : {{catdetail.Tool_Threshold}}%</title></rect>
+    <rect id="bay21" ng-click="setId(58)" x="727" y="565" height="55" width="35" fill="white"><title>Tool Name : {{catdetail.Tool_Name}}<br><br>Category : {{catdetail.Tool_Category}}<br><br>Threshold : {{catdetail.Tool_Threshold}}%</title></rect>
+    <rect id="bay22" ng-click="setId(52)" x="727" y="465" height="95" width="35" fill="white"><title>Tool Name : {{catdetail.Tool_Name}}<br><br>Category : {{catdetail.Tool_Category}}<br><br>Threshold : {{catdetail.Tool_Threshold}}%</title></rect>
+    <rect id="bay15" ng-click="setId(76)" x="510" y="548" height="65" width="37" fill="white"><title>Tool Name : {{catdetail.Tool_Name}}<br><br>Category : {{catdetail.Tool_Category}}<br><br>Threshold : {{catdetail.Tool_Threshold}}%</title></rect>
+    <rect id="bay14" ng-click="setId(27)" x="549" y="548" height="65" width="37" fill="white"><title>Tool Name : {{catdetail.Tool_Name}}<br><br>Category : {{catdetail.Tool_Category}}<br><br>Threshold : {{catdetail.Tool_Threshold}}%</title></rect>
+    <rect id="bay13" ng-click="setId(38)" x="588" y="548" height="40" width="60" fill="white"><title>Tool Name : {{catdetail.Tool_Name}}<br><br>Category : {{catdetail.Tool_Category}}<br><br>Threshold : {{catdetail.Tool_Threshold}}%</title></rect>
+    <rect id="bay7" ng-click="setId(50)" x="588" y="589" height="23" width="60" fill="white"><title>Tool Name : {{catdetail.Tool_Name}}<br><br>Category : {{catdetail.Tool_Category}}<br><br>Threshold : {{catdetail.Tool_Threshold}}%</title></rect>
+    <rect id="bay12" ng-click="setId(48)" x="648" y="548" height="65" width="58" fill="white"><title>Tool Name : {{catdetail.Tool_Name}}<br><br>Category : {{catdetail.Tool_Category}}<br><br>Threshold : {{catdetail.Tool_Threshold}}%</title></rect>
+    <rect id="bay11" ng-click="setId(26)" x="510" y="505" height="42" width="65" fill="white"><title>Tool Name : {{catdetail.Tool_Name}}<br><br>Category : {{catdetail.Tool_Category}}<br><br>Threshold : {{catdetail.Tool_Threshold}}%</title></rect>
+    <rect id="bay10" ng-click="setId(18)" x="576" y="505" height="42" width="55" fill="white"><title>Tool Name : {{catdetail.Tool_Name}}<br><br>Category : {{catdetail.Tool_Category}}<br><br>Threshold : {{catdetail.Tool_Threshold}}%</title></rect>
+     <rect id="bay9" ng-click="setId(75)" x="632" y="505" height="42" width="25" fill="white"><title>Tool Name : {{catdetail.Tool_Name}}<br><br>Category : {{catdetail.Tool_Category}}<br><br>Threshold : {{catdetail.Tool_Threshold}}%</title></rect>
+    <rect id="bay8" ng-click="setId(49)" x="660" y="505" height="42" width="45" fill="white"><title>Tool Name : {{catdetail.Tool_Name}}<br><br>Category : {{catdetail.Tool_Category}}<br><br>Threshold : {{catdetail.Tool_Threshold}}%</title></rect>
+    <rect id="bay24" ng-click="setId(14)" x="863" y="465" height="75" width="75" fill="white"><title>Tool Name : {{catdetail.Tool_Name}}<br><br>Category : {{catdetail.Tool_Category}}<br><br>Threshold : {{catdetail.Tool_Threshold}}%</title></rect>
+    <!--<rect id="bay32" ng-click="setId(129)" x="963" y="333" height="37" width="27" fill="white"><title>Tool Name : {{catdetail.Tool_Name}}<br><br>Category : {{catdetail.Tool_Category}}<br><br>Threshold : {{catdetail.Tool_Threshold}}%</title></rect>-->
+    <rect id="bay33" ng-click="setId(71)" x="993" y="333" height="37" width="25" fill="white"><title>Tool Name : {{catdetail.Tool_Name}}<br><br>Category : {{catdetail.Tool_Category}}<br><br>Threshold : {{catdetail.Tool_Threshold}}%</title></rect>
+    <!--<rect id="bay5" ng-click="setId(129)" x="680" y="383" height="45" width="25" fill="white"><title>Tool Name : {{catdetail.Tool_Name}}<br><br>Category : {{catdetail.Tool_Category}}<br><br>Threshold : {{catdetail.Tool_Threshold}}%</title></rect>-->
+     <rect id="bay3" ng-click="setId(65)" x="680" y="304" height="38" width="25" fill="white"><title>Tool Name : {{catdetail.Tool_Name}}<br><br>Category : {{catdetail.Tool_Category}}<br><br>Threshold : {{catdetail.Tool_Threshold}}%</title></rect>
 <text transform="matrix(5.7905 0 -0 5.7905 314.428 530.857)" font-family="Arial,'sans-serif'" font-size="2">Bay 41</text>
 <text transform="matrix(5.7905 0 -0 5.7905 203.092 443.294)" font-family="Arial,'sans-serif'" font-size="2">bay 43</text>
 <text transform="matrix(0.0116827 -4.34286 4.34286 0.0116827 701.403 342.992)" font-family="Arial,'sans-serif'" font-size="2">Bay-3</text>
@@ -1817,20 +1689,20 @@
 </g>
 
 <g clip-path="url(#clipId1)" fill="rgb(0,0,0)" stroke="rgb(0,0,0)" stroke-width="0">
-    <rect id="bay25" ng-click="setId(16)" x="952" y="541" height="110" width="100" fill="white"></rect>
- <rect id="bay26" ng-click="setId(15)" x="970" y="465" height="75" width="44" fill="white"></rect>
-    <rect id="bay27" ng-click="setId(7)" x="963" y="407" height="37" width="54" fill="white"></rect>
-    <rect id="bay31" ng-click="setId(30)" x="963" y="370" height="37" width="52" fill="white"></rect>
-    <rect id="bay34" ng-click="setId(29)" x="910" y="333" height="55" width="52" fill="white"></rect>
-    <rect id="bay28" ng-click="setId(28)" x="910" y="389" height="55" width="52" fill="white"></rect>
-    <rect id="bay29" ng-click="setId(59)" x="842" y="389" height="55" width="67" fill="white"></rect>
-    <rect id="bay35" ng-click="setId(60)" x="842" y="333" height="55" width="67" fill="white"></rect>
-    <rect id="bay36" ng-click="setId(61)" x="782" y="333" height="110" width="58" fill="white"></rect>
-    <rect id="bay37" ng-click="setId(62)" x="730" y="333" height="67" width="50" fill="white"></rect>
-    <rect id="bay30" ng-click="setId(68)" x="730" y="401" height="41" width="50" fill="white"></rect>
-    <rect id="bay4" ng-click="setId(66)" x="680" y="343" height="40" width="25" fill="white"></rect>
-    <!-- <rect id="bay2" ng-click="setId(129)" x="680" y="255" height="48" width="25" fill="white"></rect>-->
-     <rect id="bay1" ng-click="setId(31)" x="792" y="255" height="55" width="75" fill="white"></rect>
+    <rect id="bay25" ng-click="setId(16)" x="952" y="541" height="110" width="100" fill="white"><title>Tool Name : {{catdetail.Tool_Name}}<br><br>Category : {{catdetail.Tool_Category}}<br><br>Threshold : {{catdetail.Tool_Threshold}}%</title></rect>
+ <rect id="bay26" ng-click="setId(15)" x="970" y="465" height="75" width="44" fill="white"><title>Tool Name : {{catdetail.Tool_Name}}<br><br>Category : {{catdetail.Tool_Category}}<br><br>Threshold : {{catdetail.Tool_Threshold}}%</title></rect>
+    <rect id="bay27" ng-click="setId(7)" x="963" y="407" height="37" width="54" fill="white"><title>Tool Name : {{catdetail.Tool_Name}}<br><br>Category : {{catdetail.Tool_Category}}<br><br>Threshold : {{catdetail.Tool_Threshold}}%</title></rect>
+    <rect id="bay31" ng-click="setId(30)" x="963" y="370" height="37" width="52" fill="white"><title>Tool Name : {{catdetail.Tool_Name}}<br><br>Category : {{catdetail.Tool_Category}}<br><br>Threshold : {{catdetail.Tool_Threshold}}%</title></rect>
+    <rect id="bay34" ng-click="setId(29)" x="910" y="333" height="55" width="52" fill="white"><title>Tool Name : {{catdetail.Tool_Name}}<br><br>Category : {{catdetail.Tool_Category}}<br><br>Threshold : {{catdetail.Tool_Threshold}}%</title></rect>
+    <rect id="bay28" ng-click="setId(28)" x="910" y="389" height="55" width="52" fill="white"><title>Tool Name : {{catdetail.Tool_Name}}<br><br>Category : {{catdetail.Tool_Category}}<br><br>Threshold : {{catdetail.Tool_Threshold}}%</title></rect>
+    <rect id="bay29" ng-click="setId(59)" x="842" y="389" height="55" width="67" fill="white"><title>Tool Name : {{catdetail.Tool_Name}}<br><br>Category : {{catdetail.Tool_Category}}<br><br>Threshold : {{catdetail.Tool_Threshold}}%</title></rect>
+    <rect id="bay35" ng-click="setId(60)" x="842" y="333" height="55" width="67" fill="white"><title>Tool Name : {{catdetail.Tool_Name}}<br><br>Category : {{catdetail.Tool_Category}}<br><br>Threshold : {{catdetail.Tool_Threshold}}%</title></rect>
+    <rect id="bay36" ng-click="setId(61)" x="782" y="333" height="110" width="58" fill="white"><title>Tool Name : {{catdetail.Tool_Name}}<br><br>Category : {{catdetail.Tool_Category}}<br><br>Threshold : {{catdetail.Tool_Threshold}}%</title></rect>
+    <rect id="bay37" ng-click="setId(62)" x="730" y="333" height="67" width="50" fill="white"><title>Tool Name : {{catdetail.Tool_Name}}<br><br>Category : {{catdetail.Tool_Category}}<br><br>Threshold : {{catdetail.Tool_Threshold}}%</title></rect>
+    <rect id="bay30" ng-click="setId(68)" x="730" y="401" height="41" width="50" fill="white"><title>Tool Name : {{catdetail.Tool_Name}}<br><br>Category : {{catdetail.Tool_Category}}<br><br>Threshold : {{catdetail.Tool_Threshold}}%</title></rect>
+    <rect id="bay4" ng-click="setId(66)" x="680" y="343" height="40" width="25" fill="white"><title>Tool Name : {{catdetail.Tool_Name}}<br><br>Category : {{catdetail.Tool_Category}}<br><br>Threshold : {{catdetail.Tool_Threshold}}%</title></rect>
+    <!-- <rect id="bay2" ng-click="setId(129)" x="680" y="255" height="48" width="25" fill="white"><title>Tool Name : {{catdetail.Tool_Name}}<br><br>Category : {{catdetail.Tool_Category}}<br><br>Threshold : {{catdetail.Tool_Threshold}}%</title></rect>-->
+     <rect id="bay1" ng-click="setId(31)" x="792" y="255" height="55" width="75" fill="white"><title>Tool Name : {{catdetail.Tool_Name}}<br><br>Category : {{catdetail.Tool_Category}}<br><br>Threshold : {{catdetail.Tool_Threshold}}%</title></rect>
 <text transform="matrix(4.34287 0 -0 4.34287 682.288 365.114)" font-family="Arial,'sans-serif'" font-size="2">Bay-4</text>
 <text transform="matrix(4.34287 0 -0 4.34287 735.709 372.35)" font-family="Arial,'sans-serif'" font-size="2">Bay-37</text>
 <text transform="matrix(4.34287 0 -0 4.34287 793.498 384.248)" font-family="Arial,'sans-serif'" font-size="2">Bay-36</text>
@@ -1866,25 +1738,12 @@
 
 </svg>
 
-
-               <!-- <svg width="1500" height="800">
-                    <rect x="50" y="20" width="80" height="40" style="fill:#ffffff;stroke-width:1;stroke:black" />
-                    <rect x="50" y="60" width="80" height="40" style="fill:#ffffff;stroke-width:1;stroke:black" />
-                    <rect x="50" y="100" width="80" height="40" style="fill:#ffffff;stroke-width:1;stroke:black" />
-                    <rect x="50" y="140" width="80" height="60" style="fill:#ffffff;stroke-width:1;stroke:black" />
-                    <rect x="50" y="200" width="80" height="60" style="fill:#ffffff;stroke-width:1;stroke:black" />
-                    <line x1="130" y1="20" x2="130" y2="260" style="stroke:rgb(255,0,0);stroke-width:2" />
-                    <line x1="150" y1="20" x2="150" y2="260" style="stroke:rgb(255,0,0);stroke-width:2" />
-                    <rect x="150" y="200" width="80" height="60" style="fill:#ffffff;stroke-width:1;stroke:black" />
-                    <rect x="230" y="200" width="60" height="60" style="fill:#ffffff;stroke-width:1;stroke:black" />
-                    <rect x="90" y="280" width="110" height="60" style="fill:#ffffff;stroke-width:1;stroke:black" />
-                    <rect x="200" y="280" width="90" height="60" style="fill:#ffffff;stroke-width:1;stroke:black" />
-                </svg>-->
-
-            </div>
         </div>
     </div>
+</div>
 
 
 
 </div>
+
+

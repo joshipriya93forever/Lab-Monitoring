@@ -186,23 +186,22 @@ LabMonitoring.config([ '$stateProvider',
         })
 
 
-        .state("main.tool.statistics", {
-            url: "/statistics",
-            templateUrl: "templates/partials/toolStatistics.html",
-            data: {pageTitle: 'Tool Statistics'}
+        .state("main.toolCategory", {
+            url: "/toolCategory",
+            templateUrl: "templates/views/toolCategory.html",
+            data: {pageTitle: 'Tool Category'},
+            controller: "ToolCategoryController"
         })
 
-        .state("main.tool.config", {
-            url: "/configuration",
-            templateUrl: "templates/partials/toolConfig.html",
-            data: {pageTitle: 'Tool Configuration'}
+
+        .state("main.categoryTable", {
+            url: "/categoryTable",
+            templateUrl: "templates/views/categoryTable.html",
+            data: {pageTitle: 'Category Table'},
+            controller: "CategoryTableController"
         })
 
-        .state("main.tool.work", {
-            url: "/work",
-            templateUrl: "templates/partials/toolWork.html",
-            data: {pageTitle: 'Tool Work'}
-        })
+
 
 
         .state('main.consoleTable', {
@@ -210,6 +209,13 @@ LabMonitoring.config([ '$stateProvider',
             templateUrl: "templates/views/consoleTable.html",
             data: {pageTitle: 'Bay Table'},
             controller: "ConsoleTableController"
+        })
+
+        .state('main.manageConsole', {
+            url: "/manageConsole",
+            templateUrl: "templates/views/manageConsole.html",
+            data: {pageTitle: 'Manage Console'},
+            controller: "ManageConsoleController"
         })
 
 
@@ -286,7 +292,7 @@ LabMonitoring.run(function($rootScope, $location) {
             $location.path("/login.html");
         }
     })
-});;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+});
 
 
 angular.module('LabMonitoring').controller('AddProjectController', function($rootScope, $scope, $http, $state,DataService) {
@@ -319,7 +325,7 @@ angular.module('LabMonitoring').controller('AddProjectController', function($roo
     };
 
 
-
+    $rootScope.settings.layout.pageSidebarClosed = true;
 });
 
 
@@ -393,7 +399,7 @@ $scope.getUsersData();
         $scope.alerts.splice(index, 1);
     };
 
-
+    $rootScope.settings.layout.pageSidebarClosed = true;
 
 });
 
@@ -449,12 +455,48 @@ angular.module('LabMonitoring').controller('AddUsersController', function($rootS
         $scope.alerts.splice(index, 1);
     };
 
-
+    $rootScope.settings.layout.pageSidebarClosed = true;
 
 });
 
 
 
+
+
+angular.module('LabMonitoring').controller('CategoryTableController', function($rootScope,$state, $scope, $http, $timeout,DataService,$interval) {
+
+    var urlS = $rootScope.urlS;
+    $scope.alerts = [];
+
+
+
+    $rootScope.getToolDetails = function(){
+        var url = urlS.tool_category
+        DataService.get(url).then(function (data) {
+            $scope.toolCats = data;
+        }, function (err) {
+            $scope.alerts.push({type: 'danger', msg: 'Sorry we are not able to get table information.Please try again.'});
+        });
+    }
+    $rootScope.getToolDetails();                    
+
+
+    
+    $scope.currentPage = 1;
+    $scope.pageSize = 10;
+    $scope.tools = [];
+
+
+
+
+    $rootScope.settings.layout.pageSidebarClosed = true;
+
+   
+    $scope.closeAlert = function(index){
+        $scope.alerts.splice(index, 1);
+    };
+
+});
 
 
 
@@ -585,7 +627,7 @@ angular.module('LabMonitoring').controller('ConsoleTableController',  function($
         $scope.alerts.splice(index, 1);
     };
 
-
+    $rootScope.settings.layout.pageSidebarClosed = true;
 
 
 });
@@ -1553,9 +1595,9 @@ angular.module('LabMonitoring').controller('LabTrendController', function($rootS
                 ins = {};
             }
             var chart = nv.models.multiBarChart()
-                        .showControls(false)
+                        .showControls(true)
                 .stacked(true);
-
+            d3.selectAll('.nvtooltip').remove();
             d3.select('#chart svg').datum([
                 {
                     key: "Production",
@@ -1697,6 +1739,51 @@ angular.module('LabMonitoring').controller('LoginController', function($rootScop
 });
 
 
+
+
+angular.module('LabMonitoring').controller('ManageConsoleController',  function($rootScope, $scope, $http, $state,  DataService) {
+
+    var urlS = $rootScope.urlS;
+    var aurl = $rootScope.url;
+
+
+   $scope.console =  $rootScope.console;
+
+       $scope.getConsoleBays = function(){
+          var id = $scope.console.id;
+           var url = urlS.bays + id;
+           DataService.get(url).then(function (data) {
+               $scope.bays = data.tools;
+               console.log($scope.bays);
+               
+           }, function (err) {
+               $scope.alerts.push({type: 'danger', msg: 'Sorry!!! Something went wrong. Please try again.'});
+           });
+       }();
+
+
+
+
+
+    
+    $scope.getDeactivatedTools = function(){
+        var url = urlS.inactive_tools;
+        DataService.get(url).then(function (data) {
+            $scope.inactive_tools = data;
+        }, function (err) {
+
+        });
+    }();
+
+
+
+
+
+    $rootScope.settings.layout.pageSidebarClosed = true;
+
+});
+
+
 angular.module('LabMonitoring').controller('ModalController', function ($rootScope,$scope, $state, $uibModalInstance, item, $http,DataService,Upload) {
         if (item) {
             $scope.item = item;
@@ -1733,21 +1820,23 @@ angular.module('LabMonitoring').controller('ModalController', function ($rootSco
         $uibModalInstance.dismiss();
     };
 
-    $scope.edit = function (tool,picFile) {                    
+    $scope.edit = function (item) {
         if(item.name === "" || item.name === undefined){
             console.log('field is required');
         }
         else {
-            var url = urlS.tools+item.id + '/';
+            var id = item.id;
+            var url = 'api/tool_detail/' + id + '/'
+            console.log($scope.item.name, $scope.item.picFile, $scope.item.tool_owner,  $scope.item.bay_number);
             item.upload = Upload.upload({
                 method: 'PATCH',
                 url: $rootScope.baseURL + url,
                 data: {
-                    name: item.name, image: picFile, tool_owner: item.tool_owner, bay_number: item.bay_number
+                   name : $scope.item.name, image: $scope.item.picFile, tool_owner: $scope.item.tool_owner, bay_number: $scope.item.bay_number, bay: 257
                 }
-            }).then(function (resp) {
+            }).then(function (data) {
                 $state.go('main.toolTable');
-            }, function (resp) {
+            }, function (data) {
                 $scope.alerts.push({type: 'danger', msg: 'Sorry!!! Something went wrong. Please try again.'});
             });
             $uibModalInstance.close($scope.changedItem.item);
@@ -2044,7 +2133,7 @@ angular.module('LabMonitoring').controller('ProjectTableController',  function($
         $scope.alerts.splice(index, 1);
     };
 
-
+    $rootScope.settings.layout.pageSidebarClosed = true;
 
 });
 
@@ -2097,7 +2186,7 @@ angular.module('LabMonitoring').controller('ReportGenerationController', functio
         var start =  $scope.start;
         var end =    $scope.end;
         var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
-        var export_url = 'http://152.135.122.61:8871/api/export_tool_xls/?start_date=' + start +'&end_date='+ end
+        var export_url = 'http://152.135.122.61:9999/api/export_tool_xls/?start_date=' + start +'&end_date='+ end
         DataService.get(url_report).then(function () {
             window.location = export_url;
         });
@@ -2107,7 +2196,7 @@ angular.module('LabMonitoring').controller('ReportGenerationController', functio
         var start =  $scope.start;
         var end =    $scope.end;
         var url_report = 'api/export_project_xls/?start_date=' + start +'&end_date='+ end;
-        var export_url = 'http://152.135.122.61:8871/api/export_project_xls/?start_date=' + start +'&end_date='+ end
+        var export_url = 'http://152.135.122.61:9999/api/export_project_xls/?start_date=' + start +'&end_date='+ end
         DataService.get(url_report).then(function () {
             window.location = export_url;
         });
@@ -2116,7 +2205,7 @@ angular.module('LabMonitoring').controller('ReportGenerationController', functio
         var start =  $scope.start;
         var end =    $scope.end;
         var url_report = 'api/export_user_xls/?start_date=' + start +'&end_date='+ end;
-        var export_url = 'http://152.135.122.61:8871/api/export_user_xls/?start_date=' + start +'&end_date='+ end
+        var export_url = 'http://152.135.122.61:9999/api/export_user_xls/?start_date=' + start +'&end_date='+ end
         DataService.get(url_report).then(function () {
             window.location = export_url;
         });
@@ -2132,7 +2221,7 @@ angular.module('LabMonitoring').controller('ReportGenerationController', functio
         var start =  $scope.start;
         var end =    $scope.end;
         var url_report = 'api/export_tools/'+ id +'/?start_date=' + start +'&end_date='+ end
-        var export_url = 'http://152.135.122.61:8871/api/export_tools/'+ id +'?start_date=' + start +'&end_date='+ end
+        var export_url = 'http://152.135.122.61:9999/api/export_tools/'+ id +'?start_date=' + start +'&end_date='+ end
         DataService.get(url_report).then(function () {
             window.location = export_url;
         });
@@ -2161,10 +2250,608 @@ angular.module('LabMonitoring').controller('ReportGenerationController', functio
 
 
 
-
+    $rootScope.settings.layout.pageSidebarClosed = true;
 
 });
 
+
+
+angular.module('LabMonitoring').controller('ToolCategoryController', function($rootScope,$state, $scope, $http, $timeout,DataService,$interval) {
+
+    var urlS = $rootScope.urlS;
+    $scope.alerts = [];
+
+
+
+    $scope.toolCategory = function() {
+        $("#bay1").ready(function () {
+            var url = urlS.tool_category + 31 + '/'
+            DataService.get(url).then(function (data) {
+                $scope.catdetail = data;
+                $("#bay1").
+                $scope.tefficiency = $scope.catdetail.Tool_efficiency;
+                if ($scope.tefficiency === false) {
+                    $('#bay1').css({fill: "rgb(237, 5, 5)"});
+                }
+                else if ($scope.tefficiency === true) {
+                    $('#bay1').css({fill: "rgb(140, 192, 19)"});
+                }
+            }, function (err) {
+
+            });
+        });
+        
+        $("#bay3").ready(function () {
+            var url = urlS.tool_category + 65 + '/'
+            DataService.get(url).then(function (data) {
+                $scope.catdetail = data;
+                $scope.tefficiency = $scope.catdetail.Tool_efficiency;
+                if ($scope.tefficiency === false) {
+                    $('#bay3').css({fill: "rgb(237, 5, 5)"});
+                }
+                else if ($scope.tefficiency === true) {
+                    $('#bay3').css({fill: "rgb(140, 192, 19)"});
+                }
+            }, function (err) {
+
+            });
+        });
+        $("#bay4").ready(function () {
+            var url = urlS.tool_category + 66 + '/'
+            DataService.get(url).then(function (data) {
+                $scope.catdetail = data;
+                $scope.tefficiency = $scope.catdetail.Tool_efficiency;
+                if ($scope.tefficiency === false) {
+                    $('#bay4').css({fill: "rgb(237, 5, 5)"});
+                }
+                else if ($scope.tefficiency === true) {
+                    $('#bay4').css({fill: "rgb(140, 192, 19)"});
+                }
+            }, function (err) {
+
+            });
+        });
+        
+        
+        $("#bay7").ready(function () {
+            var url = urlS.tool_category + 50 + '/'
+            DataService.get(url).then(function (data) {
+                $scope.catdetail = data;
+                $scope.tefficiency = $scope.catdetail.Tool_efficiency;
+                if ($scope.tefficiency === false) {
+                    $('#bay7').css({fill: "rgb(237, 5, 5)"});
+                }
+                else if ($scope.tefficiency === true) {
+                    $('#bay7').css({fill: "rgb(140, 192, 19)"});
+                }
+            }, function (err) {
+
+            });
+        });
+        $("#bay8").ready(function () {
+            var url = urlS.tool_category + 49 + '/'
+            DataService.get(url).then(function (data) {
+                $scope.catdetail = data;
+                $scope.tefficiency = $scope.catdetail.Tool_efficiency;
+                if ($scope.tefficiency === false) {
+                    $('#bay8').css({fill: "rgb(237, 5, 5)"});
+                }
+                else if ($scope.tefficiency === true) {
+                    $('#bay8').css({fill: "rgb(140, 192, 19)"});
+                }
+            }, function (err) {
+
+            });
+        });
+        $("#bay9").ready(function () {
+            var url = urlS.tool_category + 75 + '/'
+            DataService.get(url).then(function (data) {
+                $scope.catdetail = data;
+                $scope.tefficiency = $scope.catdetail.Tool_efficiency;
+                if ($scope.tefficiency === false) {
+                    $('#bay9').css({fill: "rgb(237, 5, 5)"});
+                }
+                else if ($scope.tefficiency === true) {
+                    $('#bay9').css({fill: "rgb(140, 192, 19)"});
+                }
+            }, function (err) {
+
+            });
+        });
+        $("#bay10").ready(function () {
+            var url = urlS.tool_category + 18 + '/'
+            DataService.get(url).then(function (data) {
+                $scope.catdetail = data;
+                $scope.tefficiency = $scope.catdetail.Tool_efficiency;
+                if ($scope.tefficiency === false) {
+                    $('#bay10').css({fill: "rgb(237, 5, 5)"});
+                }
+                else if ($scope.tefficiency === true) {
+                    $('#bay10').css({fill: "rgb(140, 192, 19)"});
+                }
+            }, function (err) {
+
+            });
+        });
+        $("#bay11").ready(function () {
+            var url = urlS.tool_category + 26 + '/'
+            DataService.get(url).then(function (data) {
+                $scope.catdetail = data;
+                $scope.tefficiency = $scope.catdetail.Tool_efficiency;
+                if ($scope.tefficiency === false) {
+                    $('#bay11').css({fill: "rgb(237, 5, 5)"});
+                }
+                else if ($scope.tefficiency === true) {
+                    $('#bay11').css({fill: "rgb(140, 192, 19)"});
+                }
+            }, function (err) {
+
+            });
+        });
+        $("#bay12").ready(function () {
+            var url = urlS.tool_category + 48 + '/'
+            DataService.get(url).then(function (data) {
+                $scope.catdetail = data;
+                $scope.tefficiency = $scope.catdetail.Tool_efficiency;
+                if ($scope.tefficiency === false) {
+                    $('#bay12').css({fill: "rgb(237, 5, 5)"});
+                }
+                else if ($scope.tefficiency === true) {
+                    $('#bay12').css({fill: "rgb(140, 192, 19)"});
+                }
+            }, function (err) {
+
+            });
+        });
+        $("#bay13").ready(function () {
+            var url = urlS.tool_category + 38 + '/'
+            DataService.get(url).then(function (data) {
+                $scope.catdetail = data;
+                $scope.tefficiency = $scope.catdetail.Tool_efficiency;
+                if ($scope.tefficiency === false) {
+                    $('#bay13').css({fill: "rgb(237, 5, 5)"});
+                }
+                else if ($scope.tefficiency === true) {
+                    $('#bay13').css({fill: "rgb(140, 192, 19)"});
+                }
+            }, function (err) {
+
+            });
+        });
+        $("#bay14").ready(function () {
+            var url = urlS.tool_category + 27 + '/'
+            DataService.get(url).then(function (data) {
+                $scope.catdetail = data;
+                $scope.tefficiency = $scope.catdetail.Tool_efficiency;
+                if ($scope.tefficiency === false) {
+                    $('#bay14').css({fill: "rgb(237, 5, 5)"});
+                }
+                else if ($scope.tefficiency === true) {
+                    $('#bay14').css({fill: "rgb(140, 192, 19)"});
+                }
+            }, function (err) {
+
+            });
+        });
+        $("#bay15").ready(function () {
+            var url = urlS.tool_category + 76 + '/'
+            DataService.get(url).then(function (data) {
+                $scope.catdetail = data;
+                $scope.tefficiency = $scope.catdetail.Tool_efficiency;
+                if ($scope.tefficiency === false) {
+                    $('#bay15').css({fill: "rgb(237, 5, 5)"});
+                }
+                else if ($scope.tefficiency === true) {
+                    $('#bay15').css({fill: "rgb(140, 192, 19)"});
+                }
+            }, function (err) {
+
+            });
+        });
+        $("#bay16").ready(function () {
+            var url = urlS.tool_category + 55 + '/'
+            DataService.get(url).then(function (data) {
+                $scope.catdetail = data;
+                $scope.tefficiency = $scope.catdetail.Tool_efficiency;
+                if ($scope.tefficiency === false) {
+                    $('#bay16').css({fill: "rgb(237, 5, 5)"});
+                }
+                else if ($scope.tefficiency === true) {
+                    $('#bay16').css({fill: "rgb(140, 192, 19)"});
+                }
+            }, function (err) {
+
+            });
+        });
+        $("#bay17").ready(function () {
+            var url = urlS.tool_category + 53 + '/'
+            DataService.get(url).then(function (data) {
+                $scope.catdetail = data;
+                $scope.tefficiency = $scope.catdetail.Tool_efficiency;
+                if ($scope.tefficiency === false) {
+                    $('#bay17').css({fill: "rgb(237, 5, 5)"});
+                }
+                else if ($scope.tefficiency === true) {
+                    $('#bay17').css({fill: "rgb(140, 192, 19)"});
+                }
+            }, function (err) {
+
+            });
+        });
+        $("#bay18").ready(function () {
+            var url = urlS.tool_category + 54 + '/'
+            DataService.get(url).then(function (data) {
+                $scope.catdetail = data;
+                $scope.tefficiency = $scope.catdetail.Tool_efficiency;
+                if ($scope.tefficiency === false) {
+                    $('#bay18').css({fill: "rgb(237, 5, 5)"});
+                }
+                else if ($scope.tefficiency === true) {
+                    $('#bay18').css({fill: "rgb(140, 192, 19)"});
+                }
+            }, function (err) {
+
+            });
+        });
+        $("#bay19").ready(function () {
+            var url = urlS.tool_category + 72 + '/'
+            DataService.get(url).then(function (data) {
+                $scope.catdetail = data;
+                $scope.tefficiency = $scope.catdetail.Tool_efficiency;
+                if ($scope.tefficiency === false) {
+                    $('#bay19').css({fill: "rgb(237, 5, 5)"});
+                }
+                else if ($scope.tefficiency === true) {
+                    $('#bay19').css({fill: "rgb(140, 192, 19)"});
+                }
+            }, function (err) {
+
+            });
+        });
+        
+        $("#bay21").ready(function () {
+            var url = urlS.tool_category + 58 + '/'
+            DataService.get(url).then(function (data) {
+                $scope.catdetail = data;
+                $scope.tefficiency = $scope.catdetail.Tool_efficiency;
+                if ($scope.tefficiency === false) {
+                    $('#bay21').css({fill: "rgb(237, 5, 5)"});
+                }
+                else if ($scope.tefficiency === true) {
+                    $('#bay21').css({fill: "rgb(140, 192, 19)"});
+                }
+            }, function (err) {
+
+            });
+        });
+        $("#bay22").ready(function () {
+            var url = urlS.tool_category + 52 + '/'
+            DataService.get(url).then(function (data) {
+                $scope.catdetail = data;
+                $scope.tefficiency = $scope.catdetail.Tool_efficiency;
+                if ($scope.tefficiency === false) {
+                    $('#bay22').css({fill: "rgb(237, 5, 5)"});
+                }
+                else if ($scope.tefficiency === true) {
+                    $('#bay22').css({fill: "rgb(140, 192, 19)"});
+                }
+            }, function (err) {
+
+            });
+        });
+        
+        $("#bay24").ready(function () {
+            var url = urlS.tool_category + 14 + '/'
+            DataService.get(url).then(function (data) {
+                $scope.catdetail = data;
+                $scope.tefficiency = $scope.catdetail.Tool_efficiency;
+                if ($scope.tefficiency === false) {
+                    $('#bay24').css({fill: "rgb(237, 5, 5)"});
+                }
+                else if ($scope.tefficiency === true) {
+                    $('#bay24').css({fill: "rgb(140, 192, 19)"});
+                }
+            }, function (err) {
+
+            });
+        });
+        $("#bay25").ready(function () {
+            var url = urlS.tool_category + 16 + '/'
+            DataService.get(url).then(function (data) {
+                $scope.catdetail = data;
+                $scope.tefficiency = $scope.catdetail.Tool_efficiency;
+                if ($scope.tefficiency === false) {
+                    $('#bay25').css({fill: "rgb(237, 5, 5)"});
+                }
+                else if ($scope.tefficiency === true) {
+                    $('#bay25').css({fill: "rgb(140, 192, 19)"});
+                }
+            }, function (err) {
+
+            });
+        });
+        $("#bay26").ready(function () {
+            var url = urlS.tool_category + 15 + '/'
+            DataService.get(url).then(function (data) {
+                $scope.catdetail = data;
+                $scope.tefficiency = $scope.catdetail.Tool_efficiency;
+                if ($scope.tefficiency === false) {
+                    $('#bay26').css({fill: "rgb(237, 5, 5)"});
+                }
+                else if ($scope.tefficiency === true) {
+                    $('#bay26').css({fill: "rgb(140, 192, 19)"});
+                }
+            }, function (err) {
+
+            });
+        });
+        $("#bay27").ready(function () {
+            var url = urlS.tool_category + 7 + '/'
+            DataService.get(url).then(function (data) {
+                $scope.catdetail = data;
+                $scope.tefficiency = $scope.catdetail.Tool_efficiency;
+                if ($scope.tefficiency === false) {
+                    $('#bay27').css({fill: "rgb(237, 5, 5)"});
+                }
+                else if ($scope.tefficiency === true) {
+                    $('#bay27').css({fill: "rgb(140, 192, 19)"});
+                }
+            }, function (err) {
+
+            });
+        });
+        $("#bay28").ready(function () {
+            var url = urlS.tool_category + 28 + '/'
+            DataService.get(url).then(function (data) {
+                $scope.catdetail = data;
+                $scope.tefficiency = $scope.catdetail.Tool_efficiency;
+                if ($scope.tefficiency === false) {
+                    $('#bay28').css({fill: "rgb(237, 5, 5)"});
+                }
+                else if ($scope.tefficiency === true) {
+                    $('#bay28').css({fill: "rgb(140, 192, 19)"});
+                }
+            }, function (err) {
+
+            });
+        });
+        $("#bay29").ready(function () {
+            var url = urlS.tool_category + 59 + '/'
+            DataService.get(url).then(function (data) {
+                $scope.catdetail = data;
+                $scope.tefficiency = $scope.catdetail.Tool_efficiency;
+                if ($scope.tefficiency === false) {
+                    $('#bay29').css({fill: "rgb(237, 5, 5)"});
+                }
+                else if ($scope.tefficiency === true) {
+                    $('#bay29').css({fill: "rgb(140, 192, 19)"});
+                }
+            }, function (err) {
+
+            });
+        });
+        $("#bay30").ready(function () {
+            var url = urlS.tool_category + 68 + '/'
+            DataService.get(url).then(function (data) {
+                $scope.catdetail = data;
+                $scope.tefficiency = $scope.catdetail.Tool_efficiency;
+                if ($scope.tefficiency === false) {
+                    $('#bay30').css({fill: "rgb(237, 5, 5)"});
+                }
+                else if ($scope.tefficiency === true) {
+                    $('#bay30').css({fill: "rgb(140, 192, 19)"});
+                }
+            }, function (err) {
+
+            });
+        });
+        $("#bay31").ready(function () {
+            var url = urlS.tool_category + 30 + '/'
+            DataService.get(url).then(function (data) {
+                $scope.catdetail = data;
+                $scope.tefficiency = $scope.catdetail.Tool_efficiency;
+                if ($scope.tefficiency === false) {
+                    $('#bay31').css({fill: "rgb(237, 5, 5)"});
+                }
+                else if ($scope.tefficiency === true) {
+                    $('#bay31').css({fill: "rgb(140, 192, 19)"});
+                }
+            }, function (err) {
+
+            });
+        });
+        
+        $("#bay33").ready(function () {
+            var url = urlS.tool_category + 71 + '/'
+            DataService.get(url).then(function (data) {
+                $scope.catdetail = data;
+                $scope.tefficiency = $scope.catdetail.Tool_efficiency;
+                if ($scope.tefficiency === false) {
+                    $('#bay33').css({fill: "rgb(237, 5, 5)"});
+                }
+                else if ($scope.tefficiency === true) {
+                    $('#bay33').css({fill: "rgb(140, 192, 19)"});
+                }
+            }, function (err) {
+
+            });
+        });
+        $("#bay34").ready(function () {
+            var url = urlS.tool_category + 29 + '/'
+            DataService.get(url).then(function (data) {
+                $scope.catdetail = data;
+                $scope.tefficiency = $scope.catdetail.Tool_efficiency;
+                if ($scope.tefficiency === false) {
+                    $('#bay34').css({fill: "rgb(237, 5, 5)"});
+                }
+                else if ($scope.tefficiency === true) {
+                    $('#bay34').css({fill: "rgb(140, 192, 19)"});
+                }
+            }, function (err) {
+
+            });
+        });
+        $("#bay35").ready(function () {
+            var url = urlS.tool_category + 60 + '/'
+            DataService.get(url).then(function (data) {
+                $scope.catdetail = data;
+                $scope.tefficiency = $scope.catdetail.Tool_efficiency;
+                if ($scope.tefficiency === false) {
+                    $('#bay35').css({fill: "rgb(237, 5, 5)"});
+                }
+                else if ($scope.tefficiency === true) {
+                    $('#bay35').css({fill: "rgb(140, 192, 19)"});
+                }
+            }, function (err) {
+
+            });
+        });
+        $("#bay36").ready(function () {
+            var url = urlS.tool_category + 61 + '/'
+            DataService.get(url).then(function (data) {
+                $scope.catdetail = data;
+                $scope.tefficiency = $scope.catdetail.Tool_efficiency;
+                if ($scope.tefficiency === false) {
+                    $('#bay36').css({fill: "rgb(237, 5, 5)"});
+                }
+                else if ($scope.tefficiency === true) {
+                    $('#bay36').css({fill: "rgb(140, 192, 19)"});
+                }
+            }, function (err) {
+
+            });
+        });
+        $("#bay37").ready(function () {
+            var url = urlS.tool_category + 62 + '/'
+            DataService.get(url).then(function (data) {
+                $scope.catdetail = data;
+                $scope.tefficiency = $scope.catdetail.Tool_efficiency;
+                if ($scope.tefficiency === false) {
+                    $('#bay37').css({fill: "rgb(237, 5, 5)"});
+                }
+                else if ($scope.tefficiency === true) {
+                    $('#bay37').css({fill: "rgb(140, 192, 19)"});
+                }
+            }, function (err) {
+
+            });
+        });
+        $("#bay38").ready(function () {
+            var url = urlS.tool_category + 43 + '/'
+            DataService.get(url).then(function (data) {
+                $scope.catdetail = data;
+                $scope.tefficiency = $scope.catdetail.Tool_efficiency;
+                if ($scope.tefficiency === false) {
+                    $('#bay38').css({fill: "rgb(237, 5, 5)"});
+                }
+                else if ($scope.tefficiency === true) {
+                    $('#bay38').css({fill: "rgb(140, 192, 19)"});
+                }
+            }, function (err) {
+
+            });
+        });
+        $("#bay39").ready(function () {
+            var url = urlS.tool_category + 44 + '/'
+            DataService.get(url).then(function (data) {
+                $scope.catdetail = data;
+                $scope.tefficiency = $scope.catdetail.Tool_efficiency;
+                if ($scope.tefficiency === false) {
+                    $('#bay39').css({fill: "rgb(237, 5, 5)"});
+                }
+                else if ($scope.tefficiency === true) {
+                    $('#bay39').css({fill: "rgb(140, 192, 19)"});
+                }
+            }, function (err) {
+
+            });
+        });
+        $("#bay40").ready(function () {
+            var url = urlS.tool_category + 45 + '/'
+            DataService.get(url).then(function (data) {
+                $scope.catdetail = data;
+                $scope.tefficiency = $scope.catdetail.Tool_efficiency;
+                if ($scope.tefficiency === false) {
+                    $('#bay40').css({fill: "rgb(237, 5, 5)"});
+                }
+                else if ($scope.tefficiency === true) {
+                    $('#bay40').css({fill: "rgb(140, 192, 19)"});
+                }
+            }, function (err) {
+
+            });
+        });
+        $("#bay41").ready(function () {
+            var url = urlS.tool_category + 46 + '/'
+            DataService.get(url).then(function (data) {
+                $scope.catdetail = data;
+                $scope.tefficiency = $scope.catdetail.Tool_efficiency;
+                if ($scope.tefficiency === false) {
+                    $('#bay41').css({fill: "rgb(237, 5, 5)"});
+                }
+                else if ($scope.tefficiency === true) {
+                    $('#bay41').css({fill: "rgb(140, 192, 19)"});
+                }
+            }, function (err) {
+
+            });
+        });
+        $("#bay42").ready(function () {
+            var url = urlS.tool_category + 67 + '/'
+            DataService.get(url).then(function (data) {
+                $scope.catdetail = data;
+                $scope.tefficiency = $scope.catdetail.Tool_efficiency;
+                if ($scope.tefficiency === false) {
+                    $('#bay42').css({fill: "rgb(237, 5, 5)"});
+                }
+                else if ($scope.tefficiency === true) {
+                    $('#bay42').css({fill: "rgb(140, 192, 19)"});
+                }
+            }, function (err) {
+
+            });
+        });
+        $("#bay43").ready(function () {
+            var url = urlS.tool_category + 74 + '/'
+            DataService.get(url).then(function (data) {
+                $scope.catdetail = data;
+
+                $scope.tefficiency = $scope.catdetail.Tool_efficiency;
+                if ($scope.tefficiency === false) {
+                    $('#bay43').css({fill: "rgb(237, 5, 5)"});
+                }
+                else if ($scope.tefficiency === true) {
+                    $('#bay43').css({fill: "rgb(140, 192, 19)"});
+                }
+            }, function (err) {
+
+            });
+        });
+        
+        
+        
+    }();
+
+    refreshMap = $interval($scope.toolCategory, 200000);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    $rootScope.settings.layout.pageSidebarClosed = true;
+
+});
 
 
 angular.module('LabMonitoring').controller('ToolController',  function($rootScope, $scope, settings, $state,DataService) {
@@ -2186,14 +2873,6 @@ angular.module('LabMonitoring').controller('ToolController',  function($rootScop
         });
     }
 
-    
-    $scope.toolstat = function(id){
-        $rootScope.id = id;
-        $state.go('main.tool.status');
-    }
-
-
-
 
 
     $scope.getTools =  function() {
@@ -2214,7 +2893,7 @@ angular.module('LabMonitoring').controller('ToolController',  function($rootScop
         $scope.alerts.splice(index, 1);
     };
 
-
+    $rootScope.settings.layout.pageSidebarClosed = true;
 
 });
 
@@ -2585,8 +3264,6 @@ angular.module('LabMonitoring').controller('ToolTableController', function($root
     }
 
 
-    
-
 
 
 
@@ -2700,7 +3377,7 @@ angular.module('LabMonitoring').controller('ToolTableController', function($root
     $scope.closeAlert = function(index){
         $scope.alerts.splice(index, 1);
     };
-
+    $rootScope.settings.layout.pageSidebarClosed = true;
 });
 
 
@@ -2822,7 +3499,7 @@ angular.module('LabMonitoring').controller('UsersTableController', function($roo
     $scope.closeAlert = function(index){
         $scope.alerts.splice(index, 1);
     };
-
+    $rootScope.settings.layout.pageSidebarClosed = true;
 });
 
 

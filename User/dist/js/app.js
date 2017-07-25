@@ -223,7 +223,7 @@ angular.module('LabMonitoring').controller('DashboardController', function($root
 
         });
     }
-
+    $scope.qtrpie();
 
     $scope.setId = function (id) {
         $rootScope.id = id;
@@ -1134,7 +1134,7 @@ angular.module('LabMonitoring').controller('LabTrendController', function($rootS
                 ins = {};
             }
             var chart = nv.models.multiBarChart()
-                .showControls(false)
+                .showControls(true)
                 .stacked(true);
 
             d3.select('#chart svg').datum([

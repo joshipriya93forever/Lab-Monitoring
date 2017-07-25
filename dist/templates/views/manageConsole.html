@@ -1,0 +1,69 @@
+<div class="portlet light portlet-fit bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class=" fa fa-area-chart font-green"></i>
+            <span class="caption-subject font-green bold uppercase">Manage Console</span>
+        </div>
+        <div id="help" class="actions dash">
+
+        </div>
+    </div>
+
+    <div class="portlet-body">
+        <form name="toolform" class="css-form" ng-submit="addToolDetails(picFile)" novalidate>
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-6" ng-repeat="bay in bays">
+                <div class="portlet box blue-hoki">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="fa fa-wrench"></i>Bay {{bay.bay_number}} </div>
+                        <!--<div class="actions">
+                            <a href="javascript:;" class="btn btn-default btn-sm">
+                                <i class="fa fa-pencil"></i> Edit </a>
+                            <a href="javascript:;" class="btn btn-default btn-sm">
+                                <i class="fa fa-plus"></i> Add </a>
+                        </div>-->
+                    </div>
+                    <div class="portlet-body form">
+                        <div class="portlet light profile-sidebar-portlet" ng-class="{'idle' : bay.status === 'ID', 'productive' : bay.status === 'PR', 'instal' : bay.status === 'IN', 'maintenance' : bay.status === 'MA'}">
+
+                            <!-- SIDEBAR USERPIC -->
+                            <div class="profile-userpic __web-inspector-hide-shortcut__">
+                                <img src=src="{{bay.image_url}}" class="img-responsive" alt=""> </div>
+                            <!-- END SIDEBAR USERPIC -->
+                            <!-- SIDEBAR USER TITLE -->
+                            <div class="profile-usertitle">
+                                <div class="profile-usertitle-name ng-binding">{{bay.name}}</div>
+                            </div>
+
+                        </div>
+                            <div class="row" style="padding-left: 20px;">
+                                <div class="form-group form-sm-line-input has-info">
+                                    <select name="repeatSelect" id="repeatSelect" ng-model="tool_owner" required data-placeholder="Select Tool">
+                                        <option ng-repeat="tool in inactive_tools" value="{{tool.id}}">{{tool.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                             <div class="row" >
+                            <div class="form-actions noborder">
+                                <button type="submit" class="btn blue">Submit</button>
+                            </div>
+                        </div>
+
+
+                    </div>
+                        </div>
+                    </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+
+<div class="scroll-to-top" ui-sref="main.consoleTable"  style="display: block;">
+    <div class="btn-group btn-group-justified" style="width: 70px;">
+        <a  class="btn blue">
+            <i class="icon-back"></i> Back </a>
+    </div>
+</div>

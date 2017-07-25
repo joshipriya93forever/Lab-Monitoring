@@ -8,7 +8,7 @@
                 <i class="icon-pencil"></i>Edit <span class="upercase" ng-model="item.name">{{item.name}}</span> </div>
         </div>
         <div class="portlet-body form">
-            <form role="form" name="itemForm" class="form-horizontal form-row-seperated" ng-submit="edit(item,picFile)" novalidate>
+            <form role="form" name="itemForm" class="form-horizontal form-row-seperated" ng-submit="edit(item)" novalidate>
                 <div class="form-body">
                     <div class="form-group" ng-class="{'has-error': itemForm.tname.$error.required (!itemForm.$pristine || itemForm.$submitted)}">
                         <label class="col-sm-4 control-label">Tool Name<span class="required"> * </span></label>
@@ -49,7 +49,7 @@
                             <label class="control-label col-md-3">Upload Tool Image </label>
                             <img ng-show="myForm.file.$valid" ngf-thumbnail="picFile" class="large">
                             <button ng-click="picFile = null" ng-show="picFile">Remove</button>
-                            <input type="file" ngf-select ng-model="picFile" name="file"
+                            <input type="file" ngf-select ng-model="item.picFile" name="file"
                                    accept="image/png" ngf-max-size="2MB"
                                    ngf-model-invalid="errorFile">
                             <i ng-show="myForm.file.$error.required">*required</i><br>
