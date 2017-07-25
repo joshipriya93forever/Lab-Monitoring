@@ -28,23 +28,21 @@
                 </div>
                 <div class="portlet-body">
 
-                    <table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_1">
+                    <table class="table table-striped table-bordered table-hover table-checkable order-column category" id="sample_1">
                         <thead>
                         <tr>
                             <th>Tool Name</th>
                             <th>Bay No.</th>
                             <th>Tool Category</th>
-                            <th>Tool Threshold</th>
+                            <th>Tool Threshold in %</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr class="odd gradeX" dir-paginate="toolCat in toolCats | filter:q | itemsPerPage: pageSize" current-page="currentPage" pagination-id="toolsPagination" >
-
                             <td value="tool name">{{ toolCat.Tool_Name }}</td>
                             <td>{{ toolCat.Bay_number }}</td>
-                            <td ng-class="{'process' : toolCat.Tool_Category === 'Process', 'quall' : toolCat.Tool_Category === 'Qualifications', 'fissue' : toolCat.Tool_Category === 'Field Issue'}">{{ toolCat.Tool_Category }}</td>
-                            <td>{{ toolCat.tool_owner.first_name}}</td>
-                            <td ng-class="{'under' : toolCat.Tool_efficiency === 'false', 'above' : toolCat.Tool_efficiency === 'true'}">{{ toolCat.Tool_Threshold }}</td>
+                            <td ng-class="{'process' : toolCat.Tool_Category === 'Process', 'quall' : toolCat.Tool_Category === 'Qualifications', 'fissue' : toolCat.Tool_Category === 'Field Issues'}">{{ toolCat.Tool_Category }}</td>
+                            <td ng-class="{'under' : toolCat.Tool_efficiency === false, 'above' : toolCat.Tool_efficiency === true}">{{ toolCat.Tool_Threshold }} %</td>
 
                         </tr>
                         </tbody>

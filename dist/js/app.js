@@ -471,7 +471,7 @@ angular.module('LabMonitoring').controller('CategoryTableController', function($
 
 
     $rootScope.getToolDetails = function(){
-        var url = urlS.tool_category
+        var url = urlS.category_list
         DataService.get(url).then(function (data) {
             $scope.toolCats = data;
         }, function (err) {

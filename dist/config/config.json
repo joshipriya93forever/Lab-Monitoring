@@ -8,7 +8,8 @@
     "users" : "api/user/user_info/",
     "groups" : "api/user/usergroup/",
     "inactive_tools" : "/api/tool_list/nonactivetools/",
-    "tool_category" : "api/tool_category_data/"
+    "tool_category" : "api/tool_category_data/",
+    "category_list" : "api/tool_category_list/"
   },
   "url" :{
     "tool" : "/tools/",
