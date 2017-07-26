@@ -2186,7 +2186,7 @@ angular.module('LabMonitoring').controller('ReportGenerationController', functio
         var start =  $scope.start;
         var end =    $scope.end;
         var url_report = 'api/export_tool_xls/?start_date=' + start +'&end_date='+ end
-        var export_url = 'http://152.135.122.61:9999/api/export_tool_xls/?start_date=' + start +'&end_date='+ end
+        var export_url = 'http://152.135.122.61:8871/api/export_tool_xls/?start_date=' + start +'&end_date='+ end
         DataService.get(url_report).then(function () {
             window.location = export_url;
         });
@@ -2196,7 +2196,7 @@ angular.module('LabMonitoring').controller('ReportGenerationController', functio
         var start =  $scope.start;
         var end =    $scope.end;
         var url_report = 'api/export_project_xls/?start_date=' + start +'&end_date='+ end;
-        var export_url = 'http://152.135.122.61:9999/api/export_project_xls/?start_date=' + start +'&end_date='+ end
+        var export_url = 'http://152.135.122.61:8871/api/export_project_xls/?start_date=' + start +'&end_date='+ end
         DataService.get(url_report).then(function () {
             window.location = export_url;
         });
@@ -2205,7 +2205,7 @@ angular.module('LabMonitoring').controller('ReportGenerationController', functio
         var start =  $scope.start;
         var end =    $scope.end;
         var url_report = 'api/export_user_xls/?start_date=' + start +'&end_date='+ end;
-        var export_url = 'http://152.135.122.61:9999/api/export_user_xls/?start_date=' + start +'&end_date='+ end
+        var export_url = 'http://152.135.122.61:8871/api/export_user_xls/?start_date=' + start +'&end_date='+ end
         DataService.get(url_report).then(function () {
             window.location = export_url;
         });
@@ -2221,7 +2221,7 @@ angular.module('LabMonitoring').controller('ReportGenerationController', functio
         var start =  $scope.start;
         var end =    $scope.end;
         var url_report = 'api/export_tools/'+ id +'/?start_date=' + start +'&end_date='+ end
-        var export_url = 'http://152.135.122.61:9999/api/export_tools/'+ id +'?start_date=' + start +'&end_date='+ end
+        var export_url = 'http://152.135.122.61:8871/api/export_tools/'+ id +'?start_date=' + start +'&end_date='+ end
         DataService.get(url_report).then(function () {
             window.location = export_url;
         });
