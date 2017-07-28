@@ -470,21 +470,63 @@ angular.module('LabMonitoring').controller('CategoryTableController', function($
 
 
 
-    $rootScope.getToolDetails = function(){
+    $rootScope.getToolCategoryList = function(){
         var url = urlS.category_list
         DataService.get(url).then(function (data) {
             $scope.toolCats = data;
         }, function (err) {
             $scope.alerts.push({type: 'danger', msg: 'Sorry we are not able to get table information.Please try again.'});
         });
-    }
-    $rootScope.getToolDetails();                    
+    }();
 
 
     
     $scope.currentPage = 1;
     $scope.pageSize = 10;
     $scope.tools = [];
+
+
+
+
+    $rootScope.clock = "loading clock...";
+    $scope.tickInterval = 1000
+
+    var tick = function() {
+        $rootScope.clock = Date.now()
+        $timeout(tick, $scope.tickInterval);
+    }
+
+   
+    $timeout(tick, $scope.tickInterval);
+
+
+
+
+    Date.prototype.formatMMDDYYYY = function() {
+        return (this.getMonth() + 1) +
+            "/" +  this.getDate() +
+            "/" +  this.getFullYear();
+    }
+
+    $scope.date = {
+        startDate: '2017-02-18',
+        endDate: moment().format('YYYY-MM-DD')
+    };
+
+    $scope.setStartDate = function () {
+        $scope.date.startDate = moment().subtract(4, "days");
+    };
+
+    $scope.start = '2017-02-18';
+    $scope.end = moment().format('YYYY-MM-DD');
+
+
+    $('#toolcategory').on('apply.daterangepicker', function(ev, picker) {
+        $scope.start = picker.startDate.format('YYYY-MM-DD');
+        $scope.end = picker.endDate.format('YYYY-MM-DD');
+        $scope.labTrendBar();
+    });
+
 
 
 
@@ -2264,48 +2306,50 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
 
 
     $scope.toolCategory = function() {
-        $("#bay1").ready(function () {
+        $("#lab1").ready(function () {
             var url = urlS.tool_category + 31 + '/'
             DataService.get(url).then(function (data) {
                 $scope.catdetail = data;
-                $("#bay1").
+
+                $("#lab1" ).append( "<title>"+ $scope.catdetail +"</title>" );
+
                 $scope.tefficiency = $scope.catdetail.Tool_efficiency;
                 if ($scope.tefficiency === false) {
-                    $('#bay1').css({fill: "rgb(237, 5, 5)"});
+                    $('#lab1').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
                 else if ($scope.tefficiency === true) {
-                    $('#bay1').css({fill: "rgb(140, 192, 19)"});
+                    $('#lab1').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
             }, function (err) {
 
             });
         });
         
-        $("#bay3").ready(function () {
+        $("#lab3").ready(function () {
             var url = urlS.tool_category + 65 + '/'
             DataService.get(url).then(function (data) {
                 $scope.catdetail = data;
                 $scope.tefficiency = $scope.catdetail.Tool_efficiency;
                 if ($scope.tefficiency === false) {
-                    $('#bay3').css({fill: "rgb(237, 5, 5)"});
+                    $('#lab3').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
                 else if ($scope.tefficiency === true) {
-                    $('#bay3').css({fill: "rgb(140, 192, 19)"});
+                    $('#lab3').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
             }, function (err) {
 
             });
         });
-        $("#bay4").ready(function () {
+        $("#lab4").ready(function () {
             var url = urlS.tool_category + 66 + '/'
             DataService.get(url).then(function (data) {
                 $scope.catdetail = data;
                 $scope.tefficiency = $scope.catdetail.Tool_efficiency;
                 if ($scope.tefficiency === false) {
-                    $('#bay4').css({fill: "rgb(237, 5, 5)"});
+                    $('#lab4').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
                 else if ($scope.tefficiency === true) {
-                    $('#bay4').css({fill: "rgb(140, 192, 19)"});
+                    $('#lab4').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
             }, function (err) {
 
@@ -2313,515 +2357,515 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
         });
         
         
-        $("#bay7").ready(function () {
+        $("#lab7").ready(function () {
             var url = urlS.tool_category + 50 + '/'
             DataService.get(url).then(function (data) {
                 $scope.catdetail = data;
                 $scope.tefficiency = $scope.catdetail.Tool_efficiency;
                 if ($scope.tefficiency === false) {
-                    $('#bay7').css({fill: "rgb(237, 5, 5)"});
+                    $('#lab7').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
                 else if ($scope.tefficiency === true) {
-                    $('#bay7').css({fill: "rgb(140, 192, 19)"});
+                    $('#lab7').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
             }, function (err) {
 
             });
         });
-        $("#bay8").ready(function () {
+        $("#lab8").ready(function () {
             var url = urlS.tool_category + 49 + '/'
             DataService.get(url).then(function (data) {
                 $scope.catdetail = data;
                 $scope.tefficiency = $scope.catdetail.Tool_efficiency;
                 if ($scope.tefficiency === false) {
-                    $('#bay8').css({fill: "rgb(237, 5, 5)"});
+                    $('#lab8').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
                 else if ($scope.tefficiency === true) {
-                    $('#bay8').css({fill: "rgb(140, 192, 19)"});
+                    $('#lab8').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
             }, function (err) {
 
             });
         });
-        $("#bay9").ready(function () {
+        $("#lab9").ready(function () {
             var url = urlS.tool_category + 75 + '/'
             DataService.get(url).then(function (data) {
                 $scope.catdetail = data;
                 $scope.tefficiency = $scope.catdetail.Tool_efficiency;
                 if ($scope.tefficiency === false) {
-                    $('#bay9').css({fill: "rgb(237, 5, 5)"});
+                    $('#lab9').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
                 else if ($scope.tefficiency === true) {
-                    $('#bay9').css({fill: "rgb(140, 192, 19)"});
+                    $('#lab9').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
             }, function (err) {
 
             });
         });
-        $("#bay10").ready(function () {
+        $("#lab10").ready(function () {
             var url = urlS.tool_category + 18 + '/'
             DataService.get(url).then(function (data) {
                 $scope.catdetail = data;
                 $scope.tefficiency = $scope.catdetail.Tool_efficiency;
                 if ($scope.tefficiency === false) {
-                    $('#bay10').css({fill: "rgb(237, 5, 5)"});
+                    $('#lab10').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
                 else if ($scope.tefficiency === true) {
-                    $('#bay10').css({fill: "rgb(140, 192, 19)"});
+                    $('#lab10').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
             }, function (err) {
 
             });
         });
-        $("#bay11").ready(function () {
+        $("#lab11").ready(function () {
             var url = urlS.tool_category + 26 + '/'
             DataService.get(url).then(function (data) {
                 $scope.catdetail = data;
                 $scope.tefficiency = $scope.catdetail.Tool_efficiency;
                 if ($scope.tefficiency === false) {
-                    $('#bay11').css({fill: "rgb(237, 5, 5)"});
+                    $('#lab11').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
                 else if ($scope.tefficiency === true) {
-                    $('#bay11').css({fill: "rgb(140, 192, 19)"});
+                    $('#lab11').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
             }, function (err) {
 
             });
         });
-        $("#bay12").ready(function () {
+        $("#lab12").ready(function () {
             var url = urlS.tool_category + 48 + '/'
             DataService.get(url).then(function (data) {
                 $scope.catdetail = data;
                 $scope.tefficiency = $scope.catdetail.Tool_efficiency;
                 if ($scope.tefficiency === false) {
-                    $('#bay12').css({fill: "rgb(237, 5, 5)"});
+                    $('#lab12').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
                 else if ($scope.tefficiency === true) {
-                    $('#bay12').css({fill: "rgb(140, 192, 19)"});
+                    $('#lab12').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
             }, function (err) {
 
             });
         });
-        $("#bay13").ready(function () {
+        $("#lab13").ready(function () {
             var url = urlS.tool_category + 38 + '/'
             DataService.get(url).then(function (data) {
                 $scope.catdetail = data;
                 $scope.tefficiency = $scope.catdetail.Tool_efficiency;
                 if ($scope.tefficiency === false) {
-                    $('#bay13').css({fill: "rgb(237, 5, 5)"});
+                    $('#lab13').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
                 else if ($scope.tefficiency === true) {
-                    $('#bay13').css({fill: "rgb(140, 192, 19)"});
+                    $('#lab13').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
             }, function (err) {
 
             });
         });
-        $("#bay14").ready(function () {
+        $("#lab14").ready(function () {
             var url = urlS.tool_category + 27 + '/'
             DataService.get(url).then(function (data) {
                 $scope.catdetail = data;
                 $scope.tefficiency = $scope.catdetail.Tool_efficiency;
                 if ($scope.tefficiency === false) {
-                    $('#bay14').css({fill: "rgb(237, 5, 5)"});
+                    $('#lab14').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
                 else if ($scope.tefficiency === true) {
-                    $('#bay14').css({fill: "rgb(140, 192, 19)"});
+                    $('#lab14').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
             }, function (err) {
 
             });
         });
-        $("#bay15").ready(function () {
+        $("#lab15").ready(function () {
             var url = urlS.tool_category + 76 + '/'
             DataService.get(url).then(function (data) {
                 $scope.catdetail = data;
                 $scope.tefficiency = $scope.catdetail.Tool_efficiency;
                 if ($scope.tefficiency === false) {
-                    $('#bay15').css({fill: "rgb(237, 5, 5)"});
+                    $('#lab15').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
                 else if ($scope.tefficiency === true) {
-                    $('#bay15').css({fill: "rgb(140, 192, 19)"});
+                    $('#lab15').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
             }, function (err) {
 
             });
         });
-        $("#bay16").ready(function () {
+        $("#lab16").ready(function () {
             var url = urlS.tool_category + 55 + '/'
             DataService.get(url).then(function (data) {
                 $scope.catdetail = data;
                 $scope.tefficiency = $scope.catdetail.Tool_efficiency;
                 if ($scope.tefficiency === false) {
-                    $('#bay16').css({fill: "rgb(237, 5, 5)"});
+                    $('#lab16').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
                 else if ($scope.tefficiency === true) {
-                    $('#bay16').css({fill: "rgb(140, 192, 19)"});
+                    $('#lab16').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
             }, function (err) {
 
             });
         });
-        $("#bay17").ready(function () {
+        $("#lab17").ready(function () {
             var url = urlS.tool_category + 53 + '/'
             DataService.get(url).then(function (data) {
                 $scope.catdetail = data;
                 $scope.tefficiency = $scope.catdetail.Tool_efficiency;
                 if ($scope.tefficiency === false) {
-                    $('#bay17').css({fill: "rgb(237, 5, 5)"});
+                    $('#lab17').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
                 else if ($scope.tefficiency === true) {
-                    $('#bay17').css({fill: "rgb(140, 192, 19)"});
+                    $('#lab17').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
             }, function (err) {
 
             });
         });
-        $("#bay18").ready(function () {
+        $("#lab18").ready(function () {
             var url = urlS.tool_category + 54 + '/'
             DataService.get(url).then(function (data) {
                 $scope.catdetail = data;
                 $scope.tefficiency = $scope.catdetail.Tool_efficiency;
                 if ($scope.tefficiency === false) {
-                    $('#bay18').css({fill: "rgb(237, 5, 5)"});
+                    $('#lab18').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
                 else if ($scope.tefficiency === true) {
-                    $('#bay18').css({fill: "rgb(140, 192, 19)"});
+                    $('#lab18').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
             }, function (err) {
 
             });
         });
-        $("#bay19").ready(function () {
+        $("#lab19").ready(function () {
             var url = urlS.tool_category + 72 + '/'
             DataService.get(url).then(function (data) {
                 $scope.catdetail = data;
                 $scope.tefficiency = $scope.catdetail.Tool_efficiency;
                 if ($scope.tefficiency === false) {
-                    $('#bay19').css({fill: "rgb(237, 5, 5)"});
+                    $('#lab19').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
                 else if ($scope.tefficiency === true) {
-                    $('#bay19').css({fill: "rgb(140, 192, 19)"});
+                    $('#lab19').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
             }, function (err) {
 
             });
         });
         
-        $("#bay21").ready(function () {
+        $("#lab21").ready(function () {
             var url = urlS.tool_category + 58 + '/'
             DataService.get(url).then(function (data) {
                 $scope.catdetail = data;
                 $scope.tefficiency = $scope.catdetail.Tool_efficiency;
                 if ($scope.tefficiency === false) {
-                    $('#bay21').css({fill: "rgb(237, 5, 5)"});
+                    $('#lab21').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
                 else if ($scope.tefficiency === true) {
-                    $('#bay21').css({fill: "rgb(140, 192, 19)"});
+                    $('#lab21').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
             }, function (err) {
 
             });
         });
-        $("#bay22").ready(function () {
+        $("#lab22").ready(function () {
             var url = urlS.tool_category + 52 + '/'
             DataService.get(url).then(function (data) {
                 $scope.catdetail = data;
                 $scope.tefficiency = $scope.catdetail.Tool_efficiency;
                 if ($scope.tefficiency === false) {
-                    $('#bay22').css({fill: "rgb(237, 5, 5)"});
+                    $('#lab22').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
                 else if ($scope.tefficiency === true) {
-                    $('#bay22').css({fill: "rgb(140, 192, 19)"});
+                    $('#lab22').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
             }, function (err) {
 
             });
         });
         
-        $("#bay24").ready(function () {
+        $("#lab24").ready(function () {
             var url = urlS.tool_category + 14 + '/'
             DataService.get(url).then(function (data) {
                 $scope.catdetail = data;
                 $scope.tefficiency = $scope.catdetail.Tool_efficiency;
                 if ($scope.tefficiency === false) {
-                    $('#bay24').css({fill: "rgb(237, 5, 5)"});
+                    $('#lab24').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
                 else if ($scope.tefficiency === true) {
-                    $('#bay24').css({fill: "rgb(140, 192, 19)"});
+                    $('#lab24').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
             }, function (err) {
 
             });
         });
-        $("#bay25").ready(function () {
+        $("#lab25").ready(function () {
             var url = urlS.tool_category + 16 + '/'
             DataService.get(url).then(function (data) {
                 $scope.catdetail = data;
                 $scope.tefficiency = $scope.catdetail.Tool_efficiency;
                 if ($scope.tefficiency === false) {
-                    $('#bay25').css({fill: "rgb(237, 5, 5)"});
+                    $('#lab25').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
                 else if ($scope.tefficiency === true) {
-                    $('#bay25').css({fill: "rgb(140, 192, 19)"});
+                    $('#lab25').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
             }, function (err) {
 
             });
         });
-        $("#bay26").ready(function () {
+        $("#lab26").ready(function () {
             var url = urlS.tool_category + 15 + '/'
             DataService.get(url).then(function (data) {
                 $scope.catdetail = data;
                 $scope.tefficiency = $scope.catdetail.Tool_efficiency;
                 if ($scope.tefficiency === false) {
-                    $('#bay26').css({fill: "rgb(237, 5, 5)"});
+                    $('#lab26').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
                 else if ($scope.tefficiency === true) {
-                    $('#bay26').css({fill: "rgb(140, 192, 19)"});
+                    $('#lab26').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
             }, function (err) {
 
             });
         });
-        $("#bay27").ready(function () {
+        $("#lab27").ready(function () {
             var url = urlS.tool_category + 7 + '/'
             DataService.get(url).then(function (data) {
                 $scope.catdetail = data;
                 $scope.tefficiency = $scope.catdetail.Tool_efficiency;
                 if ($scope.tefficiency === false) {
-                    $('#bay27').css({fill: "rgb(237, 5, 5)"});
+                    $('#lab27').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
                 else if ($scope.tefficiency === true) {
-                    $('#bay27').css({fill: "rgb(140, 192, 19)"});
+                    $('#lab27').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
             }, function (err) {
 
             });
         });
-        $("#bay28").ready(function () {
+        $("#lab28").ready(function () {
             var url = urlS.tool_category + 28 + '/'
             DataService.get(url).then(function (data) {
                 $scope.catdetail = data;
                 $scope.tefficiency = $scope.catdetail.Tool_efficiency;
                 if ($scope.tefficiency === false) {
-                    $('#bay28').css({fill: "rgb(237, 5, 5)"});
+                    $('#lab28').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
                 else if ($scope.tefficiency === true) {
-                    $('#bay28').css({fill: "rgb(140, 192, 19)"});
+                    $('#lab28').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
             }, function (err) {
 
             });
         });
-        $("#bay29").ready(function () {
+        $("#lab29").ready(function () {
             var url = urlS.tool_category + 59 + '/'
             DataService.get(url).then(function (data) {
                 $scope.catdetail = data;
                 $scope.tefficiency = $scope.catdetail.Tool_efficiency;
                 if ($scope.tefficiency === false) {
-                    $('#bay29').css({fill: "rgb(237, 5, 5)"});
+                    $('#lab29').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
                 else if ($scope.tefficiency === true) {
-                    $('#bay29').css({fill: "rgb(140, 192, 19)"});
+                    $('#lab29').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
             }, function (err) {
 
             });
         });
-        $("#bay30").ready(function () {
+        $("#lab30").ready(function () {
             var url = urlS.tool_category + 68 + '/'
             DataService.get(url).then(function (data) {
                 $scope.catdetail = data;
                 $scope.tefficiency = $scope.catdetail.Tool_efficiency;
                 if ($scope.tefficiency === false) {
-                    $('#bay30').css({fill: "rgb(237, 5, 5)"});
+                    $('#lab30').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
                 else if ($scope.tefficiency === true) {
-                    $('#bay30').css({fill: "rgb(140, 192, 19)"});
+                    $('#lab30').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
             }, function (err) {
 
             });
         });
-        $("#bay31").ready(function () {
+        $("#lab31").ready(function () {
             var url = urlS.tool_category + 30 + '/'
             DataService.get(url).then(function (data) {
                 $scope.catdetail = data;
                 $scope.tefficiency = $scope.catdetail.Tool_efficiency;
                 if ($scope.tefficiency === false) {
-                    $('#bay31').css({fill: "rgb(237, 5, 5)"});
+                    $('#lab31').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
                 else if ($scope.tefficiency === true) {
-                    $('#bay31').css({fill: "rgb(140, 192, 19)"});
+                    $('#lab31').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
             }, function (err) {
 
             });
         });
         
-        $("#bay33").ready(function () {
+        $("#lab33").ready(function () {
             var url = urlS.tool_category + 71 + '/'
             DataService.get(url).then(function (data) {
                 $scope.catdetail = data;
                 $scope.tefficiency = $scope.catdetail.Tool_efficiency;
                 if ($scope.tefficiency === false) {
-                    $('#bay33').css({fill: "rgb(237, 5, 5)"});
+                    $('#lab33').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
                 else if ($scope.tefficiency === true) {
-                    $('#bay33').css({fill: "rgb(140, 192, 19)"});
+                    $('#lab33').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
             }, function (err) {
 
             });
         });
-        $("#bay34").ready(function () {
+        $("#lab34").ready(function () {
             var url = urlS.tool_category + 29 + '/'
             DataService.get(url).then(function (data) {
                 $scope.catdetail = data;
                 $scope.tefficiency = $scope.catdetail.Tool_efficiency;
                 if ($scope.tefficiency === false) {
-                    $('#bay34').css({fill: "rgb(237, 5, 5)"});
+                    $('#lab34').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
                 else if ($scope.tefficiency === true) {
-                    $('#bay34').css({fill: "rgb(140, 192, 19)"});
+                    $('#lab34').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
             }, function (err) {
 
             });
         });
-        $("#bay35").ready(function () {
+        $("#lab35").ready(function () {
             var url = urlS.tool_category + 60 + '/'
             DataService.get(url).then(function (data) {
                 $scope.catdetail = data;
                 $scope.tefficiency = $scope.catdetail.Tool_efficiency;
                 if ($scope.tefficiency === false) {
-                    $('#bay35').css({fill: "rgb(237, 5, 5)"});
+                    $('#lab35').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
                 else if ($scope.tefficiency === true) {
-                    $('#bay35').css({fill: "rgb(140, 192, 19)"});
+                    $('#lab35').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
             }, function (err) {
 
             });
         });
-        $("#bay36").ready(function () {
+        $("#lab36").ready(function () {
             var url = urlS.tool_category + 61 + '/'
             DataService.get(url).then(function (data) {
                 $scope.catdetail = data;
                 $scope.tefficiency = $scope.catdetail.Tool_efficiency;
                 if ($scope.tefficiency === false) {
-                    $('#bay36').css({fill: "rgb(237, 5, 5)"});
+                    $('#lab36').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
                 else if ($scope.tefficiency === true) {
-                    $('#bay36').css({fill: "rgb(140, 192, 19)"});
+                    $('#lab36').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
             }, function (err) {
 
             });
         });
-        $("#bay37").ready(function () {
+        $("#lab37").ready(function () {
             var url = urlS.tool_category + 62 + '/'
             DataService.get(url).then(function (data) {
                 $scope.catdetail = data;
                 $scope.tefficiency = $scope.catdetail.Tool_efficiency;
                 if ($scope.tefficiency === false) {
-                    $('#bay37').css({fill: "rgb(237, 5, 5)"});
+                    $('#lab37').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
                 else if ($scope.tefficiency === true) {
-                    $('#bay37').css({fill: "rgb(140, 192, 19)"});
+                    $('#lab37').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
             }, function (err) {
 
             });
         });
-        $("#bay38").ready(function () {
+        $("#lab38").ready(function () {
             var url = urlS.tool_category + 43 + '/'
             DataService.get(url).then(function (data) {
                 $scope.catdetail = data;
                 $scope.tefficiency = $scope.catdetail.Tool_efficiency;
                 if ($scope.tefficiency === false) {
-                    $('#bay38').css({fill: "rgb(237, 5, 5)"});
+                    $('#lab38').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
                 else if ($scope.tefficiency === true) {
-                    $('#bay38').css({fill: "rgb(140, 192, 19)"});
+                    $('#lab38').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
             }, function (err) {
 
             });
         });
-        $("#bay39").ready(function () {
+        $("#lab39").ready(function () {
             var url = urlS.tool_category + 44 + '/'
             DataService.get(url).then(function (data) {
                 $scope.catdetail = data;
                 $scope.tefficiency = $scope.catdetail.Tool_efficiency;
                 if ($scope.tefficiency === false) {
-                    $('#bay39').css({fill: "rgb(237, 5, 5)"});
+                    $('#lab39').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
                 else if ($scope.tefficiency === true) {
-                    $('#bay39').css({fill: "rgb(140, 192, 19)"});
+                    $('#lab39').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
             }, function (err) {
 
             });
         });
-        $("#bay40").ready(function () {
+        $("#lab40").ready(function () {
             var url = urlS.tool_category + 45 + '/'
             DataService.get(url).then(function (data) {
                 $scope.catdetail = data;
                 $scope.tefficiency = $scope.catdetail.Tool_efficiency;
                 if ($scope.tefficiency === false) {
-                    $('#bay40').css({fill: "rgb(237, 5, 5)"});
+                    $('#lab40').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
                 else if ($scope.tefficiency === true) {
-                    $('#bay40').css({fill: "rgb(140, 192, 19)"});
+                    $('#lab40').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
             }, function (err) {
 
             });
         });
-        $("#bay41").ready(function () {
+        $("#lab41").ready(function () {
             var url = urlS.tool_category + 46 + '/'
             DataService.get(url).then(function (data) {
                 $scope.catdetail = data;
                 $scope.tefficiency = $scope.catdetail.Tool_efficiency;
                 if ($scope.tefficiency === false) {
-                    $('#bay41').css({fill: "rgb(237, 5, 5)"});
+                    $('#lab41').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
                 else if ($scope.tefficiency === true) {
-                    $('#bay41').css({fill: "rgb(140, 192, 19)"});
+                    $('#lab41').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
             }, function (err) {
 
             });
         });
-        $("#bay42").ready(function () {
+        $("#lab42").ready(function () {
             var url = urlS.tool_category + 67 + '/'
             DataService.get(url).then(function (data) {
                 $scope.catdetail = data;
                 $scope.tefficiency = $scope.catdetail.Tool_efficiency;
                 if ($scope.tefficiency === false) {
-                    $('#bay42').css({fill: "rgb(237, 5, 5)"});
+                    $('#lab42').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
                 else if ($scope.tefficiency === true) {
-                    $('#bay42').css({fill: "rgb(140, 192, 19)"});
+                    $('#lab42').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
             }, function (err) {
 
             });
         });
-        $("#bay43").ready(function () {
+        $("#lab43").ready(function () {
             var url = urlS.tool_category + 74 + '/'
             DataService.get(url).then(function (data) {
                 $scope.catdetail = data;
 
                 $scope.tefficiency = $scope.catdetail.Tool_efficiency;
                 if ($scope.tefficiency === false) {
-                    $('#bay43').css({fill: "rgb(237, 5, 5)"});
+                    $('#lab43').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
                 else if ($scope.tefficiency === true) {
-                    $('#bay43').css({fill: "rgb(140, 192, 19)"});
+                    $('#lab43').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
             }, function (err) {
 
@@ -2836,7 +2880,28 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
 
 
 
+    $scope.cumupie = function(){
+        $scope.quater =  false;
+        var url = urlS.tools + 'lab_utilization/'
+        DataService.get(url).then(function (data) {
+            $rootScope.cumulative = data;;
+        }, function (err) {
 
+        });
+    };
+
+    $scope.cumupie()
+
+
+    $scope.qtrpie = function(){
+        $scope.quater =  true;
+        var url = urlS.tools + 'lab_utilization_qtr/'
+        DataService.get(url).then(function (data) {
+            $rootScope.qtrcumulative = data;
+        }, function (err) {
+
+        });
+    }
 
 
 
@@ -2850,6 +2915,157 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
 
 
     $rootScope.settings.layout.pageSidebarClosed = true;
+
+
+
+
+
+
+
+
+
+
+
+
+
+    var tooltip = d3.selectAll(".tooltip:not(.css)");
+    var HTMLabsoluteTip = d3.select("div.tooltip.absolute");
+    var HTMLfixedTip = d3.select("div.tooltip.fixed");
+    var HTMLmouseTip = d3.select("div.tooltip.mouse");
+    var SVGexactTip = d3.select("g.tooltip.exact");
+    var SVGmouseTip = d3.select("g.tooltip.mouse");
+    
+
+    
+    d3.select("svg").select("g")
+        .selectAll("circle")
+
+        
+        .attr("title", "Automatic Title Tooltip")
+
+        .on("mouseover", function () {
+            tooltip.style("opacity", "1");
+
+            
+            tooltip.style("color", this.getAttribute("fill") );
+            
+
+
+            
+
+            
+
+               
+               
+               
+            var tooltipParent = SVGexactTip.node().parentElement;
+            var matrix =
+                this.getTransformToElement(tooltipParent)
+                    .translate(+this.getAttribute("cx"),
+                        +this.getAttribute("cy"));
+
+           
+           
+           
+           
+           
+
+           
+           
+           
+           
+           
+
+           
+           
+           
+           
+            SVGexactTip
+                .attr("transform", "translate(" + (matrix.e)
+                    + "," + (matrix.f-20) + ")");
+
+            
+
+               
+               
+               
+
+               
+               
+               
+
+            var matrix = this.getScreenCTM()
+                    .translate(+this.getAttribute("cx"),
+                        +this.getAttribute("cy"));
+
+           
+           
+            HTMLfixedTip
+                .style("left",
+                    (matrix.e) + "px")
+                .style("top",
+                    (matrix.f + 3) + "px");
+           
+           
+
+           
+           
+           
+            HTMLabsoluteTip
+                .style("left",
+                    (window.pageXOffset + matrix.e) + "px")
+                .style("top",
+                    (window.pageYOffset + matrix.f + 30) + "px");
+
+        })
+        .on("mousemove", function () {
+
+            
+
+            
+
+            
+
+            var mouseCoords = d3.mouse(
+                SVGmouseTip.node().parentElement);
+           
+           
+           
+           
+
+           
+           
+           
+           
+           
+
+            SVGmouseTip
+                .attr("transform", "translate("
+                    + (mouseCoords[0]-10) + ","
+                    + (mouseCoords[1] - 10) + ")");
+
+            
+
+           
+           
+           
+            HTMLmouseTip
+                .style("left", Math.max(0, d3.event.pageX - 150) + "px")
+                .style("top", (d3.event.pageY + 20) + "px");
+        })
+        .on("mouseout", function () {
+            return tooltip.style("opacity", "0");
+        });
+
+    var circleGroup = d3.select("g#circle-group");
+    d3.select("button#wiggle").on("click", function() {
+        circleGroup.transition().duration(1000)
+            .attr("transform",
+                "rotate("+ (20*(Math.random()-0.5)) + ")"
+                +"translate(" + (20*(Math.random()-0.5)) +","
+                + (20*(Math.random()-0.5)) + ")"
+            );
+    });
 
 });
 

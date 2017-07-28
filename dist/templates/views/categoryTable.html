@@ -16,6 +16,14 @@
                 <div class="portlet-title">
                     <div class="caption">
                         <span class="fa fa-table"></span> Tool Category </div>
+
+                       <!-- <div class="col-lg-2 col-md-2 bold"></div>
+                        <div class="input-group col-lg-4 col-md-4" id="toolcategory" style="margin-bottom: 20px;">
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                            <input date-range-picker name="daterange5" class="date-picker" type="text"
+                                   ng-model="date" options="opts" style="padding: 3px;" required/>
+                        </div>
+-->
                     <div class="actions">
                         <div class="portlet-input input-inline input-medium">
                             <div class="input-icon right">
@@ -33,14 +41,16 @@
                         <tr>
                             <th>Tool Name</th>
                             <th>Bay No.</th>
+                            <th>Tool Owner</th>
                             <th>Tool Category</th>
-                            <th>Tool Threshold in %</th>
+                            <th>Tool Target Utillization in %</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr class="odd gradeX" dir-paginate="toolCat in toolCats | filter:q | itemsPerPage: pageSize" current-page="currentPage" pagination-id="toolsPagination" >
-                            <td value="tool name">{{ toolCat.Tool_Name }}</td>
-                            <td>{{ toolCat.Bay_number }}</td>
+                            <td value="tool name">{{ toolCat.Tool_Name}}</td>
+                            <td>{{ toolCat.Bay_number}}</td>
+                            <td>{{ toolCat.Tfirst_name}} {{ toolCat.Tlast_name}}</td>
                             <td ng-class="{'process' : toolCat.Tool_Category === 'Process', 'quall' : toolCat.Tool_Category === 'Qualifications', 'fissue' : toolCat.Tool_Category === 'Field Issues'}">{{ toolCat.Tool_Category }}</td>
                             <td ng-class="{'under' : toolCat.Tool_efficiency === false, 'above' : toolCat.Tool_efficiency === true}">{{ toolCat.Tool_Threshold }} %</td>
 
