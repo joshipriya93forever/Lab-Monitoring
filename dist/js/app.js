@@ -470,7 +470,7 @@ angular.module('LabMonitoring').controller('CategoryTableController', function($
 
 
 
-    $rootScope.getToolCategoryList = function(){
+    $scope.getToolCategoryList = function(){
         var url = urlS.category_list
         DataService.get(url).then(function (data) {
             $scope.toolCats = data;
@@ -521,10 +521,15 @@ angular.module('LabMonitoring').controller('CategoryTableController', function($
     $scope.end = moment().format('YYYY-MM-DD');
 
 
-    $('#toolcategory').on('apply.daterangepicker', function(ev, picker) {
-        $scope.start = picker.startDate.format('YYYY-MM-DD');
-        $scope.end = picker.endDate.format('YYYY-MM-DD');
-        $scope.labTrendBar();
+    $('#toolcategoryDate').on('apply.daterangepicker', function(ev, picker) {
+        var start = picker.startDate.format('YYYY-MM-DD');
+        var end = picker.endDate.format('YYYY-MM-DD');
+        var url = urlS.category_list + '?start_date=' + start +'&end_date='+ end
+        DataService.get(url).then(function (data) {
+            $scope.toolCats = data;
+        }, function (err) {
+            $scope.alerts.push({type: 'danger', msg: 'Sorry we are not able to get table information.Please try again.'});
+        });
     });
 
 
