@@ -2359,7 +2359,7 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
                 }
                 $("#lab3").hover(function () {
                         if ($scope.tool3.Tool_Category === "Qualifications") {
-                            $('#lab1').css("fill", "rgb(125, 109, 196)");
+                            $('#lab3').css("fill", "rgb(125, 109, 196)");
                         }
                         else if ($scope.tool3.Tool_Category === "Field Issues") {
                             $('#lab3').css("fill", "#ba4d4d");
