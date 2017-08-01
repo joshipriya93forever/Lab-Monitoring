@@ -46,7 +46,7 @@
                             <th>Tool Owner</th>
                             <th>Tool Category</th>
                             <th>Tool Target Utillization</th>
-                            <th>Tool Utillization</th>
+                            <th>Tool Utillization (%)</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -56,7 +56,7 @@
                             <td>{{ toolCat.Tfirst_name}} {{ toolCat.Tlast_name}}</td>
                             <td ng-class="{'process' : toolCat.Tool_Category === 'Process', 'quall' : toolCat.Tool_Category === 'Qualifications', 'fissue' : toolCat.Tool_Category === 'Field Issues'}">{{ toolCat.Tool_Category }}</td>
                             <td>{{ toolCat.Tool_Threshold }} %</td>
-                            <td ng-class="{'under' : toolCat.Tool_efficiency === false, 'above' : toolCat.Tool_efficiency === true}">{{ toolCat.Productive | number:2}}</td>
+                            <td ng-class="{'under' : toolCat.Tool_efficiency === false, 'above' : toolCat.Tool_efficiency === true}">{{ toolCat.Productive | number:2}} %</td>
                         </tr>
                         </tbody>
                     </table>
