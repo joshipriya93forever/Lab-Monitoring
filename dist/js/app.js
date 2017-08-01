@@ -2315,11 +2315,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
             var url = urlS.tool_category + 31 + '/'
             DataService.get(url).then(function (data) {
                 $scope.tool1 = data;
-                $scope.tefficiency = $scope.tool1.Tool_efficiency;
-                if ($scope.tefficiency === false) {
+                if ($scope.tool1.Tool_efficiency === false) {
                     $('#lab1').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
-                else if ($scope.tefficiency === true) {
+                else if ($scope.tool1.Tool_efficiency === true) {
                     $('#lab1').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
                 $("#lab1").hover(function () {
@@ -2335,10 +2334,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
                     }
                 },
                     function () {
-                        if ($scope.tefficiency === false) {
+                        if ($scope.tool1.Tool_efficiency === false) {
                             $('#lab1').css({fill: "rgba(239, 9, 9, 0.78)"});
                         }
-                        else if ($scope.tefficiency === true) {
+                        else if ($scope.tool1.Tool_efficiency === true) {
                             $('#lab1').css({fill: "rgba(140, 192, 19, 0.88)"});
                         }
                     }
@@ -2352,11 +2351,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
             var url = urlS.tool_category + 65 + '/'
             DataService.get(url).then(function (data) {
                 $scope.tool3 = data;
-                $scope.tefficiency = $scope.tool3.Tool_efficiency;
-                if ($scope.tefficiency === false) {
+                if ($scope.tool3.Tool_efficiency === false) {
                     $('#lab3').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
-                else if ($scope.tefficiency === true) {
+                else if ($scope.tool3.Tool_efficiency === true) {
                     $('#lab3').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
                 $("#lab3").hover(function () {
@@ -2372,10 +2370,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
                         }
                     },
                     function () {
-                        if ($scope.tefficiency === false) {
+                        if ($scope.tool3.Tool_efficiency === false) {
                             $('#lab3').css({fill: "rgba(239, 9, 9, 0.78)"});
                         }
-                        else if ($scope.tefficiency === true) {
+                        else if ($scope.tool3.Tool_efficiency === true) {
                             $('#lab3').css({fill: "rgba(140, 192, 19, 0.88)"});
                         }
                     }
@@ -2388,11 +2386,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
             var url = urlS.tool_category + 66 + '/'
             DataService.get(url).then(function (data) {
                 $scope.tool4 = data;
-                $scope.tefficiency = $scope.tool4.Tool_efficiency;
-                if ($scope.tefficiency === false) {
+                if ($scope.tool4.Tool_efficiency === false) {
                     $('#lab4').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
-                else if ($scope.tefficiency === true) {
+                else if ($scope.tool4.Tool_efficiency === true) {
                     $('#lab4').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
                 $("#lab4").hover(function () {
@@ -2408,10 +2405,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
                         }
                     },
                     function () {
-                        if ($scope.tefficiency === false) {
+                        if ($scope.tool4.Tool_efficiency === false) {
                             $('#lab4').css({fill: "rgba(239, 9, 9, 0.78)"});
                         }
-                        else if ($scope.tefficiency === true) {
+                        else if ($scope.tool4.Tool_efficiency === true) {
                             $('#lab4').css({fill: "rgba(140, 192, 19, 0.88)"});
                         }
                     }
@@ -2426,11 +2423,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
             var url = urlS.tool_category + 50 + '/'
             DataService.get(url).then(function (data) {
                 $scope.tool7 = data;
-                $scope.tefficiency = $scope.tool7.Tool_efficiency;
-                if ($scope.tefficiency === false) {
+                if ($scope.tool7.Tool_efficiency === false) {
                     $('#lab7').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
-                else if ($scope.tefficiency === true) {
+                else if ($scope.tool7.Tool_efficiency === true) {
                     $('#lab7').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
                 $("#lab7").hover(function () {
@@ -2446,10 +2442,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
                         }
                     },
                     function () {
-                        if ($scope.tefficiency === false) {
+                        if ($scope.tool7.Tool_efficiency === false) {
                             $('#lab7').css({fill: "rgba(239, 9, 9, 0.78)"});
                         }
-                        else if ($scope.tefficiency === true) {
+                        else if ($scope.tool7.Tool_efficiency === true) {
                             $('#lab7').css({fill: "rgba(140, 192, 19, 0.88)"});
                         }
                     }
@@ -2462,11 +2458,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
             var url = urlS.tool_category + 49 + '/'
             DataService.get(url).then(function (data) {
                 $scope.tool8 = data;
-                $scope.tefficiency = $scope.tool8.Tool_efficiency;
-                if ($scope.tefficiency === false) {
+                if ($scope.tool8.Tool_efficiency === false) {
                     $('#lab8').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
-                else if ($scope.tefficiency === true) {
+                else if ($scope.tool8.Tool_efficiency === true) {
                     $('#lab8').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
                 $("#lab8").hover(function () {
@@ -2482,10 +2477,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
                         }
                     },
                     function () {
-                        if ($scope.tefficiency === false) {
+                        if ($scope.tool8.Tool_efficiency === false) {
                             $('#lab8').css({fill: "rgba(239, 9, 9, 0.78)"});
                         }
-                        else if ($scope.tefficiency === true) {
+                        else if ($scope.tool8.Tool_efficiency === true) {
                             $('#lab8').css({fill: "rgba(140, 192, 19, 0.88)"});
                         }
                     }
@@ -2498,11 +2493,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
             var url = urlS.tool_category + 75 + '/'
             DataService.get(url).then(function (data) {
                 $scope.tool9 = data;
-                $scope.tefficiency = $scope.tool9.Tool_efficiency;
-                if ($scope.tefficiency === false) {
+                if ($scope.tool9.Tool_efficiency === false) {
                     $('#lab9').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
-                else if ($scope.tefficiency === true) {
+                else if ($scope.tool9.Tool_efficiency === true) {
                     $('#lab9').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
                 $("#lab9").hover(function () {
@@ -2518,10 +2512,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
                         }
                     },
                     function () {
-                        if ($scope.tefficiency === false) {
+                        if ($scope.tool9.Tool_efficiency === false) {
                             $('#lab9').css({fill: "rgba(239, 9, 9, 0.78)"});
                         }
-                        else if ($scope.tefficiency === true) {
+                        else if ($scope.tool9.Tool_efficiency === true) {
                             $('#lab9').css({fill: "rgba(140, 192, 19, 0.88)"});
                         }
                     }
@@ -2534,11 +2528,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
             var url = urlS.tool_category + 18 + '/'
             DataService.get(url).then(function (data) {
                 $scope.tool10 = data;
-                $scope.tefficiency = $scope.tool10.Tool_efficiency;
-                if ($scope.tefficiency === false) {
+                if ($scope.tool10.Tool_efficiency === false) {
                     $('#lab10').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
-                else if ($scope.tefficiency === true) {
+                else if ($scope.tool10.Tool_efficiency === true) {
                     $('#lab10').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
                 $("#lab10").hover(function () {
@@ -2554,10 +2547,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
                         }
                     },
                     function () {
-                        if ($scope.tefficiency === false) {
+                        if ($scope.tool10.Tool_efficiency === false) {
                             $('#lab10').css({fill: "rgba(239, 9, 9, 0.78)"});
                         }
-                        else if ($scope.tefficiency === true) {
+                        else if ($scope.tool10.Tool_efficiency === true) {
                             $('#lab10').css({fill: "rgba(140, 192, 19, 0.88)"});
                         }
                     }
@@ -2570,11 +2563,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
             var url = urlS.tool_category + 26 + '/'
             DataService.get(url).then(function (data) {
                 $scope.tool11 = data;
-                $scope.tefficiency = $scope.tool11.Tool_efficiency;
-                if ($scope.tefficiency === false) {
+                if ($scope.tool11.Tool_efficiency === false) {
                     $('#lab11').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
-                else if ($scope.tefficiency === true) {
+                else if ($$scope.tool11.Tool_efficiency === true) {
                     $('#lab11').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
                 $("#lab11").hover(function () {
@@ -2590,10 +2582,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
                         }
                     },
                     function () {
-                        if ($scope.tefficiency === false) {
+                        if ($scope.tool11.Tool_efficiency === false) {
                             $('#lab11').css({fill: "rgba(239, 9, 9, 0.78)"});
                         }
-                        else if ($scope.tefficiency === true) {
+                        else if ($scope.tool11.Tool_efficiency === true) {
                             $('#lab11').css({fill: "rgba(140, 192, 19, 0.88)"});
                         }
                     }
@@ -2606,11 +2598,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
             var url = urlS.tool_category + 48 + '/'
             DataService.get(url).then(function (data) {
                 $scope.tool12 = data;
-                $scope.tefficiency = $scope.tool12.Tool_efficiency;
-                if ($scope.tefficiency === false) {
+                if ($scope.tool12.Tool_efficiency === false) {
                     $('#lab12').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
-                else if ($scope.tefficiency === true) {
+                else if ($scope.tool12.Tool_efficiency === true) {
                     $('#lab12').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
                 $("#lab12").hover(function () {
@@ -2626,10 +2617,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
                         }
                     },
                     function () {
-                        if ($scope.tefficiency === false) {
+                        if ($scope.tool12.Tool_efficiency === false) {
                             $('#lab12').css({fill: "rgba(239, 9, 9, 0.78)"});
                         }
-                        else if ($scope.tefficiency === true) {
+                        else if ($scope.tool12.Tool_efficiency === true) {
                             $('#lab12').css({fill: "rgba(140, 192, 19, 0.88)"});
                         }
                     }
@@ -2642,11 +2633,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
             var url = urlS.tool_category + 38 + '/'
             DataService.get(url).then(function (data) {
                 $scope.tool13 = data;
-                $scope.tefficiency = $scope.tool13.Tool_efficiency;
-                if ($scope.tefficiency === false) {
+                if ($scope.tool13.Tool_efficiency === false) {
                     $('#lab13').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
-                else if ($scope.tefficiency === true) {
+                else if ($scope.tool13.Tool_efficiency === true) {
                     $('#lab13').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
                 $("#lab13").hover(function () {
@@ -2662,10 +2652,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
                         }
                     },
                     function () {
-                        if ($scope.tefficiency === false) {
+                        if ($scope.tool13.Tool_efficiency === false) {
                             $('#lab13').css({fill: "rgba(239, 9, 9, 0.78)"});
                         }
-                        else if ($scope.tefficiency === true) {
+                        else if ($scope.tool13.Tool_efficiency === true) {
                             $('#lab13').css({fill: "rgba(140, 192, 19, 0.88)"});
                         }
                     }
@@ -2678,11 +2668,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
             var url = urlS.tool_category + 27 + '/'
             DataService.get(url).then(function (data) {
                 $scope.tool14 = data;
-                $scope.tefficiency = $scope.tool14.Tool_efficiency;
-                if ($scope.tefficiency === false) {
+                if ($scope.tool14.Tool_efficiency === false) {
                     $('#lab14').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
-                else if ($scope.tefficiency === true) {
+                else if ($scope.tool14.Tool_efficiency === true) {
                     $('#lab14').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
                 $("#lab14").hover(function () {
@@ -2698,10 +2687,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
                         }
                     },
                     function () {
-                        if ($scope.tefficiency === false) {
+                        if ($scope.tool14.Tool_efficiency === false) {
                             $('#lab14').css({fill: "rgba(239, 9, 9, 0.78)"});
                         }
-                        else if ($scope.tefficiency === true) {
+                        else if ($scope.tool14.Tool_efficiency === true) {
                             $('#lab14').css({fill: "rgba(140, 192, 19, 0.88)"});
                         }
                     }
@@ -2714,11 +2703,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
             var url = urlS.tool_category + 76 + '/'
             DataService.get(url).then(function (data) {
                 $scope.tool15 = data;
-                $scope.tefficiency = $scope.tool15.Tool_efficiency;
-                if ($scope.tefficiency === false) {
+                if ($scope.tool15.Tool_efficiency === false) {
                     $('#lab15').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
-                else if ($scope.tefficiency === true) {
+                else if ($scope.tool15.Tool_efficiency === true) {
                     $('#lab15').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
                 $("#lab15").hover(function () {
@@ -2734,10 +2722,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
                         }
                     },
                     function () {
-                        if ($scope.tefficiency === false) {
+                        if ($scope.tool15.Tool_efficiency === false) {
                             $('#lab15').css({fill: "rgba(239, 9, 9, 0.78)"});
                         }
-                        else if ($scope.tefficiency === true) {
+                        else if ($scope.tool15.Tool_efficiency === true) {
                             $('#lab15').css({fill: "rgba(140, 192, 19, 0.88)"});
                         }
                     }
@@ -2750,11 +2738,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
             var url = urlS.tool_category + 55 + '/'
             DataService.get(url).then(function (data) {
                 $scope.tool16 = data;
-                $scope.tefficiency = $scope.tool16.Tool_efficiency;
-                if ($scope.tefficiency === false) {
+                if ($scope.tool16.Tool_efficiency === false) {
                     $('#lab16').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
-                else if ($scope.tefficiency === true) {
+                else if ($scope.tool16.Tool_efficiency === true) {
                     $('#lab16').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
                 $("#lab16").hover(function () {
@@ -2770,10 +2757,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
                         }
                     },
                     function () {
-                        if ($scope.tefficiency === false) {
+                        if ($scope.tool16.Tool_efficiency === false) {
                             $('#lab16').css({fill: "rgba(239, 9, 9, 0.78)"});
                         }
-                        else if ($scope.tefficiency === true) {
+                        else if ($scope.tool16.Tool_efficiency === true) {
                             $('#lab16').css({fill: "rgba(140, 192, 19, 0.88)"});
                         }
                     }
@@ -2786,11 +2773,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
             var url = urlS.tool_category + 53 + '/'
             DataService.get(url).then(function (data) {
                 $scope.tool17 = data;
-                $scope.tefficiency = $scope.tool17.Tool_efficiency;
-                if ($scope.tefficiency === false) {
+                if ($scope.tool17.Tool_efficiency === false) {
                     $('#lab17').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
-                else if ($scope.tefficiency === true) {
+                else if ($scope.tool17.Tool_efficiency === true) {
                     $('#lab17').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
                 $("#lab17").hover(function () {
@@ -2806,10 +2792,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
                         }
                     },
                     function () {
-                        if ($scope.tefficiency === false) {
+                        if ($scope.tool17.Tool_efficiency === false) {
                             $('#lab17').css({fill: "rgba(239, 9, 9, 0.78)"});
                         }
-                        else if ($scope.tefficiency === true) {
+                        else if ($scope.tool17.Tool_efficiency === true) {
                             $('#lab17').css({fill: "rgba(140, 192, 19, 0.88)"});
                         }
                     }
@@ -2822,11 +2808,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
             var url = urlS.tool_category + 54 + '/'
             DataService.get(url).then(function (data) {
                 $scope.tool18 = data;
-                $scope.tefficiency = $scope.tool18.Tool_efficiency;
-                if ($scope.tefficiency === false) {
+                if ($scope.tool18.Tool_efficiency === false) {
                     $('#lab18').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
-                else if ($scope.tefficiency === true) {
+                else if ($scope.tool18.Tool_efficiency === true) {
                     $('#lab18').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
                 $("#lab18").hover(function () {
@@ -2842,10 +2827,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
                         }
                     },
                     function () {
-                        if ($scope.tefficiency === false) {
+                        if ($scope.tool18.Tool_efficiency === false) {
                             $('#lab18').css({fill: "rgba(239, 9, 9, 0.78)"});
                         }
-                        else if ($scope.tefficiency === true) {
+                        else if ($scope.tool18.Tool_efficiency === true) {
                             $('#lab18').css({fill: "rgba(140, 192, 19, 0.88)"});
                         }
                     }
@@ -2858,11 +2843,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
             var url = urlS.tool_category + 72 + '/'
             DataService.get(url).then(function (data) {
                 $scope.tool19 = data;
-                $scope.tefficiency = $scope.tool19.Tool_efficiency;
-                if ($scope.tefficiency === false) {
+                if ($scope.tool19.Tool_efficiency === false) {
                     $('#lab19').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
-                else if ($scope.tefficiency === true) {
+                else if ($scope.tool19.Tool_efficiency === true) {
                     $('#lab19').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
                 $("#lab19").hover(function () {
@@ -2878,10 +2862,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
                         }
                     },
                     function () {
-                        if ($scope.tefficiency === false) {
+                        if ($scope.tool19.Tool_efficiency === false) {
                             $('#lab19').css({fill: "rgba(239, 9, 9, 0.78)"});
                         }
-                        else if ($scope.tefficiency === true) {
+                        else if ($scope.tool19.Tool_efficiency === true) {
                             $('#lab19').css({fill: "rgba(140, 192, 19, 0.88)"});
                         }
                     }
@@ -2895,11 +2879,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
             var url = urlS.tool_category + 58 + '/'
             DataService.get(url).then(function (data) {
                 $scope.tool21 = data;
-                $scope.tefficiency = $scope.tool21.Tool_efficiency;
-                if ($scope.tefficiency === false) {
+                if ($scope.tool21.Tool_efficiency === false) {
                     $('#lab21').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
-                else if ($scope.tefficiency === true) {
+                else if ($scope.tool21.Tool_efficiency === true) {
                     $('#lab21').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
                 $("#lab21").hover(function () {
@@ -2915,10 +2898,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
                         }
                     },
                     function () {
-                        if ($scope.tefficiency === false) {
+                        if ($scope.tool21.Tool_efficiency === false) {
                             $('#lab21').css({fill: "rgba(239, 9, 9, 0.78)"});
                         }
-                        else if ($scope.tefficiency === true) {
+                        else if ($scope.tool21.Tool_efficiency === true) {
                             $('#lab21').css({fill: "rgba(140, 192, 19, 0.88)"});
                         }
                     }
@@ -2931,11 +2914,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
             var url = urlS.tool_category + 52 + '/'
             DataService.get(url).then(function (data) {
                 $scope.tool22 = data;
-                $scope.tefficiency = $scope.tool22.Tool_efficiency;
-                if ($scope.tefficiency === false) {
+                if ($scope.tool22.Tool_efficiency === false) {
                     $('#lab22').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
-                else if ($scope.tefficiency === true) {
+                else if ($scope.tool22.Tool_efficiency === true) {
                     $('#lab22').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
                 $("#lab22").hover(function () {
@@ -2951,10 +2933,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
                         }
                     },
                     function () {
-                        if ($scope.tefficiency === false) {
+                        if ($scope.tool22.Tool_efficiency === false) {
                             $('#lab22').css({fill: "rgba(239, 9, 9, 0.78)"});
                         }
-                        else if ($scope.tefficiency === true) {
+                        else if ($scope.tool22.Tool_efficiency === true) {
                             $('#lab22').css({fill: "rgba(140, 192, 19, 0.88)"});
                         }
                     }
@@ -2968,11 +2950,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
             var url = urlS.tool_category + 14 + '/'
             DataService.get(url).then(function (data) {
                 $scope.tool24 = data;
-                $scope.tefficiency = $scope.tool24.Tool_efficiency;
-                if ($scope.tefficiency === false) {
+                if ($scope.tool24.Tool_efficiency === false) {
                     $('#lab24').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
-                else if ($scope.tefficiency === true) {
+                else if ($scope.tool24.Tool_efficiency === true) {
                     $('#lab24').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
                 $("#lab24").hover(function () {
@@ -2988,10 +2969,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
                         }
                     },
                     function () {
-                        if ($scope.tefficiency === false) {
+                        if ($scope.tool24.Tool_efficiency === false) {
                             $('#lab24').css({fill: "rgba(239, 9, 9, 0.78)"});
                         }
-                        else if ($scope.tefficiency === true) {
+                        else if ($scope.tool24.Tool_efficiency === true) {
                             $('#lab24').css({fill: "rgba(140, 192, 19, 0.88)"});
                         }
                     }
@@ -3004,11 +2985,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
             var url = urlS.tool_category + 16 + '/'
             DataService.get(url).then(function (data) {
                 $scope.tool25 = data;
-                $scope.tefficiency = $scope.tool25.Tool_efficiency;
-                if ($scope.tefficiency === false) {
+                if ($scope.tool25.Tool_efficiency === false) {
                     $('#lab25').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
-                else if ($scope.tefficiency === true) {
+                else if ($scope.tool25.Tool_efficiency === true) {
                     $('#lab25').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
                 $("#lab25").hover(function () {
@@ -3024,10 +3004,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
                         }
                     },
                     function () {
-                        if ($scope.tefficiency === false) {
+                        if ($scope.tool25.Tool_efficiency === false) {
                             $('#lab25').css({fill: "rgba(239, 9, 9, 0.78)"});
                         }
-                        else if ($scope.tefficiency === true) {
+                        else if ($scope.tool25.Tool_efficiency === true) {
                             $('#lab25').css({fill: "rgba(140, 192, 19, 0.88)"});
                         }
                     }
@@ -3040,11 +3020,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
             var url = urlS.tool_category + 15 + '/'
             DataService.get(url).then(function (data) {
                 $scope.tool26 = data;
-                $scope.tefficiency = $scope.tool26.Tool_efficiency;
-                if ($scope.tefficiency === false) {
+                if ($scope.tool26.Tool_efficiency === false) {
                     $('#lab26').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
-                else if ($scope.tefficiency === true) {
+                else if ($scope.tool26.Tool_efficiency === true) {
                     $('#lab26').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
                 $("#lab26").hover(function () {
@@ -3060,10 +3039,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
                         }
                     },
                     function () {
-                        if ($scope.tefficiency === false) {
+                        if ($scope.tool26.Tool_efficiency === false) {
                             $('#lab26').css({fill: "rgba(239, 9, 9, 0.78)"});
                         }
-                        else if ($scope.tefficiency === true) {
+                        else if ($scope.tool26.Tool_efficiency === true) {
                             $('#lab26').css({fill: "rgba(140, 192, 19, 0.88)"});
                         }
                     }
@@ -3076,11 +3055,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
             var url = urlS.tool_category + 7 + '/'
             DataService.get(url).then(function (data) {
                 $scope.tool27 = data;
-                $scope.tefficiency = $scope.tool27.Tool_efficiency;
-                if ($scope.tefficiency === false) {
+                if ($scope.tool27.Tool_efficiency === false) {
                     $('#lab27').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
-                else if ($scope.tefficiency === true) {
+                else if ($scope.tool27.Tool_efficiency === true) {
                     $('#lab27').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
                 $("#lab27").hover(function () {
@@ -3096,10 +3074,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
                         }
                     },
                     function () {
-                        if ($scope.tefficiency === false) {
+                        if ($scope.tool27.Tool_efficiency === false) {
                             $('#lab27').css({fill: "rgba(239, 9, 9, 0.78)"});
                         }
-                        else if ($scope.tefficiency === true) {
+                        else if ($scope.tool27.Tool_efficiency === true) {
                             $('#lab27').css({fill: "rgba(140, 192, 19, 0.88)"});
                         }
                     }
@@ -3112,11 +3090,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
             var url = urlS.tool_category + 28 + '/'
             DataService.get(url).then(function (data) {
                 $scope.tool28 = data;
-                $scope.tefficiency = $scope.tool28.Tool_efficiency;
-                if ($scope.tefficiency === false) {
+                if ($scope.tool28.Tool_efficiency === false) {
                     $('#lab28').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
-                else if ($scope.tefficiency === true) {
+                else if ($scope.tool28.Tool_efficiency === true) {
                     $('#lab28').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
                 $("#lab28").hover(function () {
@@ -3132,10 +3109,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
                         }
                     },
                     function () {
-                        if ($scope.tefficiency === false) {
+                        if ($scope.tool28.Tool_efficiency === false) {
                             $('#lab28').css({fill: "rgba(239, 9, 9, 0.78)"});
                         }
-                        else if ($scope.tefficiency === true) {
+                        else if ($scope.tool28.Tool_efficiency === true) {
                             $('#lab28').css({fill: "rgba(140, 192, 19, 0.88)"});
                         }
                     }
@@ -3148,11 +3125,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
             var url = urlS.tool_category + 59 + '/'
             DataService.get(url).then(function (data) {
                 $scope.tool29 = data;
-                $scope.tefficiency = $scope.tool29.Tool_efficiency;
-                if ($scope.tefficiency === false) {
+                if ($scope.tool29.Tool_efficiency === false) {
                     $('#lab29').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
-                else if ($scope.tefficiency === true) {
+                else if ($scope.tool29.Tool_efficiency === true) {
                     $('#lab29').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
                 $("#lab29").hover(function () {
@@ -3168,10 +3144,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
                         }
                     },
                     function () {
-                        if ($scope.tefficiency === false) {
+                        if ($scope.tool29.Tool_efficiency === false) {
                             $('#lab29').css({fill: "rgba(239, 9, 9, 0.78)"});
                         }
-                        else if ($scope.tefficiency === true) {
+                        else if ($scope.tool29.Tool_efficiency === true) {
                             $('#lab29').css({fill: "rgba(140, 192, 19, 0.88)"});
                         }
                     }
@@ -3184,11 +3160,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
             var url = urlS.tool_category + 68 + '/'
             DataService.get(url).then(function (data) {
                 $scope.tool30 = data;
-                $scope.tefficiency = $scope.tool30.Tool_efficiency;
-                if ($scope.tefficiency === false) {
+                if ($scope.tool30.Tool_efficiency === false) {
                     $('#lab30').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
-                else if ($scope.tefficiency === true) {
+                else if ($scope.tool30.Tool_efficiency === true) {
                     $('#lab30').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
                 $("#lab30").hover(function () {
@@ -3204,10 +3179,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
                         }
                     },
                     function () {
-                        if ($scope.tefficiency === false) {
+                        if ($scope.tool30.Tool_efficiency === false) {
                             $('#lab30').css({fill: "rgba(239, 9, 9, 0.78)"});
                         }
-                        else if ($scope.tefficiency === true) {
+                        else if ($scope.tool30.Tool_efficiency === true) {
                             $('#lab30').css({fill: "rgba(140, 192, 19, 0.88)"});
                         }
                     }
@@ -3220,11 +3195,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
             var url = urlS.tool_category + 30 + '/'
             DataService.get(url).then(function (data) {
                 $scope.tool31 = data;
-                $scope.tefficiency = $scope.tool31.Tool_efficiency;
-                if ($scope.tefficiency === false) {
+                if ($scope.tool31.Tool_efficiency === false) {
                     $('#lab31').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
-                else if ($scope.tefficiency === true) {
+                else if ($scope.tool31.Tool_efficiency === true) {
                     $('#lab31').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
                 $("#lab31").hover(function () {
@@ -3240,10 +3214,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
                         }
                     },
                     function () {
-                        if ($scope.tefficiency === false) {
+                        if ($scope.tool31.Tool_efficiency === false) {
                             $('#lab31').css({fill: "rgba(239, 9, 9, 0.78)"});
                         }
-                        else if ($scope.tefficiency === true) {
+                        else if ($scope.tool31.Tool_efficiency === true) {
                             $('#lab31').css({fill: "rgba(140, 192, 19, 0.88)"});
                         }
                     }
@@ -3257,11 +3231,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
             var url = urlS.tool_category + 71 + '/'
             DataService.get(url).then(function (data) {
                 $scope.tool33 = data;
-                $scope.tefficiency = $scope.tool33.Tool_efficiency;
-                if ($scope.tefficiency === false) {
+                if ($scope.tool33.Tool_efficiency === false) {
                     $('#lab33').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
-                else if ($scope.tefficiency === true) {
+                else if ($scope.tool33.Tool_efficiency === true) {
                     $('#lab33').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
                 $("#lab33").hover(function () {
@@ -3277,10 +3250,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
                         }
                     },
                     function () {
-                        if ($scope.tefficiency === false) {
+                        if ($scope.tool33.Tool_efficiency === false) {
                             $('#lab33').css({fill: "rgba(239, 9, 9, 0.78)"});
                         }
-                        else if ($scope.tefficiency === true) {
+                        else if ($scope.tool33.Tool_efficiency === true) {
                             $('#lab33').css({fill: "rgba(140, 192, 19, 0.88)"});
                         }
                     }
@@ -3293,11 +3266,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
             var url = urlS.tool_category + 29 + '/'
             DataService.get(url).then(function (data) {
                 $scope.tool34 = data;
-                $scope.tefficiency = $scope.tool34.Tool_efficiency;
-                if ($scope.tefficiency === false) {
+                if ($scope.tool34.Tool_efficiency === false) {
                     $('#lab34').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
-                else if ($scope.tefficiency === true) {
+                else if ($scope.tool34.Tool_efficiency === true) {
                     $('#lab34').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
                 $("#lab34").hover(function () {
@@ -3313,10 +3285,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
                         }
                     },
                     function () {
-                        if ($scope.tefficiency === false) {
+                        if ($scope.tool34.Tool_efficiency === false) {
                             $('#lab34').css({fill: "rgba(239, 9, 9, 0.78)"});
                         }
-                        else if ($scope.tefficiency === true) {
+                        else if ($scope.tool34.Tool_efficiency === true) {
                             $('#lab34').css({fill: "rgba(140, 192, 19, 0.88)"});
                         }
                     }
@@ -3329,11 +3301,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
             var url = urlS.tool_category + 60 + '/'
             DataService.get(url).then(function (data) {
                 $scope.tool35 = data;
-                $scope.tefficiency = $scope.tool35.Tool_efficiency;
-                if ($scope.tefficiency === false) {
+                if ($scope.tool35.Tool_efficiency === false) {
                     $('#lab35').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
-                else if ($scope.tefficiency === true) {
+                else if ($scope.tool35.Tool_efficiency === true) {
                     $('#lab35').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
                 $("#lab35").hover(function () {
@@ -3349,10 +3320,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
                         }
                     },
                     function () {
-                        if ($scope.tefficiency === false) {
+                        if ($scope.tool35.Tool_efficiency === false) {
                             $('#lab35').css({fill: "rgba(239, 9, 9, 0.78)"});
                         }
-                        else if ($scope.tefficiency === true) {
+                        else if ($scope.tool35.Tool_efficiency === true) {
                             $('#lab35').css({fill: "rgba(140, 192, 19, 0.88)"});
                         }
                     }
@@ -3365,11 +3336,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
             var url = urlS.tool_category + 61 + '/'
             DataService.get(url).then(function (data) {
                 $scope.tool36 = data;
-                $scope.tefficiency = $scope.tool36.Tool_efficiency;
-                if ($scope.tefficiency === false) {
+                if ($scope.tool36.Tool_efficiency === false) {
                     $('#lab36').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
-                else if ($scope.tefficiency === true) {
+                else if ($scope.tool36.Tool_efficiency === true) {
                     $('#lab36').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
                 $("#lab36").hover(function () {
@@ -3385,10 +3355,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
                         }
                     },
                     function () {
-                        if ($scope.tefficiency === false) {
+                        if ($scope.tool36.Tool_efficiency === false) {
                             $('#lab36').css({fill: "rgba(239, 9, 9, 0.78)"});
                         }
-                        else if ($scope.tefficiency === true) {
+                        else if ($scope.tool36.Tool_efficiency === true) {
                             $('#lab36').css({fill: "rgba(140, 192, 19, 0.88)"});
                         }
                     }
@@ -3401,11 +3371,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
             var url = urlS.tool_category + 62 + '/'
             DataService.get(url).then(function (data) {
                 $scope.tool37 = data;
-                $scope.tefficiency = $scope.tool37.Tool_efficiency;
-                if ($scope.tefficiency === false) {
+                if ($scope.tool37.Tool_efficiency === false) {
                     $('#lab37').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
-                else if ($scope.tefficiency === true) {
+                else if ($scope.tool37.Tool_efficiency === true) {
                     $('#lab37').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
                 $("#lab37").hover(function () {
@@ -3421,10 +3390,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
                         }
                     },
                     function () {
-                        if ($scope.tefficiency === false) {
+                        if ($scope.tool37.Tool_efficiency === false) {
                             $('#lab37').css({fill: "rgba(239, 9, 9, 0.78)"});
                         }
-                        else if ($scope.tefficiency === true) {
+                        else if ($scope.tool37.Tool_efficiency === true) {
                             $('#lab37').css({fill: "rgba(140, 192, 19, 0.88)"});
                         }
                     }
@@ -3437,11 +3406,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
             var url = urlS.tool_category + 43 + '/'
             DataService.get(url).then(function (data) {
                 $scope.tool38 = data;
-                $scope.tefficiency = $scope.tool38.Tool_efficiency;
-                if ($scope.tefficiency === false) {
+                if ($scope.tool38.Tool_efficiency === false) {
                     $('#lab38').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
-                else if ($scope.tefficiency === true) {
+                else if ($scope.tool38.Tool_efficiency === true) {
                     $('#lab38').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
                 $("#lab38").hover(function () {
@@ -3457,10 +3425,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
                         }
                     },
                     function () {
-                        if ($scope.tefficiency === false) {
+                        if ($scope.tool38.Tool_efficiency === false) {
                             $('#lab38').css({fill: "rgba(239, 9, 9, 0.78)"});
                         }
-                        else if ($scope.tefficiency === true) {
+                        else if ($scope.tool38.Tool_efficiency === true) {
                             $('#lab38').css({fill: "rgba(140, 192, 19, 0.88)"});
                         }
                     }
@@ -3473,11 +3441,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
             var url = urlS.tool_category + 44 + '/'
             DataService.get(url).then(function (data) {
                 $scope.tool39 = data;
-                $scope.tefficiency = $scope.tool39.Tool_efficiency;
-                if ($scope.tefficiency === false) {
+                if ($scope.tool39.Tool_efficiency === false) {
                     $('#lab39').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
-                else if ($scope.tefficiency === true) {
+                else if ($scope.tool39.Tool_efficiency === true) {
                     $('#lab39').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
                 $("#lab39").hover(function () {
@@ -3493,10 +3460,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
                         }
                     },
                     function () {
-                        if ($scope.tefficiency === false) {
+                        if ($scope.tool39.Tool_efficiency === false) {
                             $('#lab39').css({fill: "rgba(239, 9, 9, 0.78)"});
                         }
-                        else if ($scope.tefficiency === true) {
+                        else if ($scope.tool39.Tool_efficiency === true) {
                             $('#lab39').css({fill: "rgba(140, 192, 19, 0.88)"});
                         }
                     }
@@ -3509,11 +3476,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
             var url = urlS.tool_category + 45 + '/'
             DataService.get(url).then(function (data) {
                 $scope.tool40 = data;
-                $scope.tefficiency = $scope.tool40.Tool_efficiency;
-                if ($scope.tefficiency === false) {
+                if ($scope.tool40.Tool_efficiency === false) {
                     $('#lab40').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
-                else if ($scope.tefficiency === true) {
+                else if ($scope.tool40.Tool_efficiency === true) {
                     $('#lab40').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
                 $("#lab40").hover(function () {
@@ -3529,10 +3495,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
                         }
                     },
                     function () {
-                        if ($scope.tefficiency === false) {
+                        if ($scope.tool40.Tool_efficiency === false) {
                             $('#lab40').css({fill: "rgba(239, 9, 9, 0.78)"});
                         }
-                        else if ($scope.tefficiency === true) {
+                        else if ($scope.tool40.Tool_efficiency === true) {
                             $('#lab40').css({fill: "rgba(140, 192, 19, 0.88)"});
                         }
                     }
@@ -3545,11 +3511,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
             var url = urlS.tool_category + 46 + '/'
             DataService.get(url).then(function (data) {
                 $scope.tool41 = data;
-                $scope.tefficiency = $scope.tool41.Tool_efficiency;
-                if ($scope.tefficiency === false) {
+                if ($scope.tool41.Tool_efficiency === false) {
                     $('#lab41').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
-                else if ($scope.tefficiency === true) {
+                else if ($scope.tool41.Tool_efficiency === true) {
                     $('#lab41').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
                 $("#lab41").hover(function () {
@@ -3565,10 +3530,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
                         }
                     },
                     function () {
-                        if ($scope.tefficiency === false) {
+                        if ($scope.tool41.Tool_efficiency === false) {
                             $('#lab41').css({fill: "rgba(239, 9, 9, 0.78)"});
                         }
-                        else if ($scope.tefficiency === true) {
+                        else if ($scope.tool41.Tool_efficiency === true) {
                             $('#lab41').css({fill: "rgba(140, 192, 19, 0.88)"});
                         }
                     }
@@ -3581,11 +3546,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
             var url = urlS.tool_category + 67 + '/'
             DataService.get(url).then(function (data) {
                 $scope.tool42 = data;
-                $scope.tefficiency = $scope.tool42.Tool_efficiency;
-                if ($scope.tefficiency === false) {
+                if ($scope.tool42.Tool_efficiency === false) {
                     $('#lab42').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
-                else if ($scope.tefficiency === true) {
+                else if ($scope.tool42.Tool_efficiency === true) {
                     $('#lab42').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
                 $("#lab42").hover(function () {
@@ -3601,10 +3565,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
                         }
                     },
                     function () {
-                        if ($scope.tefficiency === false) {
+                        if ($scope.tool42.Tool_efficiency === false) {
                             $('#lab42').css({fill: "rgba(239, 9, 9, 0.78)"});
                         }
-                        else if ($scope.tefficiency === true) {
+                        else if ($scope.tool42.Tool_efficiency === true) {
                             $('#lab42').css({fill: "rgba(140, 192, 19, 0.88)"});
                         }
                     }
@@ -3617,12 +3581,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
             var url = urlS.tool_category + 74 + '/'
             DataService.get(url).then(function (data) {
                 $scope.tool43 = data;
-
-                $scope.tefficiency = $scope.tool43.Tool_efficiency;
-                if ($scope.tefficiency === false) {
+                if ($scope.tool43.Tool_efficiency === false) {
                     $('#lab43').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
-                else if ($scope.tefficiency === true) {
+                else if ($scope.tool43.Tool_efficiency === true) {
                     $('#lab43').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
                 $("#lab43").hover(function () {
@@ -3638,10 +3600,10 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
                         }
                     },
                     function () {
-                        if ($scope.tefficiency === false) {
+                        if ($scope.tool43.Tool_efficiency === false) {
                             $('#lab43').css({fill: "rgba(239, 9, 9, 0.78)"});
                         }
-                        else if ($scope.tefficiency === true) {
+                        else if ($scope.tool43.Tool_efficiency === true) {
                             $('#lab43').css({fill: "rgba(140, 192, 19, 0.88)"});
                         }
                     }
