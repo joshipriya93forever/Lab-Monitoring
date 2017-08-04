@@ -1293,7 +1293,7 @@ angular.module('LabMonitoring').controller('LabController', function($rootScope,
             });
         });
         $("#bay30").ready(function () {
-         var url = urlS.tools + 68 + '/'
+         var url = urlS.tools + 62 + '/'
          DataService.get(url).then(function (data) {
          $scope.tool = data;
          $scope.tstatus = $scope.tool.status;
@@ -1420,7 +1420,7 @@ angular.module('LabMonitoring').controller('LabController', function($rootScope,
             });
         });
         $("#bay37").ready(function () {
-            var url = urlS.tools + 62 + '/'
+            var url = urlS.tools + 68 + '/'
             DataService.get(url).then(function (data) {
                 $scope.tool = data;
                 $scope.tstatus = $scope.tool.status;
@@ -1566,8 +1566,48 @@ angular.module('LabMonitoring').controller('LabController', function($rootScope,
 
          });
          });
-        
-         
+         $("#bay44").ready(function () {
+         var url = urlS.tools + 82 + '/'
+         DataService.get(url).then(function (data) {
+         $scope.tool = data;
+         $scope.tstatus = $scope.tool.status;
+         if ($scope.tstatus === 'IN') {
+         $('#bay44').css({fill: "#ffff80"});
+         }
+         else if ($scope.tstatus === 'ID') {
+         $('#bay44').css({fill: "#ff7f7f"});
+         }
+         else if ($scope.tstatus === 'PR') {
+         $('#bay44').css({fill: "#c2de80"});
+         }
+         else if ($scope.tstatus === 'MA') {
+         $('#bay44').css({fill: "#9ac3f5"});
+         }
+         }, function (err) {
+
+         });
+         });
+         $("#bay45").ready(function () {
+         var url = urlS.tools + 84 + '/'
+         DataService.get(url).then(function (data) {
+         $scope.tool = data;
+         $scope.tstatus = $scope.tool.status;
+         if ($scope.tstatus === 'IN') {
+         $('#bay45').css({fill: "#ffff80"});
+         }
+         else if ($scope.tstatus === 'ID') {
+         $('#bay45').css({fill: "#ff7f7f"});
+         }
+         else if ($scope.tstatus === 'PR') {
+         $('#bay45').css({fill: "#c2de80"});
+         }
+         else if ($scope.tstatus === 'MA') {
+         $('#bay45').css({fill: "#9ac3f5"});
+         }
+         }, function (err) {
+
+         });
+         });
         
     };
     $scope.bayStatus();
@@ -3157,7 +3197,7 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
             });
         });
         $("#lab30").ready(function () {
-            var url = urlS.tool_category + 68 + '/'
+            var url = urlS.tool_category + 62 + '/'
             DataService.get(url).then(function (data) {
                 $scope.tool30 = data;
                 if ($scope.tool30.Tool_efficiency === false) {
@@ -3368,7 +3408,7 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
             });
         });
         $("#lab37").ready(function () {
-            var url = urlS.tool_category + 62 + '/'
+            var url = urlS.tool_category + 68 + '/'
             DataService.get(url).then(function (data) {
                 $scope.tool37 = data;
                 if ($scope.tool37.Tool_efficiency === false) {
@@ -3612,8 +3652,76 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
 
             });
         });
-        
-        
+         $("#lab44").ready(function () {
+         var url = urlS.tool_category + 82 + '/'
+         DataService.get(url).then(function (data) {
+         $scope.tool44 = data;
+         if ($scope.tool44.Tool_efficiency === false) {
+         $('#lab44').css({fill: "rgba(239, 9, 9, 0.78)"});
+         }
+         else if ($scope.tool44.Tool_efficiency === true) {
+         $('#lab44').css({fill: "rgba(140, 192, 19, 0.88)"});
+         }
+         $("#lab44").hover(function () {
+         if ($scope.tool44.Tool_Category === "Qualifications") {
+         $('#lab44').css("fill", "rgb(125, 109, 196)");
+         }
+         else if ($scope.tool44.Tool_Category === "Field Issues") {
+         $('#lab44').css("fill", "#ba4d4d");
+
+         }
+         else if ($scope.tool44.Tool_Category === "Process") {
+         $('#lab44').css({fill: "#aee9ca"});
+         }
+         },
+         function () {
+         if ($scope.tool44.Tool_efficiency === false) {
+         $('#lab44').css({fill: "rgba(239, 9, 9, 0.78)"});
+         }
+         else if ($scope.tool44.Tool_efficiency === true) {
+         $('#lab44').css({fill: "rgba(140, 192, 19, 0.88)"});
+         }
+         }
+         );
+         }, function (err) {
+
+         });
+         });
+        $("#lab45").ready(function () {
+         var url = urlS.tool_category + 84 + '/'
+         DataService.get(url).then(function (data) {
+         $scope.tool45 = data;
+         if ($scope.tool45.Tool_efficiency === false) {
+         $('#lab45').css({fill: "rgba(239, 9, 9, 0.78)"});
+         }
+         else if ($scope.tool45.Tool_efficiency === true) {
+         $('#lab45').css({fill: "rgba(140, 192, 19, 0.88)"});
+         }
+         $("#lab45").hover(function () {
+         if ($scope.tool45.Tool_Category === "Qualifications") {
+         $('#lab45').css("fill", "rgb(125, 109, 196)");
+         }
+         else if ($scope.tool45.Tool_Category === "Field Issues") {
+         $('#lab45').css("fill", "#ba4d4d");
+
+         }
+         else if ($scope.tool45.Tool_Category === "Process") {
+         $('#lab45').css({fill: "#aee9ca"});
+         }
+         },
+         function () {
+         if ($scope.tool45.Tool_efficiency === false) {
+         $('#lab45').css({fill: "rgba(239, 9, 9, 0.78)"});
+         }
+         else if ($scope.tool45.Tool_efficiency === true) {
+         $('#lab45').css({fill: "rgba(140, 192, 19, 0.88)"});
+         }
+         }
+         );
+         }, function (err) {
+
+         });
+         });
         
     }();
 
