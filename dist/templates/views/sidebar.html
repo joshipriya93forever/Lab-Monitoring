@@ -1,0 +1,166 @@
+<div class="page-sidebar navbar-collapse collapse">
+    <!-- BEGIN SIDEBAR MENU -->
+
+    <ul class="page-sidebar-menu" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200" ng-class="{'page-sidebar-menu-closed': settings.layout.pageSidebarClosed}">
+        <!-- DOC: To remove the search box from the sidebar you just need to completely remove the below "sidebar-search-wrapper" LI element -->
+
+        <li class="start nav-item">
+            <a ui-sref="main.dashboard">
+                <i class="fa fa-dashboard"></i>
+                <span class="title">Dashboard</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="#" class="nav-link nav-toggle">
+                <i class="fa fa-wrench"></i>
+                <span class="title">Tool Category</span>
+                <span class="arrow"></span>
+            </a>
+            <ul class="sub-menu">
+                <li>
+                    <a ui-sref="main.toolCategory">
+                        <i class="fa fa-flask"></i>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref="main.categoryTable">
+                        <i class="fa fa-wrench"></i>Category Table</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-item">
+            <a href="#" class="nav-link nav-toggle">
+                <i class="icon-settings"></i>
+                <span class="title">Manage</span>
+                <span class="arrow"></span>
+            </a>
+            <ul class="sub-menu">
+                <li>
+                    <a ui-sref="main.consoleTable">
+                        <i class="fa fa-flask"></i> Console</span>
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref="main.toolTable">
+                        <i class="fa fa-wrench"></i> Tools</span>
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref="main.projectTable">
+                        <i class="fa fa-file-excel-o"></i> Projects</span>
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref="main.usersTable">
+                        <i class="fa fa-users"></i> Users</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-item" ng-controller="ReportGenerationController">
+            <a ui-sref="main.toolReport">
+                <i class="icon-cloud-download"></i>
+                <span class="title">Report</span>
+            </a>
+           <!-- <ul class="sub-menu">
+                <li>
+                    <a href="#" class="nav-link nav-toggle">
+                        <i class="fa fa-wrench"></i>
+                        <span class="title">Lab</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub-menu">
+                        <li>
+                            <a ng-click="toolWeekly()">
+                                <i class="icon-calendar"></i> Weekly</a>
+                        </li>
+                        <li>
+                            <a ng-click="toolMonthly()">
+                                <i class="icon-calendar"></i> Monthly</a>
+                        </li>
+                        <li>
+                            <a ng-click="toolQuatrely()">
+                                <i class="icon-calendar"></i> Quaterly</a>
+                        </li>
+                        <li class="divider"> </li>
+                        <li>
+                            <a><i class="icon-calendar"></i>Select Date
+                                <input type="text" name="datefilter" id="tool" value=""  minDate="dayOne" maxDate="current"/>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a >
+                        <i class="fa fa-wrench"></i>
+                        <span class="title">Tools</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="nav-link nav-toggle">
+                        <i class="fa fa-file-excel-o"></i>
+                        <span class="title">Projects</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub-menu">
+                        <li>
+                            <a ng-click="projectWeekly()">
+                                <i class="icon-calendar"></i> Weekly</a>
+                        </li>
+                        <li>
+                            <a ng-click="projectMonthly()">
+                                <i class="icon-calendar"></i> Monthly</a>
+                        </li>
+                        <li>
+                            <a ng-click="projectQuatrely()">
+                                <i class="icon-calendar"></i> Quaterly</a>
+                        </li>
+                        <li class="divider"> </li>
+                        <li>
+                            <a><i class="icon-calendar"></i>Select Date
+                                <input type="text" name="datefilter" value="" id="project"/>
+
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#" class="nav-link nav-toggle">
+                        <i class="fa fa-users"></i>
+                        <span class="title">Users</span>
+                        <span class="arrow"></span>
+                    </a>
+                    <ul class="sub-menu">
+                        <li>
+                            <a ng-click="userWeekly()">
+                                <i class="icon-calendar"></i> Weekly</a>
+                        </li>
+                        <li>
+                            <a ng-click="userMonthly()">
+                                <i class="icon-calendar"></i> Monthly</a>
+                        </li>
+                        <li>
+                            <a ng-click="userQuatrely()">
+                                <i class="icon-calendar"></i> Quaterly</a>
+                        </li>
+                        <li class="divider"> </li>
+                        <li>
+                            <a><i class="icon-calendar"></i>Select Date
+                                <input type="text" name="datefilter" value="" id="user" />
+
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>-->
+        </li>
+        <li class="nav-item">
+            <a ui-sref="main.labTrend">
+                <i class="fa fa-bar-chart"></i>
+                <span class="title">Lab Trend</span>
+            </a>
+        </li>
+    </ul>
+    <!-- END SIDEBAR MENU -->
+</div>

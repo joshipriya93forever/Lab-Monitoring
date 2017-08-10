@@ -1,0 +1,88 @@
+<div ng-if="!form.urfid.$error.required">
+    <uib-alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)" dismiss-on-timeout="3000">{{alert.msg}}</uib-alert>
+</div>
+<div class="portlet box cblue">
+    <div class="portlet-title">
+        <div class="caption">
+            <span class="icon-note"></span> Add Users
+        </div>
+    </div>
+    <div class="portlet-body form">
+        <div class="row">
+            <div class="col-lg-offset-2 col-lg-8 col-md-offset-2 col-md-8 col-sm-offset-2 col-sm-8">
+                <form name="userForm" class="css-form" ng-submit="addUsers(user)" novalidate>
+                    <div class="form-body">
+                        <div class="form-group form-md-line-input" ng-class="{'has-error': userForm.urfid.$error.required (!userForm.$pristine || userForm.$submitted)}">
+                            <input type="text" class="form-control" name="urfid"  my-directive id="rfid" placeholder="Enter the RFID" ng-model="user.rfid" required ng-keyup="$event.keyCode == 13 && addUsers(user)">
+                            <label for="rfid">RFID<span class="required"> * </span></label>
+                        </div>
+                        <p class="help-block" ng-show="userForm.urfid.$error.required && (!userForm.$pristine || userForm.$submitted)">This field is required</p>
+
+
+                        <div class="form-group form-md-line-input">
+                            <input type="text" class="form-control" name="ufname"  my-directive id="user_fname" placeholder="Enter First Name" ng-model="user.first_name" required ng-keyup="$event.keyCode == 13 && addUsers(user)">
+                            <label for="user_fname">First Name<span class="required"> * </span></label>
+                        </div>
+                        <!--<p class="help-block" ng-show="itemForm.ufname.$error.required && (!itemForm.$pristine || itemForm.$submitted)">This field is required</p>-->
+
+
+                        <div class="form-group form-md-line-input">
+                            <input type="text" class="form-control" name="ulname"  my-directive id="user_lname" placeholder="Enter Last Name" ng-model="user.last_name" required ng-keyup="$event.keyCode == 13 && addUsers(user)">
+                            <label for="user_lname">Last Name</label>
+                        </div>
+
+
+                        <div class="form-group form-md-line-input">
+                            <input type="email" class="form-control" name="email"  my-directive id="user_email" placeholder="Enter Email Address" ng-model="user.email" required ng-keyup="$event.keyCode == 13 && addUsers(user)">
+                            <label for="user_email">Email<span class="required"> * </span></label>
+                        </div>
+                        <!--<p class="help-block" ng-show="itemForm.email.$error.required && (!itemForm.$pristine || itemForm.$submitted)">This field is required</p>-->
+
+                        <div class="form-group form-md-line-input">
+                            <select name="repeatSelect" id="repeatSelect" ng-model="user.group">
+                                <option ng-repeat="group in groups" value="{{group.id}}">{{group.name}}</option>
+                            </select>
+                            <label>Group</label>
+                        </div>
+
+                        <div class="form-group form-md-radios has-success">
+                            <div class="row">
+                            <div class="col-md-9">
+                                <div class="md-radio-inline">
+                                    <div class="md-radio">
+                                        <input type="radio" id="checkbox1_9" name="Admin" class="md-radiobtn" ng-model="user.is_admin" uib-btn-radio="'true'">
+                                        <label for="checkbox1_9">
+                                            <span></span>
+                                            <span class="check"></span>
+                                            <span class="box"></span> Admin </label>
+                                    </div>
+                                    <div class="md-radio">
+                                        <input type="radio" id="checkbox1_10" name="Owner" class="md-radiobtn" ng-model="user.is_owner"  uib-btn-radio="'true'">
+                                        <label for="checkbox1_10">
+                                            <span></span>
+                                            <span class="check"></span>
+                                            <span class="box"></span> Owner </label>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions noborder">
+                            <button type="submit" class="btn blue">Submit</button>
+                        </div>
+
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="scroll-to-top" ui-sref="main.usersTable"  style="display: block;">
+    <div class="btn-group btn-group-justified" style="width: 70px;">
+        <a  class="btn blue">
+            <i class="icon-back"></i> Back </a>
+    </div>
+</div>
