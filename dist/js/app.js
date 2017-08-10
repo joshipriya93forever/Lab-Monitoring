@@ -474,6 +474,8 @@ angular.module('LabMonitoring').controller('CategoryTableController', function($
         var url = urlS.category_list
         DataService.get(url).then(function (data) {
             $scope.toolCats = data;
+            $scope.start =  $scope.toolCats.Qstart_date;
+            $scope.end =  $scope.toolCats.Qend_date;
         }, function (err) {
             $scope.alerts.push({type: 'danger', msg: 'Sorry we are not able to get table information.Please try again.'});
         });
@@ -509,16 +511,16 @@ angular.module('LabMonitoring').controller('CategoryTableController', function($
     }
 
     $scope.date = {
-        startDate: '2017-02-18',
-        endDate: moment().format('YYYY-MM-DD')
+        startDate: $scope.start,
+        endDate: $scope.end
     };
 
     $scope.setStartDate = function () {
         $scope.date.startDate = moment().subtract(4, "days");
     };
 
-    $scope.start = '2017-02-18';
-    $scope.end = moment().format('YYYY-MM-DD');
+    $scope.start = $scope.start;
+    $scope.end = $scope.end;
 
 
     $('#toolcategoryDate').on('apply.daterangepicker', function(ev, picker) {
@@ -1440,43 +1442,87 @@ angular.module('LabMonitoring').controller('LabController', function($rootScope,
 
             });
         });
-        $("#bay38").ready(function () {
+        $("#bay38a").ready(function () {
             var url = urlS.tools + 43 + '/'
             DataService.get(url).then(function (data) {
                 $scope.tool = data;
                 $scope.tstatus = $scope.tool.status;
                 if ($scope.tstatus === 'IN') {
-                    $('#bay38').css({fill: "#ffff80"});
+                    $('#bay38a').css({fill: "#ffff80"});
                 }
                 else if ($scope.tstatus === 'ID') {
-                    $('#bay38').css({fill: "#ff7f7f"});
+                    $('#bay38a').css({fill: "#ff7f7f"});
                 }
                 else if ($scope.tstatus === 'PR') {
-                    $('#bay38').css({fill: "#c2de80"});
+                    $('#bay38a').css({fill: "#c2de80"});
                 }
                 else if ($scope.tstatus === 'MA') {
-                    $('#bay38').css({fill: "#9ac3f5"});
+                    $('#bay38a').css({fill: "#9ac3f5"});
                 }
             }, function (err) {
 
             });
         });
-        $("#bay39").ready(function () {
+
+        $("#bay38b").ready(function () {
+            var url = urlS.tools + 43 + '/'
+            DataService.get(url).then(function (data) {
+                $scope.tool = data;
+                $scope.tstatus = $scope.tool.status;
+                if ($scope.tstatus === 'IN') {
+                    $('#bay38b').css({fill: "#ffff80"});
+                }
+                else if ($scope.tstatus === 'ID') {
+                    $('#bay38b').css({fill: "#ff7f7f"});
+                }
+                else if ($scope.tstatus === 'PR') {
+                    $('#bay38b').css({fill: "#c2de80"});
+                }
+                else if ($scope.tstatus === 'MA') {
+                    $('#bay38b').css({fill: "#9ac3f5"});
+                }
+            }, function (err) {
+
+            });
+        });
+
+        $("#bay39a").ready(function () {
             var url = urlS.tools + 44 + '/'
             DataService.get(url).then(function (data) {
                 $scope.tool = data;
                 $scope.tstatus = $scope.tool.status;
                 if ($scope.tstatus === 'IN') {
-                    $('#bay39').css({fill: "#ffff80"});
+                    $('#bay39a').css({fill: "#ffff80"});
                 }
                 else if ($scope.tstatus === 'ID') {
-                    $('#bay39').css({fill: "#ff7f7f"});
+                    $('#bay39a').css({fill: "#ff7f7f"});
                 }
                 else if ($scope.tstatus === 'PR') {
-                    $('#bay39').css({fill: "#c2de80"});
+                    $('#bay39a').css({fill: "#c2de80"});
                 }
                 else if ($scope.tstatus === 'MA') {
-                    $('#bay39').css({fill: "#9ac3f5"});
+                    $('#bay39a').css({fill: "#9ac3f5"});
+                }
+            }, function (err) {
+
+            });
+        });
+        $("#bay39b").ready(function () {
+            var url = urlS.tools + 44 + '/'
+            DataService.get(url).then(function (data) {
+                $scope.tool = data;
+                $scope.tstatus = $scope.tool.status;
+                if ($scope.tstatus === 'IN') {
+                    $('#bay39b').css({fill: "#ffff80"});
+                }
+                else if ($scope.tstatus === 'ID') {
+                    $('#bay39b').css({fill: "#ff7f7f"});
+                }
+                else if ($scope.tstatus === 'PR') {
+                    $('#bay39b').css({fill: "#c2de80"});
+                }
+                else if ($scope.tstatus === 'MA') {
+                    $('#bay39b').css({fill: "#9ac3f5"});
                 }
             }, function (err) {
 
@@ -3442,34 +3488,34 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
 
             });
         });
-        $("#lab38").ready(function () {
+        $("#lab38a").ready(function () {
             var url = urlS.tool_category + 43 + '/'
             DataService.get(url).then(function (data) {
-                $scope.tool38 = data;
-                if ($scope.tool38.Tool_efficiency === false) {
-                    $('#lab38').css({fill: "rgba(239, 9, 9, 0.78)"});
+                $scope.tool38a = data;
+                if ($scope.tool38a.Tool_efficiency === false) {
+                    $('#lab38a').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
-                else if ($scope.tool38.Tool_efficiency === true) {
-                    $('#lab38').css({fill: "rgba(140, 192, 19, 0.88)"});
+                else if ($scope.tool38a.Tool_efficiency === true) {
+                    $('#lab38a').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
-                $("#lab38").hover(function () {
-                        if ($scope.tool38.Tool_Category === "Qualifications") {
-                            $('#lab38').css("fill", "rgb(125, 109, 196)");
+                $("#lab38a").hover(function () {
+                        if ($scope.tool38a.Tool_Category === "Qualifications") {
+                            $('#lab38a').css("fill", "rgb(125, 109, 196)");
                         }
-                        else if ($scope.tool38.Tool_Category === "Field Issues") {
-                            $('#lab38').css("fill", "#ba4d4d");
+                        else if ($scope.tool38a.Tool_Category === "Field Issues") {
+                            $('#lab38a').css("fill", "#ba4d4d");
 
                         }
-                        else if ($scope.tool38.Tool_Category === "Process") {
-                            $('#lab38').css({fill: "#aee9ca"});
+                        else if ($scope.tool38a.Tool_Category === "Process") {
+                            $('#lab38a').css({fill: "#aee9ca"});
                         }
                     },
                     function () {
-                        if ($scope.tool38.Tool_efficiency === false) {
-                            $('#lab38').css({fill: "rgba(239, 9, 9, 0.78)"});
+                        if ($scope.tool38a.Tool_efficiency === false) {
+                            $('#lab38a').css({fill: "rgba(239, 9, 9, 0.78)"});
                         }
-                        else if ($scope.tool38.Tool_efficiency === true) {
-                            $('#lab38').css({fill: "rgba(140, 192, 19, 0.88)"});
+                        else if ($scope.tool38a.Tool_efficiency === true) {
+                            $('#lab38a').css({fill: "rgba(140, 192, 19, 0.88)"});
                         }
                     }
                 );
@@ -3477,34 +3523,70 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
 
             });
         });
-        $("#lab39").ready(function () {
+        $("#lab38b").ready(function () {
+            var url = urlS.tool_category + 43 + '/'
+            DataService.get(url).then(function (data) {
+                $scope.tool38b = data;
+                if ($scope.tool38b.Tool_efficiency === false) {
+                    $('#lab38b').css({fill: "rgba(239, 9, 9, 0.78)"});
+                }
+                else if ($scope.tool38b.Tool_efficiency === true) {
+                    $('#lab38b').css({fill: "rgba(140, 192, 19, 0.88)"});
+                }
+                $("#lab38b").hover(function () {
+                        if ($scope.tool38b.Tool_Category === "Qualifications") {
+                            $('#lab38b').css("fill", "rgb(125, 109, 196)");
+                        }
+                        else if ($scope.tool38b.Tool_Category === "Field Issues") {
+                            $('#lab38b').css("fill", "#ba4d4d");
+
+                        }
+                        else if ($scope.tool38b.Tool_Category === "Process") {
+                            $('#lab38b').css({fill: "#aee9ca"});
+                        }
+                    },
+                    function () {
+                        if ($scope.tool38b.Tool_efficiency === false) {
+                            $('#lab38b').css({fill: "rgba(239, 9, 9, 0.78)"});
+                        }
+                        else if ($scope.tool38b.Tool_efficiency === true) {
+                            $('#lab38b').css({fill: "rgba(140, 192, 19, 0.88)"});
+                        }
+                    }
+                );
+            }, function (err) {
+
+            });
+        });
+
+        $("#lab39a").ready(function () {
             var url = urlS.tool_category + 44 + '/'
             DataService.get(url).then(function (data) {
-                $scope.tool39 = data;
-                if ($scope.tool39.Tool_efficiency === false) {
-                    $('#lab39').css({fill: "rgba(239, 9, 9, 0.78)"});
+                $scope.tool39a = data;
+                if ($scope.tool39a.Tool_efficiency === false) {
+                    $('#lab39a').css({fill: "rgba(239, 9, 9, 0.78)"});
                 }
-                else if ($scope.tool39.Tool_efficiency === true) {
-                    $('#lab39').css({fill: "rgba(140, 192, 19, 0.88)"});
+                else if ($scope.tool39a.Tool_efficiency === true) {
+                    $('#lab39a').css({fill: "rgba(140, 192, 19, 0.88)"});
                 }
-                $("#lab39").hover(function () {
-                        if ($scope.tool39.Tool_Category === "Qualifications") {
-                            $('#lab39').css("fill", "rgb(125, 109, 196)");
+                $("#lab39a").hover(function () {
+                        if ($scope.tool39a.Tool_Category === "Qualifications") {
+                            $('#lab39a').css("fill", "rgb(125, 109, 196)");
                         }
-                        else if ($scope.tool39.Tool_Category === "Field Issues") {
-                            $('#lab39').css("fill", "#ba4d4d");
+                        else if ($scope.tool39a.Tool_Category === "Field Issues") {
+                            $('#lab39a').css("fill", "#ba4d4d");
 
                         }
-                        else if ($scope.tool39.Tool_Category === "Process") {
-                            $('#lab39').css({fill: "#aee9ca"});
+                        else if ($scope.tool39a.Tool_Category === "Process") {
+                            $('#lab39a').css({fill: "#aee9ca"});
                         }
                     },
                     function () {
-                        if ($scope.tool39.Tool_efficiency === false) {
-                            $('#lab39').css({fill: "rgba(239, 9, 9, 0.78)"});
+                        if ($scope.tool39a.Tool_efficiency === false) {
+                            $('#lab39a').css({fill: "rgba(239, 9, 9, 0.78)"});
                         }
-                        else if ($scope.tool39.Tool_efficiency === true) {
-                            $('#lab39').css({fill: "rgba(140, 192, 19, 0.88)"});
+                        else if ($scope.tool39a.Tool_efficiency === true) {
+                            $('#lab39a').css({fill: "rgba(140, 192, 19, 0.88)"});
                         }
                     }
                 );
@@ -3512,6 +3594,42 @@ angular.module('LabMonitoring').controller('ToolCategoryController', function($r
 
             });
         });
+        $("#lab39b").ready(function () {
+            var url = urlS.tool_category + 44 + '/'
+            DataService.get(url).then(function (data) {
+                $scope.tool39b = data;
+                if ($scope.tool39b.Tool_efficiency === false) {
+                    $('#lab39b').css({fill: "rgba(239, 9, 9, 0.78)"});
+                }
+                else if ($scope.tool39b.Tool_efficiency === true) {
+                    $('#lab39b').css({fill: "rgba(140, 192, 19, 0.88)"});
+                }
+                $("#lab39b").hover(function () {
+                        if ($scope.tool39b.Tool_Category === "Qualifications") {
+                            $('#lab39b').css("fill", "rgb(125, 109, 196)");
+                        }
+                        else if ($scope.tool39b.Tool_Category === "Field Issues") {
+                            $('#lab39b').css("fill", "#ba4d4d");
+
+                        }
+                        else if ($scope.tool39b.Tool_Category === "Process") {
+                            $('#lab39b').css({fill: "#aee9ca"});
+                        }
+                    },
+                    function () {
+                        if ($scope.tool39b.Tool_efficiency === false) {
+                            $('#lab39b').css({fill: "rgba(239, 9, 9, 0.78)"});
+                        }
+                        else if ($scope.tool39b.Tool_efficiency === true) {
+                            $('#lab39b').css({fill: "rgba(140, 192, 19, 0.88)"});
+                        }
+                    }
+                );
+            }, function (err) {
+
+            });
+        });
+
         $("#lab40").ready(function () {
             var url = urlS.tool_category + 45 + '/'
             DataService.get(url).then(function (data) {
